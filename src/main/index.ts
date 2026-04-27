@@ -1,8 +1,13 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import { SessionService } from './session-service/index'
+import { registerIpcHandlers } from './ipc-handlers'
+
+let mainWindow: BrowserWindow | null = null
+const sessionService = new SessionService()
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
     webPreferences: {
@@ -12,11 +17,16 @@ function createWindow() {
     },
   })
 
+  registerIpcHandlers(sessionService, () => mainWindow)
+  sessionService.restoreAll()
+
   if (process.env.NODE_ENV === 'development') {
-    win.loadURL('http://localhost:5173')
+    mainWindow.loadURL('http://localhost:5173')
   } else {
-    win.loadFile(path.join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.on('closed', () => { mainWindow = null })
 }
 
 app.whenReady().then(createWindow)

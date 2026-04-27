@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import { SessionRegistry } from './registry'
 import { PtyManager } from './pty-manager'
 import { ScrollbackManager } from './scrollback'
@@ -34,7 +34,7 @@ export class SessionService {
   }
 
   create(options: CreateSessionOptions): Session {
-    const id = uuidv4()
+    const id = randomUUID()
     const envVars = readAgentEnvVars(options.agentType)
     const session: Session = {
       id,
