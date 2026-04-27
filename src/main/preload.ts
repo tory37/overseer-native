@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC } from '../renderer/types/ipc'
-import type { Session, CreateSessionOptions, GitCommandResult } from '../renderer/types/ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult } from '../renderer/types/ipc'
 
 contextBridge.exposeInMainWorld('overseer', {
   listSessions: (): Promise<Session[]> =>
@@ -52,4 +52,10 @@ contextBridge.exposeInMainWorld('overseer', {
 
   isDirectory: (p: string): Promise<boolean> =>
     ipcRenderer.invoke(IPC.FS_IS_DIR, p),
+
+  syncStatus: (): Promise<DriftStatus> =>
+    ipcRenderer.invoke(IPC.SYNC_STATUS),
+
+  syncRun: (): Promise<SyncResult> =>
+    ipcRenderer.invoke(IPC.SYNC_RUN),
 })

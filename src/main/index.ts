@@ -1,10 +1,12 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import { SessionService } from './session-service/index'
+import { SyncService } from './services/sync-service'
 import { registerIpcHandlers } from './ipc-handlers'
 
 let mainWindow: BrowserWindow | null = null
 const sessionService = new SessionService()
+const syncService = new SyncService()
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -14,16 +16,17 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: false,
     },
   })
 
-  registerIpcHandlers(sessionService, () => mainWindow)
+  registerIpcHandlers(sessionService, syncService, () => mainWindow)
   sessionService.restoreAll()
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../../renderer/index.html'))
   }
 
   mainWindow.on('closed', () => { mainWindow = null })
