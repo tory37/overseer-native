@@ -15,6 +15,8 @@ declare global {
       gitCommit: (cwd: string, message: string) => Promise<GitCommandResult>
       gitPush: (cwd: string) => Promise<GitCommandResult>
       gitPull: (cwd: string) => Promise<GitCommandResult>
+      openDirectory: (currentPath: string) => Promise<string | null>
+      isDirectory: (path: string) => Promise<boolean>
     }
   }
 }

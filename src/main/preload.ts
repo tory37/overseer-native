@@ -46,4 +46,10 @@ contextBridge.exposeInMainWorld('overseer', {
 
   gitPull: (cwd: string): Promise<GitCommandResult> =>
     ipcRenderer.invoke(IPC.GIT_PULL, cwd),
+
+  openDirectory: (currentPath: string): Promise<string | null> =>
+    ipcRenderer.invoke(IPC.DIALOG_OPEN_DIR, currentPath),
+
+  isDirectory: (p: string): Promise<boolean> =>
+    ipcRenderer.invoke(IPC.FS_IS_DIR, p),
 })
