@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { Session } from '../../renderer/types/ipc.js'
+import type { Session } from '../../renderer/types/ipc'
 
 export class SessionRegistry {
   private sessions: Session[] = []
