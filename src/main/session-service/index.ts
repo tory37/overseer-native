@@ -40,7 +40,7 @@ export class SessionService {
       id,
       name: options.name,
       agentType: options.agentType,
-      cwd: options.cwd,
+      cwd: options.cwd || os.homedir(),
       envVars,
       scrollbackPath: path.join(os.homedir(), '.overseer', 'sessions', `${id}.log`),
     }

@@ -10,7 +10,7 @@ export interface Session {
 export interface CreateSessionOptions {
   name: string
   agentType: Session['agentType']
-  cwd: string
+  cwd?: string
 }
 
 export interface GitCommandResult {
@@ -30,4 +30,6 @@ export const IPC = {
   GIT_COMMIT:        'git:commit',
   GIT_PUSH:          'git:push',
   GIT_PULL:          'git:pull',
+  DIALOG_OPEN_DIR:   'dialog:open-directory',
+  FS_IS_DIR:         'fs:is-directory',
 } as const
