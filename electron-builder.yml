@@ -1,0 +1,13 @@
+appId: com.overseer.app
+productName: Overseer
+directories:
+  output: dist/package
+files:
+  - dist/main/**/*
+  - dist/renderer/**/*
+  - node_modules/**/*
+  - package.json
+mac:
+  category: public.app-category.developer-tools
+linux:
+  category: Development
