@@ -25,7 +25,11 @@ export function TerminalInstance({ session }: Props) {
     fitRef.current = fit
 
     window.overseer.getScrollback(session.id).then(data => {
-      if (data) term.write(Buffer.from(data, 'binary'))
+      if (data) {
+        term.write(Buffer.from(data, 'binary'))
+      } else {
+        term.write('\r\nWelcome to Overseer\r\n\r\n')
+      }
     })
 
     const unsubscribe = window.overseer.onPtyData(session.id, (data) => {
