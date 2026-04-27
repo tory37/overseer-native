@@ -1,4 +1,4 @@
-import type { Session, CreateSessionOptions, GitCommandResult } from './ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult } from './ipc'
 
 declare global {
   interface Window {
@@ -17,6 +17,8 @@ declare global {
       gitPull: (cwd: string) => Promise<GitCommandResult>
       openDirectory: (currentPath: string) => Promise<string | null>
       isDirectory: (path: string) => Promise<boolean>
+      syncStatus: () => Promise<DriftStatus>
+      syncRun: () => Promise<SyncResult>
     }
   }
 }

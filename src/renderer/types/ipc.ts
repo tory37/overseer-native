@@ -19,6 +19,17 @@ export interface GitCommandResult {
   exitCode: number
 }
 
+export interface DriftStatus {
+  lastSyncedAt: string | null
+  rules: string[]
+  skills: string[]
+}
+
+export interface SyncResult {
+  ok: boolean
+  output: string
+}
+
 export const IPC = {
   SESSION_CREATE:    'session:create',
   SESSION_LIST:      'session:list',
@@ -32,4 +43,6 @@ export const IPC = {
   GIT_PULL:          'git:pull',
   DIALOG_OPEN_DIR:   'dialog:open-directory',
   FS_IS_DIR:         'fs:is-directory',
+  SYNC_STATUS:       'sync:status',
+  SYNC_RUN:          'sync:run',
 } as const
