@@ -24,14 +24,20 @@
         "displayName": "main",
         "preset": "ts-jest",
         "testEnvironment": "node",
-        "testMatch": ["<rootDir>/tests/main/**/*.test.ts"]
+        "testMatch": ["<rootDir>/tests/main/**/*.test.ts"],
+        "globals": {
+          "ts-jest": { "tsconfig": "<rootDir>/tsconfig.test.json" }
+        }
       },
       {
         "displayName": "renderer",
         "preset": "ts-jest",
         "testEnvironment": "jsdom",
         "testMatch": ["<rootDir>/tests/renderer/**/*.test.tsx"],
-        "setupFilesAfterFramework": ["@testing-library/jest-dom"]
+        "setupFilesAfterEnv": ["@testing-library/jest-dom"],
+        "globals": {
+          "ts-jest": { "tsconfig": "<rootDir>/tsconfig.renderer-test.json" }
+        }
       }
     ]
   },
@@ -58,6 +64,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "electron-builder": "^26.8.1",
     "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
     "ts-jest": "^29.4.9",
     "typescript": "^6.0.3",
     "vite": "^8.0.10"
