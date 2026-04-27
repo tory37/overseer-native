@@ -5,12 +5,14 @@ import { TerminalPane } from './components/TerminalPane'
 import { GitPanel } from './components/GitPanel'
 import { NewSessionDialog } from './components/NewSessionDialog'
 import { SessionDrawer } from './components/SessionDrawer'
+import { SettingsModal } from './components/SettingsModal'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, setActive } = useSessionStore()
   const [showNewDialog, setShowNewDialog] = useState(false)
   const [showDrawer, setShowDrawer] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
   useEffect(() => { load() }, [])
 
@@ -37,6 +39,13 @@ export default function App() {
           onSelect={setActive}
           onNew={() => setShowNewDialog(true)}
         />
+        <button
+          onClick={() => setShowSettings(true)}
+          style={{ background: 'transparent', border: 'none', color: '#888', padding: '6px 10px', cursor: 'pointer', fontSize: '16px', marginLeft: 'auto' }}
+          title="Settings"
+        >
+          ⚙
+        </button>
       </div>
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
@@ -56,9 +65,13 @@ export default function App() {
           sessions={sessions}
           activeSessionId={activeSessionId}
           onSelect={setActive}
-          onKill={async (id) => { await killSession(id) }}
+          onKill={async (id) => { try { await killSession(id) } catch (err) { console.error('kill session failed:', err) } }}
           onClose={() => setShowDrawer(false)}
         />
+      )}
+
+      {showSettings && (
+        <SettingsModal onClose={() => setShowSettings(false)} />
       )}
     </div>
   )
