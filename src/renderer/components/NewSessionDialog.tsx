@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { CreateSessionOptions, Session } from '../types/ipc'
 
 interface Props {
@@ -9,7 +9,23 @@ interface Props {
 export function NewSessionDialog({ onCreate, onCancel }: Props) {
   const [name, setName] = useState('')
   const [agentType, setAgentType] = useState<Session['agentType']>('shell')
-  const [cwd, setCwd] = useState(typeof process !== 'undefined' ? (process.env.HOME || '/') : '/')
+  const [cwd, setCwd] = useState('')
+  const [cwdValid, setCwdValid] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    setCwdValid(null)
+    if (!cwd) return
+    const timer = setTimeout(async () => {
+      const valid = await window.overseer.isDirectory(cwd)
+      setCwdValid(valid)
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [cwd])
+
+  const handleBrowse = async () => {
+    const chosen = await window.overseer.openDirectory(cwd)
+    if (chosen) setCwd(chosen)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,6 +42,11 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
   }
   const labelStyle: React.CSSProperties = { color: '#ccc', display: 'flex', flexDirection: 'column', gap: '4px' }
   const inputStyle: React.CSSProperties = { background: '#1e1e1e', color: '#eee', border: '1px solid #555', borderRadius: '4px', padding: '6px 8px' }
+  const cwdInputStyle: React.CSSProperties = {
+    ...inputStyle,
+    flex: 1,
+    border: cwdValid === false ? '1px solid #e05252' : '1px solid #555',
+  }
 
   return (
     <div style={overlayStyle}>
@@ -46,7 +67,11 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
         </label>
         <label style={labelStyle} htmlFor="cwd">
           Working Directory
-          <input id="cwd" aria-label="Working Directory" style={inputStyle} value={cwd} onChange={e => setCwd(e.target.value)} required />
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <input id="cwd" aria-label="Working Directory" style={cwdInputStyle} value={cwd} onChange={e => setCwd(e.target.value)} />
+            <button type="button" onClick={handleBrowse} style={{ ...inputStyle, cursor: 'pointer', whiteSpace: 'nowrap' }}>Browse</button>
+          </div>
+          {cwdValid === false && <span style={{ color: '#e05252', fontSize: '12px' }}>Directory not found</span>}
         </label>
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
           <button type="button" onClick={onCancel} style={{ ...inputStyle, cursor: 'pointer' }}>Cancel</button>
