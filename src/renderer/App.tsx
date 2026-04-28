@@ -9,20 +9,31 @@ import { SettingsModal } from './components/SettingsModal'
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { useCompanion } from './hooks/useCompanion'
+import { useThemeStore, BUILTIN_THEMES } from './store/theme'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, setActive } = useSessionStore()
+  const { activeThemeId, customThemes, loadSettings: loadThemeSettings } = useThemeStore()
+
   const [showNewDialog,      setShowNewDialog]      = useState(false)
   const [showDrawer,         setShowDrawer]          = useState(false)
   const [showSettings,       setShowSettings]        = useState(false)
   const [showShortcutsModal, setShowShortcutsModal] = useState(false)
   const [confirmKillId,      setConfirmKillId]      = useState<string | null>(null)
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { load(); loadThemeSettings() }, [])
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
-  
+
+  const activeTheme = [...BUILTIN_THEMES, ...customThemes].find(t => t.id === activeThemeId) || BUILTIN_THEMES[0]
+
+  useEffect(() => {
+    Object.entries(activeTheme.colors).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(`--${key}`, value)
+    })
+  }, [activeTheme])
+
   useEffect(() => {
     if (confirmKillId) {
       const timer = setTimeout(() => setConfirmKillId(null), 2000)
