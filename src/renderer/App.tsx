@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSessionStore } from './store/sessions'
 import { TabBar } from './components/TabBar'
 import { TerminalPane } from './components/TerminalPane'
-import { GitPanel } from './components/GitPanel'
+import { RightSidebar } from './components/RightSidebar'
+import { SpriteStudio } from './components/SpriteStudio'
 import { NewSessionDialog } from './components/NewSessionDialog'
 import { SessionDrawer } from './components/SessionDrawer'
 import { SettingsModal } from './components/SettingsModal'
@@ -21,6 +22,9 @@ export default function App() {
   const [showSettings,       setShowSettings]        = useState(false)
   const [showShortcutsModal, setShowShortcutsModal] = useState(false)
   const [confirmKillId,      setConfirmKillId]      = useState<string | null>(null)
+  const [showSpriteStudio,   setShowSpriteStudio]   = useState(false)
+  const [spriteStudioEditId, setSpriteStudioEditId] = useState<string | null>(null)
+  const [spritePanelVisible, setSpritePanelVisible] = useState(true)
 
   useEffect(() => { load(); loadThemeSettings() }, [])
 
@@ -95,6 +99,8 @@ export default function App() {
     onSplitSwap,
     onSplitSwapSecondary,
     onSplitToggleDirection,
+    onToggleSpritePanel: () => setSpritePanelVisible(v => !v),
+    onOpenSpriteStudio:  () => { setSpriteStudioEditId(null); setShowSpriteStudio(true) },
   })
 
   const handleCreate = async (options: CreateSessionOptions) => {
@@ -147,7 +153,11 @@ export default function App() {
           onOuterRatio={onOuterRatio}
           onInnerRatio={onInnerRatio}
         />
-        {activeSession && <GitPanel cwd={activeSession.cwd} />}
+        <RightSidebar
+          activeSession={activeSession}
+          spritePanelVisible={spritePanelVisible}
+          onOpenStudio={() => { setSpriteStudioEditId(null); setShowSpriteStudio(true) }}
+        />
       </div>
 
       {showNewDialog && (
@@ -179,6 +189,13 @@ export default function App() {
         <KeyboardShortcutsModal
           keybindings={keybindings}
           onClose={() => setShowShortcutsModal(false)}
+        />
+      )}
+
+      {showSpriteStudio && (
+        <SpriteStudio
+          onClose={() => setShowSpriteStudio(false)}
+          editingId={spriteStudioEditId}
         />
       )}
     </div>

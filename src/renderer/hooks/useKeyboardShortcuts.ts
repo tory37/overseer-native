@@ -18,6 +18,8 @@ export interface ShortcutHandlers {
   onSplitSwap:            () => void
   onSplitSwapSecondary:   () => void
   onSplitToggleDirection: () => void
+  onToggleSpritePanel:   () => void
+  onOpenSpriteStudio:    () => void
 }
 
 export interface KeyboardShortcutsAPI {
@@ -56,6 +58,8 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (action === 'splitSwap')            { h.onSplitSwap();            return }
       if (action === 'splitSwapSecondary')   { h.onSplitSwapSecondary();   return }
       if (action === 'splitToggleDirection') { h.onSplitToggleDirection(); return }
+      if (action === 'toggleSpritePanel')   { h.onToggleSpritePanel();   return }
+      if (action === 'openSpriteStudio')    { h.onOpenSpriteStudio();    return }
       const idxMatch = action.match(/^sessionByIndex(\d)$/)
       if (idxMatch) h.onSessionByIndex(parseInt(idxMatch[1], 10))
     }
