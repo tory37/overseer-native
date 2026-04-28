@@ -40,8 +40,13 @@ export default function App() {
   }
 
   const {
-    allCompanions, splitOpen, splitDirection, splitSwapped, splitFocused,
-    onSplitFocus, onSplitSwap, onSplitToggleDirection, killCompanionForSession,
+    allCompanions, allCompanionsB,
+    splitOpen, threeWayOpen, splitDirection, splitSwapped, secondarySwapped,
+    splitFocused, outerSplitRatio, innerSplitRatio,
+    onSplitFocus, onSplitFocusPrev, onSplitSwap, onSplitSwapSecondary,
+    onSplitToggleDirection, onSplitOpenThreeWay, onSplitClose,
+    onOuterRatio, onInnerRatio,
+    killCompanionForSession,
   } = useCompanion(activeSession)
 
   const handleKillActive = () => {
@@ -61,7 +66,11 @@ export default function App() {
     onOpenSettings:         () => setShowSettings(true),
     onOpenShortcuts:        () => setShowShortcutsModal(true),
     onSplitFocus,
+    onSplitFocusPrev,
+    onSplitOpenThreeWay,
+    onSplitClose,
     onSplitSwap,
+    onSplitSwapSecondary,
     onSplitToggleDirection,
   })
 
@@ -101,10 +110,17 @@ export default function App() {
           activeSessionId={activeSessionId}
           keybindings={keybindings}
           allCompanions={allCompanions}
+          allCompanionsB={allCompanionsB}
           splitOpen={splitOpen}
+          threeWayOpen={threeWayOpen}
           splitDirection={splitDirection}
           splitSwapped={splitSwapped}
+          secondarySwapped={secondarySwapped}
           splitFocused={splitFocused}
+          outerSplitRatio={outerSplitRatio}
+          innerSplitRatio={innerSplitRatio}
+          onOuterRatio={onOuterRatio}
+          onInnerRatio={onInnerRatio}
         />
         {activeSession && <GitPanel cwd={activeSession.cwd} />}
       </div>
