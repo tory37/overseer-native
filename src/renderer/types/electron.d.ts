@@ -1,4 +1,4 @@
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult } from './ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings } from './ipc'
 
 declare global {
   interface Window {
@@ -19,6 +19,8 @@ declare global {
       isDirectory: (path: string) => Promise<boolean>
       syncStatus: () => Promise<DriftStatus>
       syncRun: () => Promise<SyncResult>
+      readKeybindings: () => Promise<Keybindings | null>
+      writeKeybindings: (kb: Keybindings) => Promise<void>
     }
   }
 }
