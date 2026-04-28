@@ -55,7 +55,11 @@ export type KeybindingAction =
   | 'openSettings'
   | 'openShortcuts'
   | 'splitFocus'
+  | 'splitFocusPrev'
+  | 'splitOpenThreeWay'
+  | 'splitClose'
   | 'splitSwap'
+  | 'splitSwapSecondary'
   | 'splitToggleDirection'
 
 export type Keybindings = Record<KeybindingAction, Keybinding>
@@ -78,8 +82,12 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   openSettings:         { code: 'Comma',       ctrl: true,  shift: true,  alt: false },
   openShortcuts:        { code: 'Slash',        ctrl: true,  shift: true,  alt: false },
   splitFocus:           { code: 'Backslash',   ctrl: true,  shift: true,  alt: false },
-  splitSwap:            { code: 'KeyM',        ctrl: true,  shift: true,  alt: false },
-  splitToggleDirection: { code: 'Backquote',   ctrl: true,  shift: true,  alt: false },
+  splitFocusPrev:       { code: 'Backslash',   ctrl: true,  shift: true,  alt: true  },
+  splitOpenThreeWay:    { code: 'Equal',        ctrl: true,  shift: true,  alt: false },
+  splitClose:           { code: 'KeyX',         ctrl: true,  shift: true,  alt: false },
+  splitSwap:            { code: 'KeyM',         ctrl: true,  shift: true,  alt: false },
+  splitSwapSecondary:   { code: 'KeyJ',         ctrl: true,  shift: true,  alt: false },
+  splitToggleDirection: { code: 'Backquote',    ctrl: true,  shift: true,  alt: false },
 }
 
 const CODE_LABELS: Record<string, string> = {
