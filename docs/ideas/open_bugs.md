@@ -4,3 +4,5 @@
 - no keyboard shortcut to delete a session.  maybe a "press it twice" thing as "confirmation"
 - \ command doesn't go back to original terinal.  should go back and fourth
 - / doesnt close the shortcuts modal.  it should open AND close
+- need an audit on packages.  xterms package that we are using is deprecated.  need to figure out what else needs to change
+- node 20 actions are deprecated, seeing this in github build.  need to fix that
