@@ -8,6 +8,7 @@ import { IPC } from '../renderer/types/ipc'
 import type { CreateSessionOptions, Keybindings, ThemeSettings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
+import { parseSpriteSpeech } from './sprite-parser'
 
 export async function readKeybindingsFromDisk(baseDir = os.homedir()): Promise<Keybindings | null> {
   const p = path.join(baseDir, '.overseer', 'keybindings.json')
@@ -57,6 +58,16 @@ export function registerIpcHandlers(
 ): void {
   service.onData((sessionId, data) => {
     getWindow()?.webContents.send(`pty:data:${sessionId}`, data)
+    try {
+      const events = parseSpriteSpeech(data)
+      for (const ev of events) {
+        if (ev.type === 'speech') {
+          getWindow()?.webContents.send(IPC.SPRITE_SPEECH, { sessionId, text: ev.text })
+        }
+      }
+    } catch (err) {
+      console.error('[Sprite] Speech parse error:', err)
+    }
   })
 
   service.onError((sessionId, err) => {

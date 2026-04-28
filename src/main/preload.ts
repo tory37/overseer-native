@@ -94,4 +94,10 @@ contextBridge.exposeInMainWorld('overseer', {
     ipcRenderer.on('companion:exit', handler)
     return () => ipcRenderer.removeListener('companion:exit', handler)
   },
+
+  onSpriteSpeech: (callback: (payload: { sessionId: string; text: string }) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, payload: { sessionId: string; text: string }) => callback(payload)
+    ipcRenderer.on(IPC.SPRITE_SPEECH, handler)
+    return () => ipcRenderer.removeListener(IPC.SPRITE_SPEECH, handler)
+  },
 })
