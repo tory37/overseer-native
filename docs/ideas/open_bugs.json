@@ -4,7 +4,6 @@
   "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up. When you fix a bug, remove it from the requirements. Only consume these 1 at a time.  do not litter context with bugs we are not actively looking at.",
 
   "requirements": [
-    "when opening modals, we should auto focus the first input.  like new, if i use the keyboard shortcut for a new session, i have to tab into the first input box, instead of it being there",
     "shortcut that opens the keyboard shortcut modal does not close it.  it should open and close",
     "no keyboard shortcut to delete a session.  maybe a 'press it twice' thing as 'confirmation'",
     " back slash command doesn't go back to original terinal.  should go back and fourth",
