@@ -21,6 +21,12 @@ declare global {
       syncRun: () => Promise<SyncResult>
       readKeybindings: () => Promise<Keybindings | null>
       writeKeybindings: (kb: Keybindings) => Promise<void>
+      spawnCompanion: () => Promise<string>
+      killCompanion: (companionId: string) => Promise<void>
+      sendCompanionInput: (companionId: string, data: string) => Promise<void>
+      resizeCompanion: (companionId: string, cols: number, rows: number) => Promise<void>
+      onCompanionData: (callback: (data: string) => void) => () => void
+      onCompanionExit: (callback: () => void) => () => void
     }
   }
 }
