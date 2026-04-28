@@ -93,6 +93,7 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
           <button
             title="Close settings"
             onClick={onClose}
+            autoFocus
             style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: 18 }}
           >
             ✕

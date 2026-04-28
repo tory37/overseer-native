@@ -21,6 +21,12 @@ function setupMocks(status: DriftStatus, syncResult: SyncResult) {
   })
 }
 
+test('auto focuses the close button on mount', async () => {
+  setupMocks(noDrift, successResult)
+  render(<SettingsModal onClose={jest.fn()} keybindings={DEFAULT_KEYBINDINGS} onSaveKeybindings={jest.fn()} />)
+  expect(screen.getByTitle('Close settings')).toHaveFocus()
+})
+
 test('shows "Never" when lastSyncedAt is null', async () => {
   setupMocks(withDrift, successResult)
   render(<SettingsModal onClose={jest.fn()} keybindings={DEFAULT_KEYBINDINGS} onSaveKeybindings={jest.fn()} />)

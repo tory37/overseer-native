@@ -4,6 +4,11 @@ import '@testing-library/jest-dom'
 import { KeyboardShortcutsModal } from '../../src/renderer/components/KeyboardShortcutsModal'
 import { DEFAULT_KEYBINDINGS } from '../../src/renderer/types/ipc'
 
+test('auto focuses the close button on mount', () => {
+  render(<KeyboardShortcutsModal keybindings={DEFAULT_KEYBINDINGS} onClose={jest.fn()} />)
+  expect(screen.getByTitle('Close')).toHaveFocus()
+})
+
 test('renders all action labels', () => {
   render(<KeyboardShortcutsModal keybindings={DEFAULT_KEYBINDINGS} onClose={jest.fn()} />)
   expect(screen.getByText('New Session')).toBeInTheDocument()

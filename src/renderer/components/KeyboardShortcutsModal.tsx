@@ -56,6 +56,7 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
           <button
             title="Close"
             onClick={onClose}
+            autoFocus
             style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: 18 }}
           >
             ✕
