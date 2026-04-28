@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { formatKeybinding } from '../types/ipc'
 import type { DriftStatus, SyncResult, Keybindings, KeybindingAction } from '../types/ipc'
+import { useThemeStore, BUILTIN_THEMES } from '../store/theme'
 
 const ACTION_LABELS: Record<string, string> = {
   newSession:       'New Session',
@@ -28,6 +29,9 @@ interface Props {
 }
 
 export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props) {
+  const { activeThemeId, customThemes, setActiveTheme } = useThemeStore()
+  const allThemes = [...BUILTIN_THEMES, ...customThemes]
+
   const [status,     setStatus]     = useState<DriftStatus | null>(null)
   const [syncing,    setSyncing]    = useState(false)
   const [lastResult, setLastResult] = useState<SyncResult | null>(null)
@@ -98,6 +102,35 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
           >
             ✕
           </button>
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <h3 style={sectionHeading}>Appearance</h3>
+          <div style={divider}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <label style={{ fontSize: 13, color: 'var(--text-main)' }}>Theme</label>
+              <select
+                value={activeThemeId}
+                onChange={(e) => setActiveTheme(e.target.value)}
+                style={{
+                  background: 'var(--bg-main)',
+                  color: 'var(--text-main)',
+                  border: '1px solid var(--border)',
+                  padding: '6px 8px',
+                  borderRadius: 4,
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
+              >
+                {allThemes.map(theme => (
+                  <option key={theme.id} value={theme.id}>
+                    {theme.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         <div style={{ marginBottom: 24 }}>
