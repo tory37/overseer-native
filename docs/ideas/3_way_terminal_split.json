@@ -1,0 +1,22 @@
+{
+  "title": "3 Way Terminal Split",
+  "main_idea": "Allow splitting the secondary terminal into 2.",
+  "reason": "I normally find my normal workflow being the agent on the left, the app running on bottom right, and a terminal for other activity like pushing git etc in top right.",
+
+  "requirements": [
+    "Can split the secondary terminal in the opposite direction of the existing split",
+    "Keyboard shortcuts just to switch to this view from the first.  Should not have to split twice, but can if wanted.",
+    "Should have shortcuts to smartly switch the layouts. Swap left and right panels, swap internal secondary panels.  we aren't moving the main agent panel into a smaller split.",
+    "Should all be persisted the way the other terminals are now"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [
+    "A drag handle to resize would be nice between splits"
+  ],
+
+  "references": [],
+
+  "open_questions": []
+}

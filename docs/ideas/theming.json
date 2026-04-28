@@ -1,0 +1,20 @@
+{
+  "title": "Theming",
+  "main_idea": "Add theming configuration to the app.",
+  "reason": "Allow the user to customize at least the color scheme for fun and individuality",
+
+  "requirements": [
+    "app is styled with configurable theming",
+    "use can enter a theming section, probably of settings, and adjust the theme accordingly"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [
+    "should be easy to use and have full control of the theme"
+  ],
+
+  "references": [],
+
+  "open_questions": []
+}
