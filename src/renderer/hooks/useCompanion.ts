@@ -26,7 +26,7 @@ export interface CompanionAPI extends CompanionState {
   onSplitSwap:             () => void
   onSplitSwapSecondary:    () => void
   onSplitToggleDirection:  () => void
-  onSplitOpenThreeWay:     () => void
+  onSplitOpenThreeWay:     () => void | Promise<void>
   onSplitClose:            () => void
   onOuterRatio:            (r: number) => void
   onInnerRatio:            (r: number) => void
@@ -147,24 +147,41 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
     })
   }, [])
 
-  const onSplitOpenThreeWay = useCallback(() => {
-    if (!splitOpenRef.current) return
+  const onSplitOpenThreeWay = useCallback(async () => {
     const session = activeSessionRef.current
     if (!session) return
-    setCompanions(prev => {
-      if (prev.B.get(session.id)) {
-        setThreeWayOpen(true)
-        setSplitFocused('companionB')
-        return prev
+
+    // helper to ensure companion A exists
+    let aId = companions.A.get(session.id)
+    if (!aId) {
+      try {
+        aId = await window.overseer.spawnCompanion(session.cwd)
+        setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, aId!) }))
+      } catch (err) {
+        console.error('companion A spawn failed:', err)
+        return
       }
-      window.overseer.spawnCompanion(session.cwd).then(id => {
-        setCompanions(p => ({ ...p, B: new Map(p.B).set(session.id, id) }))
-        setThreeWayOpen(true)
-        setSplitFocused('companionB')
-      }).catch((err: unknown) => console.error('companion B spawn failed:', err))
-      return prev
-    })
-  }, [])
+    }
+
+    // helper to ensure companion B exists
+    let bId = companions.B.get(session.id)
+    if (!bId) {
+      try {
+        bId = await window.overseer.spawnCompanion(session.cwd)
+        setCompanions(p => ({ ...p, B: new Map(p.B).set(session.id, bId!) }))
+      } catch (err) {
+        console.error('companion B spawn failed:', err)
+        // Even if B fails, we should at least open A if it succeeded
+        setSplitOpen(true)
+        setSplitFocused('companionA')
+        return
+      }
+    }
+
+    setSplitOpen(true)
+    setThreeWayOpen(true)
+    setSplitFocused('companionB')
+  }, [companions])
 
   const onSplitClose = useCallback(() => {
     const session = activeSessionRef.current

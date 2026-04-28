@@ -120,11 +120,25 @@ test('onSplitOpenThreeWay when split is open: spawns companionB and opens 3-way'
   expect(result.current.splitFocused).toBe('companionB')
 })
 
-test('onSplitOpenThreeWay when split is closed: no-op', async () => {
+test('onSplitOpenThreeWay when split is closed: spawns BOTH companion A and B, opens 3-way, and focuses B', async () => {
   const { result } = renderHook(() => useCompanion(mockSession))
-  await act(async () => { result.current.onSplitOpenThreeWay() })
-  expect((window as any).overseer.spawnCompanion).not.toHaveBeenCalled()
-  expect(result.current.threeWayOpen).toBe(false)
+  
+  // Trigger from closed state
+  await act(async () => { 
+    result.current.onSplitOpenThreeWay() 
+  })
+
+  // Should have spawned two companions
+  expect((window as any).overseer.spawnCompanion).toHaveBeenCalledTimes(2)
+  expect((window as any).overseer.spawnCompanion).toHaveBeenNthCalledWith(1, '/home/test')
+  expect((window as any).overseer.spawnCompanion).toHaveBeenNthCalledWith(2, '/home/test')
+
+  // State should reflect 3-way split open
+  expect(result.current.splitOpen).toBe(true)
+  expect(result.current.threeWayOpen).toBe(true)
+  expect(result.current.splitFocused).toBe('companionB')
+  expect(result.current.allCompanions).toHaveLength(1)
+  expect(result.current.allCompanionsB).toHaveLength(1)
 })
 
 // ─── onSplitClose ────────────────────────────────────────────────────────────
