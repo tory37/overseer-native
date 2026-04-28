@@ -1,0 +1,19 @@
+{
+  "title": "Restyle Shortcuts Menu",
+  "main_idea": "We should restyle the shortctus menu to be wider, and accomodate the even more coming shortcuts.",
+  "reason": "List is getting long, two columns would solve it for a while, 3 when we get there even more.",
+
+  "requirements": [
+    "Splits shortcuts menu into columns",
+    "Shorcuts menu adapts to a non-scrolling number of shortcuts per column",
+    "easy to see all at once without scrolling"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [],
+
+  "references": [],
+
+  "open_questions": []
+}

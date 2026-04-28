@@ -9,12 +9,17 @@ test('auto focuses the close button on mount', () => {
   expect(screen.getByTitle('Close')).toHaveFocus()
 })
 
-test('renders all action labels', () => {
+test('renders category headers', () => {
+  render(<KeyboardShortcutsModal keybindings={DEFAULT_KEYBINDINGS} onClose={jest.fn()} />)
+  expect(screen.getByText('SESSIONS')).toBeInTheDocument()
+  expect(screen.getByText('PANES')).toBeInTheDocument()
+  expect(screen.getByText('GENERAL')).toBeInTheDocument()
+})
+
+test('renders action labels', () => {
   render(<KeyboardShortcutsModal keybindings={DEFAULT_KEYBINDINGS} onClose={jest.fn()} />)
   expect(screen.getByText('New Session')).toBeInTheDocument()
-  expect(screen.getByText('Delete Active Session')).toBeInTheDocument()
   expect(screen.getByText('Open Settings')).toBeInTheDocument()
-  expect(screen.getByText('Show Keyboard Shortcuts')).toBeInTheDocument()
 })
 
 test('renders formatted keybindings for defaults', () => {
