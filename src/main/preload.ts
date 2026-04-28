@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC } from '../renderer/types/ipc'
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult } from '../renderer/types/ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings } from '../renderer/types/ipc'
 
 contextBridge.exposeInMainWorld('overseer', {
   listSessions: (): Promise<Session[]> =>
@@ -58,4 +58,10 @@ contextBridge.exposeInMainWorld('overseer', {
 
   syncRun: (): Promise<SyncResult> =>
     ipcRenderer.invoke(IPC.SYNC_RUN),
+
+  readKeybindings: (): Promise<Keybindings | null> =>
+    ipcRenderer.invoke(IPC.KEYBINDINGS_READ),
+
+  writeKeybindings: (kb: Keybindings): Promise<void> =>
+    ipcRenderer.invoke(IPC.KEYBINDINGS_WRITE, kb),
 })
