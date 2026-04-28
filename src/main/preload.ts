@@ -64,4 +64,28 @@ contextBridge.exposeInMainWorld('overseer', {
 
   writeKeybindings: (kb: Keybindings): Promise<void> =>
     ipcRenderer.invoke(IPC.KEYBINDINGS_WRITE, kb),
+
+  spawnCompanion: (): Promise<string> =>
+    ipcRenderer.invoke(IPC.COMPANION_SPAWN),
+
+  killCompanion: (companionId: string): Promise<void> =>
+    ipcRenderer.invoke(IPC.COMPANION_KILL, companionId),
+
+  sendCompanionInput: (companionId: string, data: string): Promise<void> =>
+    ipcRenderer.invoke(IPC.COMPANION_INPUT, companionId, data),
+
+  resizeCompanion: (companionId: string, cols: number, rows: number): Promise<void> =>
+    ipcRenderer.invoke(IPC.COMPANION_RESIZE, companionId, cols, rows),
+
+  onCompanionData: (callback: (data: string) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: string) => callback(data)
+    ipcRenderer.on('companion:data', handler)
+    return () => ipcRenderer.removeListener('companion:data', handler)
+  },
+
+  onCompanionExit: (callback: () => void) => {
+    const handler = () => callback()
+    ipcRenderer.on('companion:exit', handler)
+    return () => ipcRenderer.removeListener('companion:exit', handler)
+  },
 })
