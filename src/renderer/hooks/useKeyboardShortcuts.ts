@@ -3,16 +3,20 @@ import { DEFAULT_KEYBINDINGS, matchKeybinding } from '../types/ipc'
 import type { Keybindings } from '../types/ipc'
 
 export interface ShortcutHandlers {
-  onNewSession:     () => void
-  onKillSession:    () => void
-  onNextSession:    () => void
-  onPrevSession:    () => void
-  onSessionByIndex: (index: number) => void
+  onNewSession:           () => void
+  onKillSession:          () => void
+  onNextSession:          () => void
+  onPrevSession:          () => void
+  onSessionByIndex:       (index: number) => void
   onOpenDrawer:           () => void
   onOpenSettings:         () => void
   onOpenShortcuts:        () => void
   onSplitFocus:           () => void
+  onSplitFocusPrev:       () => void
+  onSplitOpenThreeWay:    () => void
+  onSplitClose:           () => void
   onSplitSwap:            () => void
+  onSplitSwapSecondary:   () => void
   onSplitToggleDirection: () => void
 }
 
@@ -38,15 +42,19 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (!action) return
       e.preventDefault()
       const h = handlersRef.current
-      if (action === 'newSession')    { h.onNewSession();    return }
-      if (action === 'killSession')   { h.onKillSession();   return }
-      if (action === 'nextSession')   { h.onNextSession();   return }
-      if (action === 'prevSession')   { h.onPrevSession();   return }
+      if (action === 'newSession')           { h.onNewSession();           return }
+      if (action === 'killSession')          { h.onKillSession();          return }
+      if (action === 'nextSession')          { h.onNextSession();          return }
+      if (action === 'prevSession')          { h.onPrevSession();          return }
       if (action === 'openDrawer')           { h.onOpenDrawer();           return }
       if (action === 'openSettings')         { h.onOpenSettings();         return }
       if (action === 'openShortcuts')        { h.onOpenShortcuts();        return }
       if (action === 'splitFocus')           { h.onSplitFocus();           return }
+      if (action === 'splitFocusPrev')       { h.onSplitFocusPrev();       return }
+      if (action === 'splitOpenThreeWay')    { h.onSplitOpenThreeWay();    return }
+      if (action === 'splitClose')           { h.onSplitClose();           return }
       if (action === 'splitSwap')            { h.onSplitSwap();            return }
+      if (action === 'splitSwapSecondary')   { h.onSplitSwapSecondary();   return }
       if (action === 'splitToggleDirection') { h.onSplitToggleDirection(); return }
       const idxMatch = action.match(/^sessionByIndex(\d)$/)
       if (idxMatch) h.onSessionByIndex(parseInt(idxMatch[1], 10))

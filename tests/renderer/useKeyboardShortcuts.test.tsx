@@ -14,7 +14,11 @@ function makeHandlers(): ShortcutHandlers {
     onOpenSettings:         jest.fn(),
     onOpenShortcuts:        jest.fn(),
     onSplitFocus:           jest.fn(),
+    onSplitFocusPrev:       jest.fn(),
+    onSplitOpenThreeWay:    jest.fn(),
+    onSplitClose:           jest.fn(),
     onSplitSwap:            jest.fn(),
+    onSplitSwapSecondary:   jest.fn(),
     onSplitToggleDirection: jest.fn(),
   }
 }
@@ -164,4 +168,40 @@ test('fires onSplitToggleDirection for Ctrl+Shift+Backquote', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backquote', ctrlKey: true, shiftKey: true, bubbles: true }))
   })
   expect(handlers.onSplitToggleDirection).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitFocusPrev for Ctrl+Shift+Alt+Backslash', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backslash', ctrlKey: true, shiftKey: true, altKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitFocusPrev).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitOpenThreeWay for Ctrl+Shift+Equal', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Equal', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitOpenThreeWay).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitClose for Ctrl+Shift+X', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyX', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitClose).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitSwapSecondary for Ctrl+Shift+J', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyJ', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitSwapSecondary).toHaveBeenCalledTimes(1)
 })
