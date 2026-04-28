@@ -8,6 +8,7 @@ import { SessionDrawer } from './components/SessionDrawer'
 import { SettingsModal } from './components/SettingsModal'
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+import { useCompanion } from './hooks/useCompanion'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
@@ -42,15 +43,23 @@ export default function App() {
     if (session) setActive(session.id)
   }
 
+  const {
+    companionId, splitOpen, splitDirection, splitSwapped, splitFocused,
+    onSplitFocus, onSplitSwap, onSplitToggleDirection,
+  } = useCompanion()
+
   const { keybindings, updateKeybindings } = useKeyboardShortcuts({
-    onNewSession:     () => setShowNewDialog(true),
-    onKillSession:    handleKillActive,
-    onNextSession:    handleNextSession,
-    onPrevSession:    handlePrevSession,
-    onSessionByIndex: handleSessionByIndex,
-    onOpenDrawer:     () => setShowDrawer(true),
-    onOpenSettings:   () => setShowSettings(true),
-    onOpenShortcuts:  () => setShowShortcutsModal(true),
+    onNewSession:           () => setShowNewDialog(true),
+    onKillSession:          handleKillActive,
+    onNextSession:          handleNextSession,
+    onPrevSession:          handlePrevSession,
+    onSessionByIndex:       handleSessionByIndex,
+    onOpenDrawer:           () => setShowDrawer(true),
+    onOpenSettings:         () => setShowSettings(true),
+    onOpenShortcuts:        () => setShowShortcutsModal(true),
+    onSplitFocus,
+    onSplitSwap,
+    onSplitToggleDirection,
   })
 
   const handleCreate = async (options: CreateSessionOptions) => {
@@ -84,7 +93,16 @@ export default function App() {
       </div>
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <TerminalPane sessions={sessions} activeSessionId={activeSessionId} keybindings={keybindings} />
+        <TerminalPane
+          sessions={sessions}
+          activeSessionId={activeSessionId}
+          keybindings={keybindings}
+          companionId={companionId}
+          splitOpen={splitOpen}
+          splitDirection={splitDirection}
+          splitSwapped={splitSwapped}
+          splitFocused={splitFocused}
+        />
         {activeSession && <GitPanel cwd={activeSession.cwd} />}
       </div>
 
