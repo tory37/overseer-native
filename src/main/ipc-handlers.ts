@@ -83,10 +83,11 @@ export function registerIpcHandlers(
 
   const companionMgr = new CompanionPtyManager()
 
-  ipcMain.handle(IPC.COMPANION_SPAWN, () =>
+  ipcMain.handle(IPC.COMPANION_SPAWN, (_event, cwd: string) =>
     companionMgr.spawn(
-      (data) => getWindow()?.webContents.send('companion:data', data),
-      ()     => getWindow()?.webContents.send('companion:exit'),
+      cwd,
+      (id, data) => getWindow()?.webContents.send('companion:data', { id, data }),
+      (id)       => getWindow()?.webContents.send('companion:exit', { id }),
     )
   )
 

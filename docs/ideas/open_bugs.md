@@ -1,0 +1,3 @@
+- when opening modals, we should auto focus the first input.  like new, if i use the keyboard shortcut for a new session, i have to tab into the first input box, instead of it being there
+- shortcut that opens the keyboard shortcut modal does not close it.  it should open and close
+- no keyboard shortcut to delete a session.  maybe a "press it twice" thing as "confirmation"

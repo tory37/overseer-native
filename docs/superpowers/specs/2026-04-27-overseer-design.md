@@ -53,10 +53,12 @@ Each session is a named, persistent unit. A session stores:
   name: string,         // user-defined label (e.g. "claude-main")
   agentType: string,    // "claude" | "gemini" | "cursor" | "shell"
   cwd: string,          // working directory at spawn time
-  envVars: object,      // injected at PTY spawn (agent-specific)
+  envVars: object,      // captured from agent config at session creation
   scrollbackPath: string // ~/.overseer/sessions/<id>.log
 }
 ```
+
+`envVars` is captured from `~/.overseer/agents/<agentType>.json` at session creation time and stored in the registry. On every subsequent PTY spawn (including app reopen), the stored values are used — not re-read from the agent file. This makes sessions reproducible and isolated from config changes until the user explicitly chooses to refresh a session.
 
 Sessions are persisted to `~/.overseer/sessions/registry.json`. Scrollback output is written to `~/.overseer/sessions/<id>.log` as raw terminal output (including escape sequences). On reopen, the scrollback file is replayed into xterm.js as history, then the shell is respawned with the same env injection.
 
@@ -118,7 +120,7 @@ The CWD for git commands comes from the session's stored `cwd`. For v1, this is 
 
 **Switch:** Tab click — active xterm.js instance is hidden, new one shown. PTY remains running in the background.
 
-**Close tab:** Hides the tab from the UI. PTY continues running (sessions are persistent). A separate "Kill session" action terminates the PTY and removes the session.
+**Close tab:** Hides the tab from the UI. PTY continues running (sessions are persistent). All sessions (including closed tabs) are visible in a session list/drawer so the user can reopen them as a tab. A separate "Kill session" action terminates the PTY and permanently removes the session.
 
 **App reopen:** Registry is loaded. Each recorded session replays its scrollback log into xterm.js as history, then respawns the shell with the same env injection. AI CLI conversation state is owned by the AI CLI itself (e.g., Claude Code's own session files) — Overseer does not manage it.
 

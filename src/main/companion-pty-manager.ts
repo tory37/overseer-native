@@ -1,20 +1,13 @@
 import * as pty from 'node-pty'
 import { randomUUID } from 'crypto'
 
-type DataCallback = (data: string) => void
-type ExitCallback = () => void
+type DataCallback = (id: string, data: string) => void
+type ExitCallback = (id: string) => void
 
 export class CompanionPtyManager {
-  private ptyProcess: pty.IPty | null = null
-  private currentId: string | null = null
+  private ptys = new Map<string, pty.IPty>()
 
-  spawn(onData: DataCallback, onExit: ExitCallback): string {
-    if (this.ptyProcess) {
-      try { this.ptyProcess.kill() } catch { /* already exited */ }
-      this.ptyProcess = null
-      this.currentId = null
-    }
-
+  spawn(cwd: string, onData: DataCallback, onExit: ExitCallback): string {
     const shell = process.env.SHELL || '/bin/bash'
     const id = randomUUID()
 
@@ -22,44 +15,37 @@ export class CompanionPtyManager {
       name: 'xterm-256color',
       cols: 80,
       rows: 24,
-      cwd: process.env.HOME || '/',
+      cwd,
       env: process.env as Record<string, string>,
     })
 
-    this.ptyProcess = proc
-    this.currentId = id
-
-    proc.onData((data) => {
-      if (this.currentId === id) onData(data)
-    })
-
+    proc.onData((data) => onData(id, data))
     proc.onExit(() => {
-      if (this.currentId === id) {
-        this.ptyProcess = null
-        this.currentId = null
-        onExit()
-      }
+      this.ptys.delete(id)
+      onExit(id)
     })
 
+    this.ptys.set(id, proc)
     return id
   }
 
   write(companionId: string, data: string): void {
-    if (this.currentId === companionId) this.ptyProcess?.write(data)
+    this.ptys.get(companionId)?.write(data)
   }
 
   resize(companionId: string, cols: number, rows: number): void {
-    if (this.currentId === companionId) this.ptyProcess?.resize(cols, rows)
+    this.ptys.get(companionId)?.resize(cols, rows)
   }
 
   kill(companionId: string): void {
-    if (this.currentId !== companionId) return
-    try { this.ptyProcess?.kill() } catch { /* already exited */ }
-    this.ptyProcess = null
-    this.currentId = null
+    const proc = this.ptys.get(companionId)
+    if (proc) {
+      try { proc.kill() } catch { /* already exited */ }
+      this.ptys.delete(companionId)
+    }
   }
 
   has(companionId: string): boolean {
-    return this.currentId === companionId
+    return this.ptys.has(companionId)
   }
 }

@@ -22,10 +22,6 @@ export default function App() {
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
 
-  const handleKillActive = () => {
-    if (activeSessionId) killSession(activeSessionId).catch(console.error)
-  }
-
   const handleNextSession = () => {
     if (sessions.length === 0) return
     const idx = sessions.findIndex(s => s.id === activeSessionId)
@@ -44,9 +40,16 @@ export default function App() {
   }
 
   const {
-    companionId, splitOpen, splitDirection, splitSwapped, splitFocused,
-    onSplitFocus, onSplitSwap, onSplitToggleDirection,
-  } = useCompanion()
+    allCompanions, splitOpen, splitDirection, splitSwapped, splitFocused,
+    onSplitFocus, onSplitSwap, onSplitToggleDirection, killCompanionForSession,
+  } = useCompanion(activeSession)
+
+  const handleKillActive = () => {
+    if (activeSessionId) {
+      killCompanionForSession(activeSessionId)
+      killSession(activeSessionId).catch(console.error)
+    }
+  }
 
   const { keybindings, updateKeybindings } = useKeyboardShortcuts({
     onNewSession:           () => setShowNewDialog(true),
@@ -97,7 +100,7 @@ export default function App() {
           sessions={sessions}
           activeSessionId={activeSessionId}
           keybindings={keybindings}
-          companionId={companionId}
+          allCompanions={allCompanions}
           splitOpen={splitOpen}
           splitDirection={splitDirection}
           splitSwapped={splitSwapped}

@@ -47,7 +47,7 @@ export class PtyManager {
   }
 
   kill(sessionId: string): void {
-    this.ptys.get(sessionId)?.kill()
+    try { this.ptys.get(sessionId)?.kill() } catch { /* process already exited */ }
     this.ptys.delete(sessionId)
     this.scrollbacks.delete(sessionId)
   }

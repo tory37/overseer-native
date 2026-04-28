@@ -32,8 +32,8 @@ export function CompanionTerminal({ companionId, focused, keybindings }: Props) 
       return !matchKeybinding(keybindingsRef.current, e)
     })
 
-    const unsubscribeData = window.overseer.onCompanionData((data) => {
-      term.write(data)
+    const unsubscribeData = window.overseer.onCompanionData((id, data) => {
+      if (id === companionId) term.write(data)
     })
 
     term.onData((data) => {
