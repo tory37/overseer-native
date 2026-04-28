@@ -7,6 +7,7 @@ import { SyncService } from './services/sync-service'
 import { IPC } from '../renderer/types/ipc'
 import type { CreateSessionOptions, Keybindings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
+import { CompanionPtyManager } from './companion-pty-manager'
 
 export async function readKeybindingsFromDisk(baseDir = os.homedir()): Promise<Keybindings | null> {
   const p = path.join(baseDir, '.overseer', 'keybindings.json')
@@ -79,4 +80,17 @@ export function registerIpcHandlers(
 
   ipcMain.handle(IPC.KEYBINDINGS_READ,  () => readKeybindingsFromDisk())
   ipcMain.handle(IPC.KEYBINDINGS_WRITE, (_event, kb: Keybindings) => writeKeybindingsToDisk(kb))
+
+  const companionMgr = new CompanionPtyManager()
+
+  ipcMain.handle(IPC.COMPANION_SPAWN, () =>
+    companionMgr.spawn(
+      (data) => getWindow()?.webContents.send('companion:data', data),
+      ()     => getWindow()?.webContents.send('companion:exit'),
+    )
+  )
+
+  ipcMain.handle(IPC.COMPANION_KILL,   (_event, companionId: string) => companionMgr.kill(companionId))
+  ipcMain.handle(IPC.COMPANION_INPUT,  (_event, companionId: string, data: string) => companionMgr.write(companionId, data))
+  ipcMain.handle(IPC.COMPANION_RESIZE, (_event, companionId: string, cols: number, rows: number) => companionMgr.resize(companionId, cols, rows))
 }
