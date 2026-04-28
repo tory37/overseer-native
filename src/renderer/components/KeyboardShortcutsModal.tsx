@@ -24,8 +24,12 @@ const ACTION_LABELS: Record<string, string> = {
   openDrawer:           'Open Session List',
   openSettings:         'Open Settings',
   openShortcuts:        'Show Keyboard Shortcuts',
-  splitFocus:           'Open / Focus Companion Terminal',
-  splitSwap:            'Swap Companion Panes',
+  splitFocus:           'Open / Focus Next Pane',
+  splitFocusPrev:       'Focus Previous Pane',
+  splitOpenThreeWay:    'Open 3-Way Split',
+  splitClose:           'Close Focused Pane',
+  splitSwap:            'Swap Main / Secondary Columns',
+  splitSwapSecondary:   'Swap Companion Panes (3-way)',
   splitToggleDirection: 'Toggle Split Direction',
 }
 
