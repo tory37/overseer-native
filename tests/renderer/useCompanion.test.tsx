@@ -9,6 +9,7 @@ const mockSession: Session = {
   cwd: '/home/test',
   envVars: {},
   scrollbackPath: '',
+  spriteId: null,
 }
 
 beforeEach(() => {

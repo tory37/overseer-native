@@ -5,8 +5,8 @@ import { SessionDrawer } from '../../src/renderer/components/SessionDrawer'
 import type { Session } from '../../src/renderer/types/ipc'
 
 const sessions: Session[] = [
-  { id: 'a', name: 'session-a', agentType: 'claude', cwd: '/tmp/a', envVars: {}, scrollbackPath: '' },
-  { id: 'b', name: 'session-b', agentType: 'shell',  cwd: '/tmp/b', envVars: {}, scrollbackPath: '' },
+  { id: 'a', name: 'session-a', agentType: 'claude', cwd: '/tmp/a', envVars: {}, scrollbackPath: '', spriteId: null },
+  { id: 'b', name: 'session-b', agentType: 'shell',  cwd: '/tmp/b', envVars: {}, scrollbackPath: '', spriteId: null },
 ]
 
 test('renders all session names', () => {

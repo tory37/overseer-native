@@ -36,6 +36,9 @@ export class SessionService {
   create(options: CreateSessionOptions): Session {
     const id = randomUUID()
     const envVars = readAgentEnvVars(options.agentType)
+    if (options.persona) {
+      envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
+    }
     const session: Session = {
       id,
       name: options.name,
@@ -43,6 +46,7 @@ export class SessionService {
       cwd: options.cwd || os.homedir(),
       envVars,
       scrollbackPath: path.join(os.homedir(), '.overseer', 'sessions', `${id}.log`),
+      spriteId: options.spriteId ?? null,
     }
     this.registry.add(session)
     this.spawnPty(session)
@@ -82,5 +86,19 @@ export class SessionService {
       (data) => { this.onDataCallback?.(session.id, data) },
       (err) => { this.onErrorCallback?.(session.id, err) }
     )
+    const persona = session.envVars['OVERSEER_SPRITE_PERSONA']
+    if (persona && session.agentType === 'claude') {
+      const escaped = persona
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, ' ')
+      setTimeout(() => {
+        try {
+          this.ptyManager.write(session.id, `claude --system-prompt "${escaped}"\r`)
+        } catch (err) {
+          console.error(`[Sprite] Persona injection failed for session ${session.id}:`, err)
+        }
+      }, 300)
+    }
   }
 }

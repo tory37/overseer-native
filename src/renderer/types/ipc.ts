@@ -5,12 +5,15 @@ export interface Session {
   cwd: string
   envVars: Record<string, string>
   scrollbackPath: string
+  spriteId: string | null
 }
 
 export interface CreateSessionOptions {
   name: string
   agentType: Session['agentType']
   cwd?: string
+  spriteId?: string | null
+  persona?: string
 }
 
 export interface GitCommandResult {
@@ -72,6 +75,8 @@ export type KeybindingAction =
   | 'splitSwap'
   | 'splitSwapSecondary'
   | 'splitToggleDirection'
+  | 'toggleSpritePanel'
+  | 'openSpriteStudio'
 
 export type Keybindings = Record<KeybindingAction, Keybinding>
 
@@ -99,6 +104,8 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   splitSwap:            { code: 'KeyM',         ctrl: true,  shift: true,  alt: false },
   splitSwapSecondary:   { code: 'KeyJ',         ctrl: true,  shift: true,  alt: false },
   splitToggleDirection: { code: 'Backquote',    ctrl: true,  shift: true,  alt: false },
+  toggleSpritePanel:    { code: 'KeyS',         ctrl: true,  shift: true,  alt: false },
+  openSpriteStudio:     { code: 'KeyP',         ctrl: true,  shift: true,  alt: false },
 }
 
 const CODE_LABELS: Record<string, string> = {
@@ -161,4 +168,5 @@ export const IPC = {
   COMPANION_KILL:    'companion:kill',
   COMPANION_INPUT:   'companion:input',
   COMPANION_RESIZE:  'companion:resize',
+  SPRITE_SPEECH:     'sprite:speech',
 } as const
