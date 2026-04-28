@@ -33,8 +33,8 @@ export function GitPanel({ cwd }: Props) {
   }
 
   const panelStyle: React.CSSProperties = {
-    width: '260px', background: 'var(--bg-sidebar)', display: 'flex', flexDirection: 'column',
-    padding: '12px', gap: '8px', borderLeft: '1px solid var(--border)',
+    flex: 1, background: 'var(--bg-sidebar)', display: 'flex', flexDirection: 'column',
+    padding: '12px', gap: '8px',
   }
   const btnStyle: React.CSSProperties = {
     background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: '4px',
