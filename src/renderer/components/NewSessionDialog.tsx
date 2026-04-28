@@ -54,7 +54,7 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
         <h2 style={{ color: '#eee', margin: 0 }}>New Session</h2>
         <label style={labelStyle} htmlFor="session-name">
           Name
-          <input id="session-name" aria-label="Name" style={inputStyle} value={name} onChange={e => setName(e.target.value)} required />
+          <input id="session-name" aria-label="Name" style={inputStyle} value={name} onChange={e => setName(e.target.value)} required autoFocus />
         </label>
         <label style={labelStyle} htmlFor="agent-type">
           Agent

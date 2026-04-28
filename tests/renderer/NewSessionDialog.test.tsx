@@ -15,6 +15,12 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
+test('auto focuses the session name input on mount', () => {
+  render(<NewSessionDialog onCreate={() => {}} onCancel={() => {}} />)
+  const input = screen.getByLabelText('Name')
+  expect(input).toHaveFocus()
+})
+
 test('calls onCreate with form values on submit', async () => {
   const onCreate = jest.fn()
   render(<NewSessionDialog onCancel={() => {}} onCreate={onCreate} />)
