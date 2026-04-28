@@ -1,7 +1,7 @@
 {
   "title": "Open Bugs",
   "main_idea": "Bugs to loop through and fix one at a time. we only need to consume these on at a time.",
-  "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up. When you fix a bug, remove it from the requirements. Only consume these 1 at a time.  do not litter context with bugs we are not actively looking at.",
+  "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up. IMPORTANT: When you finish fixing a bug, you MUST remove it from the 'requirements' array in this file as the final step of your work session. Only consume these 1 at a time. Do not litter context with bugs we are not actively looking at.",
 
   "requirements": [
     "shortcut that opens the keyboard shortcut modal does not close it.  it should open and close",
