@@ -7,7 +7,7 @@
     "build:main": "tsc -p tsconfig.main.json",
     "build:renderer": "vite build",
     "build": "npm run build:main && npm run build:renderer",
-    "dist": "npm run build && electron-builder --linux AppImage",
+    "dist": "npm run build && electron-builder",
     "start": "npm run build && electron .",
     "dev:renderer": "vite",
     "test": "jest"
@@ -32,6 +32,12 @@
       "category": "Development",
       "target": [
         "AppImage"
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg"
       ]
     },
     "publish": {

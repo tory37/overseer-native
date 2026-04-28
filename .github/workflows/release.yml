@@ -10,7 +10,12 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,7 +30,12 @@ jobs:
         run: npm ci
 
       - name: Build and Package
-        run: npm run dist
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            npm run dist -- --linux AppImage
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            npm run dist -- --mac dmg
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -35,7 +45,7 @@ jobs:
         with:
           files: |
             dist/package/*.AppImage
-            dist/package/*.deb
-            dist/package/*.rpm
+            dist/package/*.dmg
+            dist/package/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
