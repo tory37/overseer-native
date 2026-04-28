@@ -36,8 +36,8 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "toryhebert",
-      "repo": "overseer"
+      "owner": "tory37",
+      "repo": "overseer-native"
     }
   },
   "jest": {
