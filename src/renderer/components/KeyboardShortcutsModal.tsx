@@ -21,9 +21,12 @@ const ACTION_LABELS: Record<string, string> = {
   sessionByIndex7:  'Switch to Session 7',
   sessionByIndex8:  'Switch to Session 8',
   sessionByIndex9:  'Switch to Session 9',
-  openDrawer:       'Open Session List',
-  openSettings:     'Open Settings',
-  openShortcuts:    'Show Keyboard Shortcuts',
+  openDrawer:           'Open Session List',
+  openSettings:         'Open Settings',
+  openShortcuts:        'Show Keyboard Shortcuts',
+  splitFocus:           'Open / Focus Companion Terminal',
+  splitSwap:            'Swap Companion Panes',
+  splitToggleDirection: 'Toggle Split Direction',
 }
 
 export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {

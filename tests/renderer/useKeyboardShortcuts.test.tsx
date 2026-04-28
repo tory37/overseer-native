@@ -5,14 +5,17 @@ import { DEFAULT_KEYBINDINGS } from '../../src/renderer/types/ipc'
 
 function makeHandlers(): ShortcutHandlers {
   return {
-    onNewSession:     jest.fn(),
-    onKillSession:    jest.fn(),
-    onNextSession:    jest.fn(),
-    onPrevSession:    jest.fn(),
-    onSessionByIndex: jest.fn(),
-    onOpenDrawer:     jest.fn(),
-    onOpenSettings:   jest.fn(),
-    onOpenShortcuts:  jest.fn(),
+    onNewSession:           jest.fn(),
+    onKillSession:          jest.fn(),
+    onNextSession:          jest.fn(),
+    onPrevSession:          jest.fn(),
+    onSessionByIndex:       jest.fn(),
+    onOpenDrawer:           jest.fn(),
+    onOpenSettings:         jest.fn(),
+    onOpenShortcuts:        jest.fn(),
+    onSplitFocus:           jest.fn(),
+    onSplitSwap:            jest.fn(),
+    onSplitToggleDirection: jest.fn(),
   }
 }
 
@@ -134,4 +137,31 @@ test('updateKeybindings writes to disk and updates state', async () => {
 
   expect((window as any).overseer.writeKeybindings).toHaveBeenCalledWith(custom)
   expect(result.current.keybindings.newSession.code).toBe('KeyT')
+})
+
+test('fires onSplitFocus for Ctrl+Shift+Backslash', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backslash', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitFocus).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitSwap for Ctrl+Shift+M', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitSwap).toHaveBeenCalledTimes(1)
+})
+
+test('fires onSplitToggleDirection for Ctrl+Shift+Backquote', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backquote', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onSplitToggleDirection).toHaveBeenCalledTimes(1)
 })

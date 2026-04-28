@@ -8,9 +8,12 @@ export interface ShortcutHandlers {
   onNextSession:    () => void
   onPrevSession:    () => void
   onSessionByIndex: (index: number) => void
-  onOpenDrawer:     () => void
-  onOpenSettings:   () => void
-  onOpenShortcuts:  () => void
+  onOpenDrawer:           () => void
+  onOpenSettings:         () => void
+  onOpenShortcuts:        () => void
+  onSplitFocus:           () => void
+  onSplitSwap:            () => void
+  onSplitToggleDirection: () => void
 }
 
 export interface KeyboardShortcutsAPI {
@@ -39,9 +42,12 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (action === 'killSession')   { h.onKillSession();   return }
       if (action === 'nextSession')   { h.onNextSession();   return }
       if (action === 'prevSession')   { h.onPrevSession();   return }
-      if (action === 'openDrawer')    { h.onOpenDrawer();    return }
-      if (action === 'openSettings')  { h.onOpenSettings();  return }
-      if (action === 'openShortcuts') { h.onOpenShortcuts(); return }
+      if (action === 'openDrawer')           { h.onOpenDrawer();           return }
+      if (action === 'openSettings')         { h.onOpenSettings();         return }
+      if (action === 'openShortcuts')        { h.onOpenShortcuts();        return }
+      if (action === 'splitFocus')           { h.onSplitFocus();           return }
+      if (action === 'splitSwap')            { h.onSplitSwap();            return }
+      if (action === 'splitToggleDirection') { h.onSplitToggleDirection(); return }
       const idxMatch = action.match(/^sessionByIndex(\d)$/)
       if (idxMatch) h.onSessionByIndex(parseInt(idxMatch[1], 10))
     }
