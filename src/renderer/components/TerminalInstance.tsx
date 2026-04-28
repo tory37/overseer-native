@@ -2,16 +2,21 @@ import React, { useEffect, useRef } from 'react'
 import { Terminal } from 'xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import 'xterm/css/xterm.css'
-import type { Session } from '../types/ipc'
+import { matchKeybinding } from '../types/ipc'
+import type { Session, Keybindings } from '../types/ipc'
 
 interface Props {
   session: Session
+  keybindings: Keybindings
 }
 
-export function TerminalInstance({ session }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const termRef = useRef<Terminal | null>(null)
-  const fitRef = useRef<FitAddon | null>(null)
+export function TerminalInstance({ session, keybindings }: Props) {
+  const containerRef   = useRef<HTMLDivElement>(null)
+  const termRef        = useRef<Terminal | null>(null)
+  const fitRef         = useRef<FitAddon | null>(null)
+  const keybindingsRef = useRef(keybindings)
+
+  useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -23,6 +28,10 @@ export function TerminalInstance({ session }: Props) {
     fit.fit()
     termRef.current = term
     fitRef.current = fit
+
+    term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+      return !matchKeybinding(keybindingsRef.current, e)
+    })
 
     window.overseer.getScrollback(session.id).then(data => {
       if (data) {

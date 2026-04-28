@@ -6,17 +6,52 @@ import { GitPanel } from './components/GitPanel'
 import { NewSessionDialog } from './components/NewSessionDialog'
 import { SessionDrawer } from './components/SessionDrawer'
 import { SettingsModal } from './components/SettingsModal'
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, setActive } = useSessionStore()
-  const [showNewDialog, setShowNewDialog] = useState(false)
-  const [showDrawer, setShowDrawer] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
+  const [showNewDialog,      setShowNewDialog]      = useState(false)
+  const [showDrawer,         setShowDrawer]          = useState(false)
+  const [showSettings,       setShowSettings]        = useState(false)
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false)
 
   useEffect(() => { load() }, [])
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
+
+  const handleKillActive = () => {
+    if (activeSessionId) killSession(activeSessionId).catch(console.error)
+  }
+
+  const handleNextSession = () => {
+    if (sessions.length === 0) return
+    const idx = sessions.findIndex(s => s.id === activeSessionId)
+    setActive(sessions[(idx + 1) % sessions.length].id)
+  }
+
+  const handlePrevSession = () => {
+    if (sessions.length === 0) return
+    const idx = sessions.findIndex(s => s.id === activeSessionId)
+    setActive(sessions[(idx - 1 + sessions.length) % sessions.length].id)
+  }
+
+  const handleSessionByIndex = (index: number) => {
+    const session = sessions[index - 1]
+    if (session) setActive(session.id)
+  }
+
+  const { keybindings, updateKeybindings } = useKeyboardShortcuts({
+    onNewSession:     () => setShowNewDialog(true),
+    onKillSession:    handleKillActive,
+    onNextSession:    handleNextSession,
+    onPrevSession:    handlePrevSession,
+    onSessionByIndex: handleSessionByIndex,
+    onOpenDrawer:     () => setShowDrawer(true),
+    onOpenSettings:   () => setShowSettings(true),
+    onOpenShortcuts:  () => setShowShortcutsModal(true),
+  })
 
   const handleCreate = async (options: CreateSessionOptions) => {
     await createSession(options)
@@ -49,7 +84,7 @@ export default function App() {
       </div>
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <TerminalPane sessions={sessions} activeSessionId={activeSessionId} />
+        <TerminalPane sessions={sessions} activeSessionId={activeSessionId} keybindings={keybindings} />
         {activeSession && <GitPanel cwd={activeSession.cwd} />}
       </div>
 
@@ -71,7 +106,18 @@ export default function App() {
       )}
 
       {showSettings && (
-        <SettingsModal onClose={() => setShowSettings(false)} />
+        <SettingsModal
+          onClose={() => setShowSettings(false)}
+          keybindings={keybindings}
+          onSaveKeybindings={updateKeybindings}
+        />
+      )}
+
+      {showShortcutsModal && (
+        <KeyboardShortcutsModal
+          keybindings={keybindings}
+          onClose={() => setShowShortcutsModal(false)}
+        />
       )}
     </div>
   )
