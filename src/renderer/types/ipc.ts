@@ -54,6 +54,9 @@ export type KeybindingAction =
   | 'openDrawer'
   | 'openSettings'
   | 'openShortcuts'
+  | 'splitFocus'
+  | 'splitSwap'
+  | 'splitToggleDirection'
 
 export type Keybindings = Record<KeybindingAction, Keybinding>
 
@@ -71,9 +74,12 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   sessionByIndex7: { code: 'Digit7',       ctrl: true,  shift: true,  alt: false },
   sessionByIndex8: { code: 'Digit8',       ctrl: true,  shift: true,  alt: false },
   sessionByIndex9: { code: 'Digit9',       ctrl: true,  shift: true,  alt: false },
-  openDrawer:      { code: 'KeyE',         ctrl: true,  shift: true,  alt: false },
-  openSettings:    { code: 'Comma',        ctrl: true,  shift: true,  alt: false },
-  openShortcuts:   { code: 'Slash',        ctrl: true,  shift: true,  alt: false },
+  openDrawer:           { code: 'KeyE',        ctrl: true,  shift: true,  alt: false },
+  openSettings:         { code: 'Comma',       ctrl: true,  shift: true,  alt: false },
+  openShortcuts:        { code: 'Slash',        ctrl: true,  shift: true,  alt: false },
+  splitFocus:           { code: 'Backslash',   ctrl: true,  shift: true,  alt: false },
+  splitSwap:            { code: 'KeyM',        ctrl: true,  shift: true,  alt: false },
+  splitToggleDirection: { code: 'Backquote',   ctrl: true,  shift: true,  alt: false },
 }
 
 const CODE_LABELS: Record<string, string> = {
@@ -130,4 +136,8 @@ export const IPC = {
   SYNC_RUN:          'sync:run',
   KEYBINDINGS_READ:  'keybindings:read',
   KEYBINDINGS_WRITE: 'keybindings:write',
+  COMPANION_SPAWN:   'companion:spawn',
+  COMPANION_KILL:    'companion:kill',
+  COMPANION_INPUT:   'companion:input',
+  COMPANION_RESIZE:  'companion:resize',
 } as const
