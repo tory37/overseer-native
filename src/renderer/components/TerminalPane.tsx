@@ -1,11 +1,12 @@
 import React, { useRef } from 'react'
 import { TerminalInstance } from './TerminalInstance'
 import { CompanionTerminal } from './CompanionTerminal'
-import type { Session, Keybindings } from '../types/ipc'
+import type { Session, Keybindings, Theme } from '../types/ipc'
 
 interface Props {
   sessions: Session[]
   activeSessionId: string | null
+  activeTheme: Theme
   keybindings: Keybindings
   allCompanions:  Array<{ sessionId: string; companionId: string }>
   allCompanionsB: Array<{ sessionId: string; companionId: string }>
@@ -69,7 +70,7 @@ function DragHandle({
 }
 
 export function TerminalPane({
-  sessions, activeSessionId, keybindings,
+  sessions, activeSessionId, activeTheme, keybindings,
   allCompanions, allCompanionsB,
   splitOpen, threeWayOpen, splitDirection, splitSwapped, secondarySwapped,
   splitFocused, outerSplitRatio, innerSplitRatio,
@@ -91,6 +92,7 @@ export function TerminalPane({
         session={session}
         focused={splitFocused === 'main' && session.id === activeSessionId}
         keybindings={keybindings}
+        activeTheme={activeTheme}
       />
     </div>
   ))
@@ -104,6 +106,7 @@ export function TerminalPane({
         companionId={companionId}
         focused={splitFocused === 'companionA' && sessionId === activeSessionId}
         keybindings={keybindings}
+        activeTheme={activeTheme}
       />
     </div>
   ))
@@ -117,6 +120,7 @@ export function TerminalPane({
         companionId={companionId}
         focused={splitFocused === 'companionB' && sessionId === activeSessionId}
         keybindings={keybindings}
+        activeTheme={activeTheme}
       />
     </div>
   ))
@@ -129,7 +133,7 @@ export function TerminalPane({
   // Always use the same flex structure so sessionStack's wrapper never changes
   // position in the React tree (avoids remounting xterm on layout changes).
   return (
-    <div ref={outerRef} style={{ flex: 1, display: 'flex', flexDirection: isRow ? 'row' : 'column', background: '#1e1e1e' }}>
+    <div ref={outerRef} style={{ flex: 1, display: 'flex', flexDirection: isRow ? 'row' : 'column', background: 'var(--bg-main)' }}>
       {/* Main panel */}
       <div style={{ flex: mainFlex, position: 'relative', overflow: 'hidden', order: splitSwapped ? 2 : 0 }}>
         {sessionStack}

@@ -50,19 +50,19 @@ export function SessionDrawer({ sessions, activeSessionId, onSelect, onKill, onC
   }
   const drawerStyle: React.CSSProperties = {
     position: 'absolute', top: 0, left: 0, bottom: 0, width: '280px',
-    background: '#252526', display: 'flex', flexDirection: 'column', padding: '16px', gap: '8px',
+    background: 'var(--bg-sidebar)', display: 'flex', flexDirection: 'column', padding: '16px', gap: '8px',
   }
   const itemStyle = (isActive: boolean, isFocused: boolean): React.CSSProperties => ({
-    background: isActive ? '#094771' : isFocused ? '#3a3a3a' : '#2d2d2d',
-    borderRadius: '4px', padding: '8px 12px', color: '#ccc',
+    background: isActive ? 'var(--bg-active-tab)' : isFocused ? 'var(--bg-active-tab)' : 'var(--bg-inactive-tab)',
+    borderRadius: '4px', padding: '8px 12px', color: 'var(--text-main)',
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    outline: isFocused ? '1px solid #0e639c' : 'none',
+    outline: isFocused ? '1px solid var(--accent)' : 'none',
   })
 
   return (
     <div style={overlayStyle} onClick={onClose}>
       <div style={drawerStyle} onClick={e => e.stopPropagation()}>
-        <h3 style={{ color: '#eee', margin: 0 }}>All Sessions</h3>
+        <h3 style={{ color: 'var(--text-main)', margin: 0 }}>All Sessions</h3>
         {sessions.map((s, i) => (
           <div key={s.id} style={itemStyle(s.id === activeSessionId, i === focusedIdx)}>
             <div
@@ -70,7 +70,7 @@ export function SessionDrawer({ sessions, activeSessionId, onSelect, onKill, onC
               onClick={() => { onSelect(s.id); onClose() }}
             >
               <div style={{ fontWeight: 600 }}>{s.name}</div>
-              <div style={{ fontSize: '11px', color: '#888' }}>{s.agentType} · {s.cwd}</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{s.agentType} · {s.cwd}</div>
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); onKill(s.id) }}
@@ -82,7 +82,7 @@ export function SessionDrawer({ sessions, activeSessionId, onSelect, onKill, onC
           </div>
         ))}
         {sessions.length === 0 && (
-          <div style={{ color: '#666', fontSize: '13px' }}>No sessions yet.</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '13px' }}>No sessions yet.</div>
         )}
       </div>
     </div>

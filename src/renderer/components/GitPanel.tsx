@@ -33,23 +33,23 @@ export function GitPanel({ cwd }: Props) {
   }
 
   const panelStyle: React.CSSProperties = {
-    width: '260px', background: '#252526', display: 'flex', flexDirection: 'column',
-    padding: '12px', gap: '8px', borderLeft: '1px solid #333',
+    width: '260px', background: 'var(--bg-sidebar)', display: 'flex', flexDirection: 'column',
+    padding: '12px', gap: '8px', borderLeft: '1px solid var(--border)',
   }
   const btnStyle: React.CSSProperties = {
-    background: '#0e639c', color: '#fff', border: 'none', borderRadius: '4px',
+    background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: '4px',
     padding: '6px 0', cursor: 'pointer', fontWeight: 600,
   }
   const outputStyle: React.CSSProperties = {
-    flex: 1, background: '#1e1e1e', color: output?.exitCode === 0 ? '#4ec9b0' : '#f44747',
+    flex: 1, background: 'var(--bg-main)', color: output?.exitCode === 0 ? '#4ec9b0' : '#f44747',
     fontFamily: 'monospace', fontSize: '12px', padding: '8px', borderRadius: '4px',
     overflowY: 'auto', whiteSpace: 'pre-wrap',
   }
 
   return (
     <div style={panelStyle}>
-      <div style={{ color: '#888', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Git</div>
-      <div style={{ fontSize: '11px', color: '#666', wordBreak: 'break-all' }}>{cwd}</div>
+      <div style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Git</div>
+      <div style={{ fontSize: '11px', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{cwd}</div>
       {(['Status', 'Commit', 'Push', 'Pull'] as GitAction[]).map(action => (
         <button key={action} style={btnStyle} onClick={() => run(action)} disabled={loading}>
           {action}

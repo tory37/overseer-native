@@ -103,11 +103,11 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#1e1e1e', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', alignItems: 'center', background: '#2d2d2d' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', fontFamily: 'sans-serif' }}>
+      <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-header)' }}>
         <button
           onClick={() => setShowDrawer(true)}
-          style={{ background: 'transparent', border: 'none', color: '#888', padding: '6px 10px', cursor: 'pointer', fontSize: '16px' }}
+          style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', padding: '6px 10px', cursor: 'pointer', fontSize: '16px' }}
           title="All sessions"
         >
           ☰
@@ -121,7 +121,7 @@ export default function App() {
         />
         <button
           onClick={() => setShowSettings(true)}
-          style={{ background: 'transparent', border: 'none', color: '#888', padding: '6px 10px', cursor: 'pointer', fontSize: '16px', marginLeft: 'auto' }}
+          style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', padding: '6px 10px', cursor: 'pointer', fontSize: '16px', marginLeft: 'auto' }}
           title="Settings"
         >
           ⚙
@@ -132,6 +132,7 @@ export default function App() {
         <TerminalPane
           sessions={sessions}
           activeSessionId={activeSessionId}
+          activeTheme={activeTheme}
           keybindings={keybindings}
           allCompanions={allCompanions}
           allCompanionsB={allCompanionsB}

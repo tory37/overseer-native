@@ -37,21 +37,21 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
   }
   const dialogStyle: React.CSSProperties = {
-    background: '#2d2d2d', padding: '24px', borderRadius: '8px',
+    background: 'var(--bg-header)', padding: '24px', borderRadius: '8px',
     display: 'flex', flexDirection: 'column', gap: '16px', minWidth: '360px',
   }
-  const labelStyle: React.CSSProperties = { color: '#ccc', display: 'flex', flexDirection: 'column', gap: '4px' }
-  const inputStyle: React.CSSProperties = { background: '#1e1e1e', color: '#eee', border: '1px solid #555', borderRadius: '4px', padding: '6px 8px' }
+  const labelStyle: React.CSSProperties = { color: 'var(--text-main)', display: 'flex', flexDirection: 'column', gap: '4px' }
+  const inputStyle: React.CSSProperties = { background: 'var(--bg-main)', color: 'var(--text-main)', border: '1px solid var(--border)', borderRadius: '4px', padding: '6px 8px' }
   const cwdInputStyle: React.CSSProperties = {
     ...inputStyle,
     flex: 1,
-    border: cwdValid === false ? '1px solid #e05252' : '1px solid #555',
+    border: cwdValid === false ? '1px solid #e05252' : '1px solid var(--border)',
   }
 
   return (
     <div style={overlayStyle}>
       <form style={dialogStyle} onSubmit={handleSubmit}>
-        <h2 style={{ color: '#eee', margin: 0 }}>New Session</h2>
+        <h2 style={{ color: 'var(--text-main)', margin: 0 }}>New Session</h2>
         <label style={labelStyle} htmlFor="session-name">
           Name
           <input id="session-name" aria-label="Name" style={inputStyle} value={name} onChange={e => setName(e.target.value)} required autoFocus />
@@ -75,7 +75,7 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
         </label>
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
           <button type="button" onClick={onCancel} style={{ ...inputStyle, cursor: 'pointer' }}>Cancel</button>
-          <button type="submit" style={{ ...inputStyle, background: '#0e639c', cursor: 'pointer' }}>Create</button>
+          <button type="submit" style={{ ...inputStyle, background: 'var(--accent)', color: '#fff', cursor: 'pointer' }}>Create</button>
         </div>
       </form>
     </div>

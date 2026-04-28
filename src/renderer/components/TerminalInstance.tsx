@@ -3,15 +3,16 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import { matchKeybinding } from '../types/ipc'
-import type { Session, Keybindings } from '../types/ipc'
+import type { Session, Keybindings, Theme } from '../types/ipc'
 
 interface Props {
   session: Session
   focused: boolean
   keybindings: Keybindings
+  activeTheme: Theme
 }
 
-export function TerminalInstance({ session, focused, keybindings }: Props) {
+export function TerminalInstance({ session, focused, keybindings, activeTheme }: Props) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
@@ -20,13 +21,29 @@ export function TerminalInstance({ session, focused, keybindings }: Props) {
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
 
   useEffect(() => {
+    if (termRef.current) {
+      termRef.current.options.theme = {
+        background: activeTheme.colors['terminal-bg'],
+        foreground: activeTheme.colors['terminal-fg']
+      }
+    }
+  }, [activeTheme])
+
+  useEffect(() => {
     if (focused && termRef.current) termRef.current.focus()
   }, [focused])
 
   useEffect(() => {
     if (!containerRef.current) return
 
-    const term = new Terminal({ theme: { background: '#1e1e1e' }, fontFamily: 'monospace', fontSize: 14 })
+    const term = new Terminal({ 
+      theme: { 
+        background: activeTheme.colors['terminal-bg'], 
+        foreground: activeTheme.colors['terminal-fg'] 
+      }, 
+      fontFamily: 'monospace', 
+      fontSize: 14 
+    })
     const fit = new FitAddon()
     term.loadAddon(fit)
     term.open(containerRef.current)

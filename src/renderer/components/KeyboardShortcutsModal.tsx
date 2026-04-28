@@ -71,16 +71,16 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        style={{ background: '#2d2d2d', color: '#ccc', borderRadius: 8, padding: 24, width: 900, maxWidth: '95vw', maxHeight: '90vh', overflow: 'auto' }}
+        style={{ background: 'var(--bg-header)', color: 'var(--text-main)', borderRadius: 8, padding: 24, width: 900, maxWidth: '95vw', maxHeight: '90vh', overflow: 'auto' }}
         onClick={e => e.stopPropagation()}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <h2 style={{ margin: 0, color: '#fff', fontSize: 20 }}>Keyboard Shortcuts</h2>
+          <h2 style={{ margin: 0, color: 'var(--text-main)', fontSize: 20 }}>Keyboard Shortcuts</h2>
           <button
             title="Close"
             onClick={onClose}
             autoFocus
-            style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: 18 }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 18 }}
           >
             ✕
           </button>
@@ -89,7 +89,7 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }}>
           {GROUPS.map(group => (
             <div key={group.title}>
-              <h3 style={{ fontSize: 11, fontWeight: 700, color: '#888', letterSpacing: '0.05em', marginBottom: 12, borderBottom: '1px solid #3a3a3a', paddingBottom: 8 }}>
+              <h3 style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em', marginBottom: 12, borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
                 {group.title}
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -98,8 +98,8 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
                   if (!kb) return null
                   return (
                     <div key={action} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
-                      <span style={{ fontSize: 13, color: '#ccc' }}>{ACTION_LABELS[action] ?? action}</span>
-                      <kbd style={{ background: '#1e1e1e', border: '1px solid #555', borderRadius: 4, padding: '2px 6px', fontSize: 11, color: '#eee', fontFamily: 'monospace', marginLeft: 8, whiteSpace: 'nowrap' }}>
+                      <span style={{ fontSize: 13, color: 'var(--text-main)' }}>{ACTION_LABELS[action] ?? action}</span>
+                      <kbd style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: 4, padding: '2px 6px', fontSize: 11, color: 'var(--text-main)', fontFamily: 'monospace', marginLeft: 8, whiteSpace: 'nowrap' }}>
                         {formatKeybinding(kb)}
                       </kbd>
                     </div>
