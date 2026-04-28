@@ -197,10 +197,10 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   setActiveTheme: (id) => {
     set({ activeThemeId: id })
     const { activeThemeId, customThemes } = get()
-    ;(window as any).electron.invoke(IPC.THEME_WRITE, { activeThemeId, customThemes })
+    window.overseer.writeTheme({ activeThemeId, customThemes })
   },
   loadSettings: async () => {
-    const settings = await (window as any).electron.invoke(IPC.THEME_READ)
+    const settings = await window.overseer.readTheme()
     if (settings) {
       set({ 
         activeThemeId: settings.activeThemeId || 'overseer-dark', 

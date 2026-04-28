@@ -11,17 +11,12 @@ const successResult: SyncResult = { ok: true, output: 'Synced.' }
 const failResult: SyncResult = { ok: false, output: 'Error: script not found' }
 
 function setupMocks(status: DriftStatus, syncResult: SyncResult) {
-  Object.defineProperty(window, 'electron', {
-    value: {
-      invoke: jest.fn().mockResolvedValue({ activeThemeId: 'overseer-dark', customThemes: [] }),
-    },
-    writable: true,
-    configurable: true,
-  })
   Object.defineProperty(window, 'overseer', {
     value: {
       syncStatus: jest.fn().mockResolvedValue(status),
       syncRun: jest.fn().mockResolvedValue(syncResult),
+      readTheme: jest.fn().mockResolvedValue({ activeThemeId: 'overseer-dark', customThemes: [] }),
+      writeTheme: jest.fn().mockResolvedValue(undefined),
     },
     writable: true,
     configurable: true,

@@ -13,11 +13,10 @@ jest.mock('../../src/renderer/components/GitPanel', () => ({
 
 // Mock the window.overseer API
 beforeEach(() => {
-  (window as any).electron = {
-    invoke: jest.fn().mockResolvedValue({ activeThemeId: 'overseer-dark', customThemes: [] }),
-  };
   (window as any).overseer = {
     load: jest.fn(),
+    readTheme: jest.fn().mockResolvedValue({ activeThemeId: 'overseer-dark', customThemes: [] }),
+    writeTheme: jest.fn().mockResolvedValue(undefined),
     readKeybindings: jest.fn().mockResolvedValue(null),
     writeKeybindings: jest.fn().mockResolvedValue(undefined),
     onPtyData: jest.fn().mockReturnValue(() => {}),
