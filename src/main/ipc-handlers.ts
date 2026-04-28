@@ -5,7 +5,7 @@ import path from 'path'
 import { SessionService } from './session-service/index'
 import { SyncService } from './services/sync-service'
 import { IPC } from '../renderer/types/ipc'
-import type { CreateSessionOptions, Keybindings } from '../renderer/types/ipc'
+import type { CreateSessionOptions, Keybindings, ThemeSettings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
 
@@ -23,6 +23,22 @@ export async function writeKeybindingsToDisk(kb: Keybindings, baseDir = os.homed
   const p = path.join(baseDir, '.overseer', 'keybindings.json')
   await fs.promises.mkdir(path.dirname(p), { recursive: true })
   await fs.promises.writeFile(p, JSON.stringify(kb, null, 2), 'utf8')
+}
+
+export async function readThemeFromDisk(baseDir = os.homedir()): Promise<ThemeSettings | null> {
+  const p = path.join(baseDir, '.overseer', 'theme-settings.json')
+  try {
+    const raw = await fs.promises.readFile(p, 'utf8')
+    return JSON.parse(raw) as ThemeSettings
+  } catch {
+    return null
+  }
+}
+
+export async function writeThemeToDisk(settings: ThemeSettings, baseDir = os.homedir()): Promise<void> {
+  const p = path.join(baseDir, '.overseer', 'theme-settings.json')
+  await fs.promises.mkdir(path.dirname(p), { recursive: true })
+  await fs.promises.writeFile(p, JSON.stringify(settings, null, 2), 'utf8')
 }
 
 export async function isDirectory(p: string): Promise<boolean> {
@@ -80,6 +96,9 @@ export function registerIpcHandlers(
 
   ipcMain.handle(IPC.KEYBINDINGS_READ,  () => readKeybindingsFromDisk())
   ipcMain.handle(IPC.KEYBINDINGS_WRITE, (_event, kb: Keybindings) => writeKeybindingsToDisk(kb))
+
+  ipcMain.handle(IPC.THEME_READ,  () => readThemeFromDisk())
+  ipcMain.handle(IPC.THEME_WRITE, (_event, settings: ThemeSettings) => writeThemeToDisk(settings))
 
   const companionMgr = new CompanionPtyManager()
 

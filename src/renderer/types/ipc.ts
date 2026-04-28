@@ -30,6 +30,17 @@ export interface SyncResult {
   output: string
 }
 
+export interface Theme {
+  id: string
+  name: string
+  colors: Record<string, string>
+}
+
+export interface ThemeSettings {
+  activeThemeId: string
+  customThemes: Theme[]
+}
+
 export interface Keybinding {
   code: string
   ctrl: boolean
@@ -144,6 +155,8 @@ export const IPC = {
   SYNC_RUN:          'sync:run',
   KEYBINDINGS_READ:  'keybindings:read',
   KEYBINDINGS_WRITE: 'keybindings:write',
+  THEME_READ:        'theme:read',
+  THEME_WRITE:       'theme:write',
   COMPANION_SPAWN:   'companion:spawn',
   COMPANION_KILL:    'companion:kill',
   COMPANION_INPUT:   'companion:input',
