@@ -12,7 +12,7 @@ test('auto focuses the close button on mount', () => {
 test('renders all action labels', () => {
   render(<KeyboardShortcutsModal keybindings={DEFAULT_KEYBINDINGS} onClose={jest.fn()} />)
   expect(screen.getByText('New Session')).toBeInTheDocument()
-  expect(screen.getByText('Kill Active Session')).toBeInTheDocument()
+  expect(screen.getByText('Delete Active Session')).toBeInTheDocument()
   expect(screen.getByText('Open Settings')).toBeInTheDocument()
   expect(screen.getByText('Show Keyboard Shortcuts')).toBeInTheDocument()
 })

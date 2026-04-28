@@ -87,7 +87,11 @@ export function TerminalPane({
       key={session.id}
       style={{ position: 'absolute', inset: 0, display: session.id === activeSessionId ? 'block' : 'none' }}
     >
-      <TerminalInstance session={session} keybindings={keybindings} />
+      <TerminalInstance
+        session={session}
+        focused={splitFocused === 'main' && session.id === activeSessionId}
+        keybindings={keybindings}
+      />
     </div>
   ))
 

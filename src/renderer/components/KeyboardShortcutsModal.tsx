@@ -9,7 +9,7 @@ interface Props {
 
 const ACTION_LABELS: Record<string, string> = {
   newSession:       'New Session',
-  killSession:      'Kill Active Session',
+  killSession:      'Delete Active Session',
   nextSession:      'Next Session',
   prevSession:      'Previous Session',
   sessionByIndex1:  'Switch to Session 1',
@@ -36,7 +36,7 @@ const ACTION_LABELS: Record<string, string> = {
 export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); onClose() }
+      if (e.key === 'Escape' || e.key === '/') { e.preventDefault(); onClose() }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)

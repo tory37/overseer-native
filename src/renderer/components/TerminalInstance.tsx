@@ -1,22 +1,27 @@
 import React, { useEffect, useRef } from 'react'
-import { Terminal } from 'xterm'
+import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
-import 'xterm/css/xterm.css'
+import '@xterm/xterm/css/xterm.css'
 import { matchKeybinding } from '../types/ipc'
 import type { Session, Keybindings } from '../types/ipc'
 
 interface Props {
   session: Session
+  focused: boolean
   keybindings: Keybindings
 }
 
-export function TerminalInstance({ session, keybindings }: Props) {
+export function TerminalInstance({ session, focused, keybindings }: Props) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
   const keybindingsRef = useRef(keybindings)
 
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
+
+  useEffect(() => {
+    if (focused && termRef.current) termRef.current.focus()
+  }, [focused])
 
   useEffect(() => {
     if (!containerRef.current) return

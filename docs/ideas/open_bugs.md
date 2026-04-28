@@ -1,8 +1,0 @@
-- I can't open three way split without opening 2 way first
-- when opening modals, we should auto focus the first input.  like new, if i use the keyboard shortcut for a new session, i have to tab into the first input box, instead of it being there
-- shortcut that opens the keyboard shortcut modal does not close it.  it should open and close
-- no keyboard shortcut to delete a session.  maybe a "press it twice" thing as "confirmation"
-- \ command doesn't go back to original terinal.  should go back and fourth
-- / doesnt close the shortcuts modal.  it should open AND close
-- need an audit on packages.  xterms package that we are using is deprecated.  need to figure out what else needs to change
-- node 20 actions are deprecated, seeing this in github build.  need to fix that

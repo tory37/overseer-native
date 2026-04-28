@@ -17,10 +17,18 @@ export default function App() {
   const [showDrawer,         setShowDrawer]          = useState(false)
   const [showSettings,       setShowSettings]        = useState(false)
   const [showShortcutsModal, setShowShortcutsModal] = useState(false)
+  const [confirmKillId,      setConfirmKillId]      = useState<string | null>(null)
 
   useEffect(() => { load() }, [])
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
+  
+  useEffect(() => {
+    if (confirmKillId) {
+      const timer = setTimeout(() => setConfirmKillId(null), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [confirmKillId])
 
   const handleNextSession = () => {
     if (sessions.length === 0) return
@@ -50,9 +58,13 @@ export default function App() {
   } = useCompanion(activeSession)
 
   const handleKillActive = () => {
-    if (activeSessionId) {
+    if (!activeSessionId) return
+    if (confirmKillId === activeSessionId) {
       killCompanionForSession(activeSessionId)
       killSession(activeSessionId).catch(console.error)
+      setConfirmKillId(null)
+    } else {
+      setConfirmKillId(activeSessionId)
     }
   }
 
@@ -64,7 +76,7 @@ export default function App() {
     onSessionByIndex:       handleSessionByIndex,
     onOpenDrawer:           () => setShowDrawer(true),
     onOpenSettings:         () => setShowSettings(true),
-    onOpenShortcuts:        () => setShowShortcutsModal(true),
+    onOpenShortcuts:        () => setShowShortcutsModal(prev => !prev),
     onSplitFocus,
     onSplitFocusPrev,
     onSplitOpenThreeWay,
@@ -92,6 +104,7 @@ export default function App() {
         <TabBar
           sessions={sessions}
           activeSessionId={activeSessionId}
+          confirmKillId={confirmKillId}
           onSelect={setActive}
           onNew={() => setShowNewDialog(true)}
         />

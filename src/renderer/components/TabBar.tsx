@@ -4,11 +4,12 @@ import type { Session } from '../types/ipc'
 interface Props {
   sessions: Session[]
   activeSessionId: string | null
+  confirmKillId?: string | null
   onSelect: (id: string) => void
   onNew: () => void
 }
 
-export function TabBar({ sessions, activeSessionId, onSelect, onNew }: Props) {
+export function TabBar({ sessions, activeSessionId, confirmKillId, onSelect, onNew }: Props) {
   return (
     <div style={{ display: 'flex', background: '#2d2d2d', padding: '4px 8px', gap: '4px' }}>
       {sessions.map(s => (
@@ -17,14 +18,14 @@ export function TabBar({ sessions, activeSessionId, onSelect, onNew }: Props) {
           onClick={() => onSelect(s.id)}
           style={{
             padding: '4px 12px',
-            background: s.id === activeSessionId ? '#1e1e1e' : '#3a3a3a',
-            color: '#ccc',
+            background: s.id === confirmKillId ? '#8b0000' : (s.id === activeSessionId ? '#1e1e1e' : '#3a3a3a'),
+            color: s.id === confirmKillId ? '#fff' : '#ccc',
             border: 'none',
             borderRadius: '4px 4px 0 0',
             cursor: 'pointer',
           }}
         >
-          {s.name}
+          {s.name}{s.id === confirmKillId ? ' (press again to kill)' : ''}
         </button>
       ))}
       <button

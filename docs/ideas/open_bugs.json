@@ -4,12 +4,6 @@
   "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up. IMPORTANT: When you finish fixing a bug, you MUST remove it from the 'requirements' array in this file as the final step of your work session. Only consume these 1 at a time. Do not litter context with bugs we are not actively looking at.",
 
   "requirements": [
-    "shortcut that opens the keyboard shortcut modal does not close it.  it should open and close",
-    "no keyboard shortcut to delete a session.  maybe a 'press it twice' thing as 'confirmation'",
-    " back slash command doesn't go back to original terinal.  should go back and fourth",
-    "/ doesnt close the shortcuts modal.  it should open AND close",
-    "need an audit on packages.  xterms package that we are using is deprecated.  need to figure out what else needs to change",
-    "node 20 actions are deprecated, seeing this in github build.  need to fix that"
 ],
 
   "out_of_scope": [],
