@@ -31,6 +31,7 @@ export interface CompanionAPI extends CompanionState {
   onOuterRatio:            (r: number) => void
   onInnerRatio:            (r: number) => void
   killCompanionForSession: (sessionId: string) => void
+  onSetSplitFocused:       (f: 'main' | 'companionA' | 'companionB') => void
 }
 
 export function useCompanion(activeSession: Session | undefined): CompanionAPI {
@@ -45,14 +46,40 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   const [innerSplitRatio, setInnerSplitRatio] = useState(0.5)
 
   const activeSessionRef  = useRef(activeSession)
+  const companionsRef     = useRef(companions)
   const splitOpenRef      = useRef(splitOpen)
   const threeWayOpenRef   = useRef(threeWayOpen)
   const splitFocusedRef   = useRef(splitFocused)
 
   useEffect(() => { activeSessionRef.current  = activeSession  }, [activeSession])
+  // companionsRef must be updated before the normalization effect reads it
+  useEffect(() => { companionsRef.current     = companions     }, [companions])
   useEffect(() => { splitOpenRef.current      = splitOpen      }, [splitOpen])
   useEffect(() => { threeWayOpenRef.current   = threeWayOpen   }, [threeWayOpen])
   useEffect(() => { splitFocusedRef.current   = splitFocused   }, [splitFocused])
+
+  // Normalize split layout state when the active session changes.
+  // splitOpen/threeWayOpen are global, but companion existence is per-session —
+  // this keeps them in sync so stale values from a previous session don't bleed over.
+  useEffect(() => {
+    const session = activeSession
+    if (!session) return
+    const comps = companionsRef.current
+    const aId = comps.A.get(session.id)
+    const bId = comps.B.get(session.id)
+    if (!aId) {
+      setThreeWayOpen(false)
+      setSplitFocused('main')
+    } else {
+      if (!splitOpenRef.current) setSplitOpen(true)
+      if (!bId) {
+        setThreeWayOpen(false)
+        setSplitFocused(f => f === 'companionB' ? 'companionA' : f)
+      } else {
+        if (!threeWayOpenRef.current) setThreeWayOpen(true)
+      }
+    }
+  }, [activeSession?.id])
 
   useEffect(() => {
     const unsub = window.overseer.onCompanionExit((companionId) => {
@@ -98,22 +125,23 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   const onSplitFocus = useCallback(() => {
     const session = activeSessionRef.current
     if (!session) return
-    if (!splitOpenRef.current) {
-      setCompanions(prev => {
-        if (prev.A.get(session.id)) {
-          setSplitOpen(true)
-          setSplitFocused('companionA')
-          return prev
-        }
-        window.overseer.spawnCompanion(session.cwd).then(id => {
-          setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, id) }))
-          setSplitOpen(true)
-          setSplitFocused('companionA')
-        }).catch((err: unknown) => console.error('companion spawn failed:', err))
-        return prev
-      })
+    const existingId = companionsRef.current.A.get(session.id)
+    if (!existingId) {
+      // No companion yet — spawn one
+      window.overseer.spawnCompanion(session.cwd).then(id => {
+        setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, id) }))
+        setSplitOpen(true)
+        setSplitFocused('companionA')
+      }).catch((err: unknown) => console.error('companion spawn failed:', err))
       return
     }
+    if (!splitOpenRef.current) {
+      // Companion exists but split is hidden — reveal it
+      setSplitOpen(true)
+      setSplitFocused('companionA')
+      return
+    }
+    // Split is open — cycle focus forward
     setSplitFocused(f => {
       if (f === 'main') return 'companionA'
       if (f === 'companionA') return threeWayOpenRef.current ? 'companionB' : 'main'
@@ -124,22 +152,23 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   const onSplitFocusPrev = useCallback(() => {
     const session = activeSessionRef.current
     if (!session) return
-    if (!splitOpenRef.current) {
-      setCompanions(prev => {
-        if (prev.A.get(session.id)) {
-          setSplitOpen(true)
-          setSplitFocused('companionA')
-          return prev
-        }
-        window.overseer.spawnCompanion(session.cwd).then(id => {
-          setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, id) }))
-          setSplitOpen(true)
-          setSplitFocused('companionA')
-        }).catch((err: unknown) => console.error('companion spawn failed:', err))
-        return prev
-      })
+    const existingId = companionsRef.current.A.get(session.id)
+    if (!existingId) {
+      // No companion yet — spawn one
+      window.overseer.spawnCompanion(session.cwd).then(id => {
+        setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, id) }))
+        setSplitOpen(true)
+        setSplitFocused('companionA')
+      }).catch((err: unknown) => console.error('companion spawn failed:', err))
       return
     }
+    if (!splitOpenRef.current) {
+      // Companion exists but split is hidden — reveal it
+      setSplitOpen(true)
+      setSplitFocused('companionA')
+      return
+    }
+    // Split is open — cycle focus backward
     setSplitFocused(f => {
       if (f === 'main') return threeWayOpenRef.current ? 'companionB' : 'companionA'
       if (f === 'companionA') return 'main'
@@ -253,6 +282,8 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
       setThreeWayOpen(false)
       setSplitFocused('main')
     }
+    // The normalization effect (keyed on activeSession?.id) will re-open the split
+    // for the next session if it still has live companions, correcting the global reset above.
   }, [])
 
   const activeCompanionId = activeSession ? (companions.A.get(activeSession.id) ?? null) : null
@@ -266,5 +297,6 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
     onSplitFocus, onSplitFocusPrev, onSplitSwap, onSplitSwapSecondary,
     onSplitToggleDirection, onSplitOpenThreeWay, onSplitClose,
     onOuterRatio, onInnerRatio, killCompanionForSession,
+    onSetSplitFocused: setSplitFocused,
   }
 }

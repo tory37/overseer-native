@@ -46,8 +46,19 @@ export function CompanionTerminal({ companionId, focused, keybindings, activeThe
     termRef.current = term
 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+      if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
+        const sel = term.getSelection()
+        if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+        return false
+      }
       return !matchKeybinding(keybindingsRef.current, e)
     })
+
+    const handleContextMenu = () => {
+      const sel = term.getSelection()
+      if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+    }
+    containerRef.current.addEventListener('contextmenu', handleContextMenu)
 
     const unsubscribeData = window.overseer.onCompanionData((id, data) => {
       if (id === companionId) term.write(data)
@@ -66,6 +77,7 @@ export function CompanionTerminal({ companionId, focused, keybindings, activeThe
     return () => {
       unsubscribeData()
       observer.disconnect()
+      containerRef.current?.removeEventListener('contextmenu', handleContextMenu)
       term.dispose()
     }
   }, [companionId])

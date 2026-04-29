@@ -20,6 +20,7 @@ interface Props {
   innerSplitRatio: number
   onOuterRatio: (r: number) => void
   onInnerRatio: (r: number) => void
+  onFocusPane: (which: 'main' | 'companionA' | 'companionB') => void
 }
 
 function DragHandle({
@@ -74,7 +75,7 @@ export function TerminalPane({
   allCompanions, allCompanionsB,
   splitOpen, threeWayOpen, splitDirection, splitSwapped, secondarySwapped,
   splitFocused, outerSplitRatio, innerSplitRatio,
-  onOuterRatio, onInnerRatio,
+  onOuterRatio, onInnerRatio, onFocusPane,
 }: Props) {
   const outerRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
@@ -135,7 +136,7 @@ export function TerminalPane({
   return (
     <div ref={outerRef} style={{ flex: 1, display: 'flex', flexDirection: isRow ? 'row' : 'column', background: 'var(--bg-main)' }}>
       {/* Main panel */}
-      <div style={{ flex: mainFlex, position: 'relative', overflow: 'hidden', order: splitSwapped ? 2 : 0 }}>
+      <div onClick={() => onFocusPane('main')} style={{ flex: mainFlex, position: 'relative', overflow: 'hidden', order: splitSwapped ? 2 : 0 }}>
         {sessionStack}
       </div>
 
@@ -161,7 +162,7 @@ export function TerminalPane({
         }}
       >
         {/* CompanionA pane */}
-        <div style={{ flex: companionAFlex, position: 'relative', overflow: 'hidden', order: secondarySwapped ? 2 : 0 }}>
+        <div onClick={() => onFocusPane('companionA')} style={{ flex: companionAFlex, position: 'relative', overflow: 'hidden', order: secondarySwapped ? 2 : 0 }}>
           {companionAStack}
         </div>
 
@@ -176,7 +177,7 @@ export function TerminalPane({
         )}
 
         {/* CompanionB pane */}
-        <div style={{
+        <div onClick={() => onFocusPane('companionB')} style={{
           flex: companionBFlex,
           position: 'relative',
           overflow: 'hidden',

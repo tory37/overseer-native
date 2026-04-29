@@ -71,7 +71,7 @@ export default function App() {
     onSplitFocus, onSplitFocusPrev, onSplitSwap, onSplitSwapSecondary,
     onSplitToggleDirection, onSplitOpenThreeWay, onSplitClose,
     onOuterRatio, onInnerRatio,
-    killCompanionForSession,
+    killCompanionForSession, onSetSplitFocused,
   } = useCompanion(activeSession)
 
   const handleKillActive = () => {
@@ -157,6 +157,7 @@ export default function App() {
           innerSplitRatio={innerSplitRatio}
           onOuterRatio={onOuterRatio}
           onInnerRatio={onInnerRatio}
+          onFocusPane={onSetSplitFocused}
         />
         <RightSidebar
           activeSession={activeSession}

@@ -52,8 +52,19 @@ export function TerminalInstance({ session, focused, keybindings, activeTheme }:
     fitRef.current = fit
 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+      if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
+        const sel = term.getSelection()
+        if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+        return false
+      }
       return !matchKeybinding(keybindingsRef.current, e)
     })
+
+    const handleContextMenu = () => {
+      const sel = term.getSelection()
+      if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+    }
+    containerRef.current.addEventListener('contextmenu', handleContextMenu)
 
     window.overseer.getScrollback(session.id).then(data => {
       if (data) {
@@ -85,6 +96,7 @@ export function TerminalInstance({ session, focused, keybindings, activeTheme }:
       unsubscribe()
       unsubscribeError()
       observer.disconnect()
+      containerRef.current?.removeEventListener('contextmenu', handleContextMenu)
       term.dispose()
     }
   }, [session.id])

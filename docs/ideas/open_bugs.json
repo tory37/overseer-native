@@ -3,39 +3,116 @@
   "main_idea": "Bugs to loop through and fix one at a time. we only need to consume these on at a time.",
   "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up.",
 
+  "categories": {
+    "A": "Terminal Rendering & Display",
+    "B": "Keyboard Shortcuts",
+    "C": "Panel/Window Management",
+    "D": "Terminal Focus & Interaction",
+    "E": "Testing / Infrastructure"
+  },
+
+  "priorities": {
+    "P1": "Breaking — core functionality blocked",
+    "P2": "Degraded — workarounds exist but painful",
+    "P3": "Cosmetic / Polish",
+    "P4": "Infrastructure"
+  },
+
   "requirements": [
-	  {
-		  "name": "No Window Layout Persistence",
-		  "description": "Should persist terminal setup through app launches within a session.",
-		  "ex1": " if split to three, should open it that way",
-		  "ex2": "if split into 2, open that way",
-		  "ex3": "if split into more than 1, and sizing is adjusted through drag handles, open it that way."
-	  },
-	  {
-		  "name": "Broken Formatting When Switching Sessions",
-		  "issue": "When we switch back to a session, the terminal is formatted poorly, but resizing reset it to what it should be.  we need to fix that.  it currently seems to make the content real narrow until resizing resets something",
-		  "context1": "when switching to a session with terminals that only have 0 no AI output, it seems to be fine",
-		  "context2": "When switching to a window with only 1 terminal, and AI output, it shows the malformation for a literal second or two, then something reset it correctly",
-		  "context3": "I really in fact only seems to be a window with AI output. but fixes on resizing"
-	  },
-	  "No keyboard shortcut to close active terminal, reducing the open windows and handling that accordingly",
-	  "ctrl + shift + backslash is not opening the second window, but it does switch focus between open panels when they're there",
-	  "deleting one panel, the panel it shifted to on close broke.  it was split three way, and the two secondary terminals dissapeared, thought ctrl shift = opened them back up, in the same state.",
-	  "the shortcut to open settings doens't close it too.  i have a feeling any menu we have other than the keyboard shortcuts behaves the same way.  let's fix that",
-	  "the separator between the two secondary panels dissapeared. ts really confusing it looks like one big terminal when that happens",
-	  "the whole app seems to be too tall.  you can scroll it small bit.",
-	  "we need another small indicator of focused terminal, like changing border color or something",
-	  "clicking on a terminal should focus it.  it doesn't right now, and that's a step down from normal terminals, or vscode experience, which we're modeling after",
-	  "when a terminal has a long history, switching back to that session the terminal seems to scroll really fast, maybe from all the way top, to bottom before settling back to normal.  why isn't the terminal just doing what it does, just like if I were using vscode? is it because we remove it from the screen? would this all work better if we just hid it with css instead of removing from screen entirely?",
-	  "i can't copy from the terminal.  can't right click, and ctrl shift c doesn't work either.  ",
-	  "if any tests are creating test sessions, we need them to be cleaned up.  and we need a rule that any ai running test sessions to verify things need to clean them up"
+    {
+      "priority": "P1",
+      "category": "D",
+      "name": "Can't Copy From Terminal",
+      "description": "Can't copy from the terminal. Can't right click, and ctrl+shift+c doesn't work either."
+    },
+    {
+      "priority": "P1",
+      "category": "D",
+      "name": "Clicking Terminal Doesn't Focus It",
+      "description": "Clicking on a terminal should focus it. It doesn't right now, and that's a step down from normal terminals or vscode experience, which we're modeling after."
+    },
+    {
+      "priority": "P1",
+      "category": "C",
+      "name": "Deleting Panel Breaks Adjacent Panels",
+      "description": "Deleting one panel, the panel it shifted to on close broke. It was split three way, and the two secondary terminals disappeared, though ctrl+shift+= opened them back up in the same state."
+    },
+    {
+      "priority": "P1",
+      "category": "B",
+      "name": "ctrl+shift+\\ Not Opening Second Window",
+      "description": "ctrl+shift+\\ is not opening the second window, but it does switch focus between open panels when they're there."
+    },
+    {
+      "priority": "P2",
+      "category": "A",
+      "name": "Broken Formatting When Switching Sessions",
+      "description": "When we switch back to a session, the terminal is formatted poorly, but resizing resets it to what it should be. It currently seems to make the content real narrow until resizing resets something.",
+      "context1": "When switching to a session with terminals that only have no AI output, it seems to be fine.",
+      "context2": "When switching to a window with only 1 terminal and AI output, it shows the malformation for a literal second or two, then something resets it correctly.",
+      "context3": "It really only seems to be a window with AI output, but fixes on resizing."
+    },
+    {
+      "priority": "P2",
+      "category": "A",
+      "name": "Fast Scroll Jump on Session Switch With Long History",
+      "description": "When a terminal has a long history, switching back to that session the terminal seems to scroll really fast, maybe from all the way top to bottom before settling back to normal. Why isn't the terminal just doing what it does, just like if I were using vscode? Is it because we remove it from the screen? Would this all work better if we just hid it with CSS instead of removing from screen entirely?"
+    },
+    {
+      "priority": "P2",
+      "category": "B",
+      "name": "Settings Shortcut Doesn't Toggle Closed",
+      "description": "The shortcut to open settings doesn't close it too. Any menu we have other than the keyboard shortcuts likely behaves the same way. Let's fix that."
+    },
+    {
+      "priority": "P2",
+      "category": "B",
+      "name": "No Keyboard Shortcut to Close Active Terminal",
+      "description": "No keyboard shortcut to close the active terminal, reducing the open windows and handling that accordingly."
+    },
+    {
+      "priority": "P2",
+      "category": "A",
+      "name": "Separator Between Secondary Panels Disappeared",
+      "description": "The separator between the two secondary panels disappeared. It's really confusing — it looks like one big terminal when that happens."
+    },
+    {
+      "priority": "P3",
+      "category": "A",
+      "name": "App Is Too Tall",
+      "description": "The whole app seems to be too tall. You can scroll it a small bit."
+    },
+    {
+      "priority": "P3",
+      "category": "D",
+      "name": "No Visual Indicator of Focused Terminal",
+      "description": "We need another small indicator of focused terminal, like changing border color or something."
+    },
+    {
+      "priority": "P3",
+      "category": "C",
+      "name": "No Window Layout Persistence",
+      "description": "Should persist terminal setup through app launches within a session.",
+      "ex1": "If split to three, should open it that way.",
+      "ex2": "If split into 2, open that way.",
+      "ex3": "If split into more than 1, and sizing is adjusted through drag handles, open it that way."
+    },
+    {
+      "priority": "P4",
+      "category": "E",
+      "name": "Test Sessions Must Be Cleaned Up",
+      "description": "If any tests are creating test sessions, we need them to be cleaned up. Any AI running test sessions to verify things needs to clean them up."
+    },
+    {
+      "priority": "P4",
+      "category": "E",
+      "name": "TypeScript Buffer Type Missing in Renderer",
+      "description": "TerminalInstance.tsx line 71 uses Buffer.from() to decode scrollback data, but the renderer tsconfig doesn't include Node.js types, so TypeScript reports TS2591: Cannot find name 'Buffer'. Pre-existing. Fix by adding @types/node to the renderer tsconfig or switching to a browser-native decode approach."
+    }
   ],
 
   "out_of_scope": [],
-
   "ui_notes": [],
-
   "references": [],
-
   "open_questions": []
 }
