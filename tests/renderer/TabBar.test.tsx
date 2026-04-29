@@ -28,3 +28,12 @@ test('calls onNew when + button is clicked', () => {
   fireEvent.click(screen.getByRole('button', { name: '+' }))
   expect(onNew).toHaveBeenCalled()
 })
+
+test('active tab has prominent styling', () => {
+  render(<TabBar sessions={sessions} activeSessionId="a" onSelect={() => {}} onNew={() => {}} />)
+  const activeTab = screen.getByText('claude-main')
+  
+  expect(activeTab.style.background).toBe('var(--bg-active-tab)')
+  expect(activeTab.style.borderTop).toBe('3px solid var(--accent)')
+  expect(activeTab.style.fontWeight).toBe('bold')
+})
