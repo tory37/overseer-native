@@ -6,6 +6,7 @@ import { readAgentEnvVars } from './agent-config'
 import type { Session, CreateSessionOptions } from '../../renderer/types/ipc'
 import os from 'os'
 import path from 'path'
+import fs from 'fs'
 
 type DataCallback = (sessionId: string, data: string) => void
 type ErrorCallback = (sessionId: string, err: string) => void
@@ -39,13 +40,21 @@ export class SessionService {
     if (options.persona) {
       envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
     }
+
+    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', id)
+    fs.mkdirSync(path.join(sessionDir, 'bin'), { recursive: true })
+    fs.writeFileSync(
+      path.join(sessionDir, 'context.json'),
+      JSON.stringify({ persona: options.persona, spriteId: options.spriteId }, null, 2)
+    )
+
     const session: Session = {
       id,
       name: options.name,
       agentType: options.agentType,
       cwd: options.cwd || os.homedir(),
       envVars,
-      scrollbackPath: path.join(os.homedir(), '.overseer', 'sessions', `${id}.log`),
+      scrollbackPath: path.join(sessionDir, 'scrollback.log'),
       spriteId: options.spriteId ?? null,
     }
     this.registry.add(session)
