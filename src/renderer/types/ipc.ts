@@ -169,4 +169,6 @@ export const IPC = {
   COMPANION_INPUT:   'companion:input',
   COMPANION_RESIZE:  'companion:resize',
   SPRITE_SPEECH:     'sprite:speech',
+  SPRITE_READ:       'sprite:read',
+  SPRITE_WRITE:      'sprite:write',
 } as const

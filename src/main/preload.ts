@@ -100,4 +100,10 @@ contextBridge.exposeInMainWorld('overseer', {
     ipcRenderer.on(IPC.SPRITE_SPEECH, handler)
     return () => ipcRenderer.removeListener(IPC.SPRITE_SPEECH, handler)
   },
+
+  readSprites: (): Promise<any> =>
+    ipcRenderer.invoke(IPC.SPRITE_READ),
+
+  writeSprites: (settings: any): Promise<void> =>
+    ipcRenderer.invoke(IPC.SPRITE_WRITE, settings),
 })
