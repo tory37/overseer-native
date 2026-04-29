@@ -130,13 +130,32 @@ export default function App() {
           onSelect={setActive}
           onNew={() => setShowNewDialog(true)}
         />
-        <button
-          onClick={() => setShowSettings(true)}
-          style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', padding: '6px 10px', cursor: 'pointer', fontSize: '16px', marginLeft: 'auto' }}
-          title="Settings"
-        >
-          ⚙
-        </button>
+        <div style={{ 
+          marginLeft: 'auto', 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '12px',
+          marginRight: '10px'
+        }}>
+          <span style={{ 
+            fontSize: '11px', 
+            fontWeight: 'bold', 
+            padding: '3px 8px', 
+            borderRadius: '4px',
+            backgroundColor: (window as any).overseer.isDev ? 'rgba(255, 165, 0, 0.2)' : 'rgba(128, 128, 128, 0.1)',
+            color: (window as any).overseer.isDev ? 'orange' : 'var(--text-muted)',
+            border: `1px solid ${(window as any).overseer.isDev ? 'orange' : 'transparent'}`
+          }}>
+            {(window as any).overseer.isDev ? 'DEV MODE' : `PRODUCTION v${(window as any).overseer.appVersion}`}
+          </span>
+          <button
+            onClick={() => setShowSettings(true)}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', padding: '6px 10px', cursor: 'pointer', fontSize: '16px' }}
+            title="Settings"
+          >
+            ⚙
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
