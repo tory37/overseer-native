@@ -4,7 +4,28 @@
   "reason": "Can't have bugs! Tracking here makes it easy to go through them as they come up. IMPORTANT: When you finish fixing a bug, you MUST remove it from the 'requirements' array in this file as the final step of your work session. Only consume these 1 at a time. Do not litter context with bugs we are not actively looking at.",
 
   "requirements": [
-],
+	  {
+		  "name": "No Window Layout Persistence",
+		  "description": "Should persist terminal setup through app launches within a session.",
+		  "ex1": " if split to three, should open it that way",
+		  "ex2": "if split into 2, open that way",
+		  "ex3": "if split into more than 1, and sizing is adjusted through drag handles, open it that way."
+	  },
+	  {
+		  "name": "Broken Formatting When Switching Sessions",
+		  "issue": "When we switch back to a session, the terminal is formatted poorly, but resizing reset it to what it should be.  we need to fix that.  it currently seems to make the content real narrow until resizing resets something",
+		  "context1": "when switching to a session with terminals that only have 0 no AI output, it seems to be fine",
+		  "context2": "When switching to a window with only 1 terminal, and AI output, it shows the malformation for a literal second or two, then something reset it correctly",
+		  "context3": "I really in fact only seems to be a window with AI output. but fixes on resizing"
+	  },
+	  "No keyboard shortcut to close active terminal, reducing the open windows and handling that accordingly",
+	  "ctrl + shift + backslash is not opening the second window, but it does switch focus between open panels when they're there",
+	  "deleting one panel, the panel it shifted to on close broke.  it was split three way, and the two secondary terminals dissapeared, thought ctrl shift = opened them back up, in the same state.",
+	  "the shortcut to open settings doens't close it too.  i have a feeling any menu we have other than the keyboard shortcuts behaves the same way.  let's fix that",
+	  "the separator between the two secondary panels dissapeared. ts really confusing it looks like one big terminal when that happens",
+	  "the whole app seems to be too tall.  you can scroll it small bit.",
+	  "we need another small indicator of focused terminal, like changing border color or something"
+  ],
 
   "out_of_scope": [],
 
