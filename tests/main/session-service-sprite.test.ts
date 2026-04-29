@@ -35,4 +35,11 @@ describe('SessionService Sprite Injection', () => {
     const stats = fs.statSync(path.join(binDir, 'claude'))
     expect(stats.mode & 0o111).toBeTruthy() // executable
   })
+
+  it('sets OVERSEER_SESSION_DIR and updates PATH', () => {
+    const session = service.create({ name: 'Test', agentType: 'claude' })
+    expect(session.envVars['OVERSEER_SESSION_DIR']).toContain(session.id)
+    expect(session.envVars['PATH']).toContain(session.id)
+    expect(session.envVars['PATH']).toContain('/bin:')
+  })
 })
