@@ -11,11 +11,13 @@ import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { useCompanion } from './hooks/useCompanion'
 import { useThemeStore, BUILTIN_THEMES } from './store/theme'
+import { useSpritesStore } from './store/sprites'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, setActive } = useSessionStore()
   const { activeThemeId, customThemes, loadSettings: loadThemeSettings } = useThemeStore()
+  const { loadSprites } = useSpritesStore()
 
   const [showNewDialog,      setShowNewDialog]      = useState(false)
   const [showDrawer,         setShowDrawer]          = useState(false)
@@ -26,7 +28,7 @@ export default function App() {
   const [spriteStudioEditId, setSpriteStudioEditId] = useState<string | null>(null)
   const [spritePanelVisible, setSpritePanelVisible] = useState(true)
 
-  useEffect(() => { load(); loadThemeSettings() }, [])
+  useEffect(() => { load(); loadThemeSettings(); loadSprites() }, [])
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
 
@@ -100,7 +102,10 @@ export default function App() {
     onSplitSwapSecondary,
     onSplitToggleDirection,
     onToggleSpritePanel: () => setSpritePanelVisible(v => !v),
-    onOpenSpriteStudio:  () => { setSpriteStudioEditId(null); setShowSpriteStudio(true) },
+    onOpenSpriteStudio:  () => setShowSpriteStudio(prev => {
+      if (!prev) setSpriteStudioEditId(null)
+      return !prev
+    }),
   })
 
   const handleCreate = async (options: CreateSessionOptions) => {
