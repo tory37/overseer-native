@@ -8,13 +8,15 @@ import type { Keybindings, Theme } from '../types/ipc'
 interface Props {
   companionId: string
   focused: boolean
+  visible: boolean
   keybindings: Keybindings
   activeTheme: Theme
 }
 
-export function CompanionTerminal({ companionId, focused, keybindings, activeTheme }: Props) {
+export function CompanionTerminal({ companionId, focused, visible, keybindings, activeTheme }: Props) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const termRef        = useRef<Terminal | null>(null)
+  const fitRef         = useRef<FitAddon | null>(null)
   const keybindingsRef = useRef(keybindings)
 
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
@@ -27,6 +29,16 @@ export function CompanionTerminal({ companionId, focused, keybindings, activeThe
       }
     }
   }, [activeTheme])
+
+  // Refresh layout when becoming visible
+  useEffect(() => {
+    if (visible && fitRef.current) {
+      // Small delay to ensure display: block has been applied and rendered
+      setTimeout(() => {
+        fitRef.current?.fit()
+      }, 0)
+    }
+  }, [visible])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -44,6 +56,7 @@ export function CompanionTerminal({ companionId, focused, keybindings, activeThe
     term.open(containerRef.current)
     fit.fit()
     termRef.current = term
+    fitRef.current = fit
 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
@@ -69,6 +82,7 @@ export function CompanionTerminal({ companionId, focused, keybindings, activeThe
     })
 
     const observer = new ResizeObserver(() => {
+      if (!containerRef.current || containerRef.current.clientWidth === 0) return
       fit.fit()
       window.overseer.resizeCompanion(companionId, term.cols, term.rows)
     })

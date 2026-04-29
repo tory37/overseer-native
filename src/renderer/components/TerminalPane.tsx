@@ -28,11 +28,13 @@ function DragHandle({
   onRatio,
   containerRef,
   flipped = false,
+  order,
 }: {
   direction: 'horizontal' | 'vertical'
   onRatio: (r: number) => void
   containerRef: React.RefObject<HTMLDivElement | null>
   flipped?: boolean
+  order?: number
 }) {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -65,6 +67,7 @@ function DragHandle({
         flexShrink: 0,
         cursor: isHoriz ? 'col-resize' : 'row-resize',
         zIndex: 1,
+        ...(order !== undefined ? { order } : {}),
       }}
     />
   )
@@ -84,47 +87,59 @@ export function TerminalPane({
   const activeCompanionAId = allCompanions.find(c => c.sessionId === activeSessionId)?.companionId ?? null
   const showCompanion = splitOpen && !!activeCompanionAId
 
-  const sessionStack = sessions.map(session => (
-    <div
-      key={session.id}
-      style={{ position: 'absolute', inset: 0, display: session.id === activeSessionId ? 'block' : 'none' }}
-    >
-      <TerminalInstance
-        session={session}
-        focused={splitFocused === 'main' && session.id === activeSessionId}
-        keybindings={keybindings}
-        activeTheme={activeTheme}
-      />
-    </div>
-  ))
+  const sessionStack = sessions.map(session => {
+    const isVisible = session.id === activeSessionId
+    return (
+      <div
+        key={session.id}
+        style={{ position: 'absolute', inset: 0, display: isVisible ? 'block' : 'none' }}
+      >
+        <TerminalInstance
+          session={session}
+          focused={splitFocused === 'main' && isVisible}
+          visible={isVisible}
+          keybindings={keybindings}
+          activeTheme={activeTheme}
+        />
+      </div>
+    )
+  })
 
-  const companionAStack = allCompanions.map(({ sessionId, companionId }) => (
-    <div
-      key={companionId}
-      style={{ position: 'absolute', inset: 0, display: sessionId === activeSessionId ? 'block' : 'none' }}
-    >
-      <CompanionTerminal
-        companionId={companionId}
-        focused={splitFocused === 'companionA' && sessionId === activeSessionId}
-        keybindings={keybindings}
-        activeTheme={activeTheme}
-      />
-    </div>
-  ))
+  const companionAStack = allCompanions.map(({ sessionId, companionId }) => {
+    const isVisible = sessionId === activeSessionId
+    return (
+      <div
+        key={companionId}
+        style={{ position: 'absolute', inset: 0, display: isVisible ? 'block' : 'none' }}
+      >
+        <CompanionTerminal
+          companionId={companionId}
+          focused={splitFocused === 'companionA' && isVisible}
+          visible={isVisible}
+          keybindings={keybindings}
+          activeTheme={activeTheme}
+        />
+      </div>
+    )
+  })
 
-  const companionBStack = allCompanionsB.map(({ sessionId, companionId }) => (
-    <div
-      key={companionId}
-      style={{ position: 'absolute', inset: 0, display: threeWayOpen && sessionId === activeSessionId ? 'block' : 'none' }}
-    >
-      <CompanionTerminal
-        companionId={companionId}
-        focused={splitFocused === 'companionB' && sessionId === activeSessionId}
-        keybindings={keybindings}
-        activeTheme={activeTheme}
-      />
-    </div>
-  ))
+  const companionBStack = allCompanionsB.map(({ sessionId, companionId }) => {
+    const isVisible = threeWayOpen && sessionId === activeSessionId
+    return (
+      <div
+        key={companionId}
+        style={{ position: 'absolute', inset: 0, display: isVisible ? 'block' : 'none' }}
+      >
+        <CompanionTerminal
+          companionId={companionId}
+          focused={splitFocused === 'companionB' && isVisible}
+          visible={isVisible}
+          keybindings={keybindings}
+          activeTheme={activeTheme}
+        />
+      </div>
+    )
+  })
 
   const mainFlex      = showCompanion ? `0 0 ${outerSplitRatio * 100}%`       : '1'
   const secondaryFlex = showCompanion ? `0 0 ${(1 - outerSplitRatio) * 100}%` : '0'
@@ -173,6 +188,7 @@ export function TerminalPane({
             onRatio={onInnerRatio}
             containerRef={innerRef}
             flipped={secondarySwapped}
+            order={1}
           />
         )}
 

@@ -8,11 +8,12 @@ import type { Session, Keybindings, Theme } from '../types/ipc'
 interface Props {
   session: Session
   focused: boolean
+  visible: boolean
   keybindings: Keybindings
   activeTheme: Theme
 }
 
-export function TerminalInstance({ session, focused, keybindings, activeTheme }: Props) {
+export function TerminalInstance({ session, focused, visible, keybindings, activeTheme }: Props) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
@@ -32,6 +33,16 @@ export function TerminalInstance({ session, focused, keybindings, activeTheme }:
   useEffect(() => {
     if (focused && termRef.current) termRef.current.focus()
   }, [focused])
+
+  // Refresh layout when becoming visible
+  useEffect(() => {
+    if (visible && fitRef.current) {
+      // Small delay to ensure display: block has been applied and rendered
+      setTimeout(() => {
+        fitRef.current?.fit()
+      }, 0)
+    }
+  }, [visible])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -87,6 +98,7 @@ export function TerminalInstance({ session, focused, keybindings, activeTheme }:
     })
 
     const observer = new ResizeObserver(() => {
+      if (!containerRef.current || containerRef.current.clientWidth === 0) return
       fit.fit()
       window.overseer.resize(session.id, term.cols, term.rows)
     })

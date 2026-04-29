@@ -172,13 +172,13 @@ test('onSplitClose when focused on companionA: kills A and B, closes split, focu
   expect(result.current.splitFocused).toBe('main')
 })
 
-test('onSplitClose when focused on main: no-op', async () => {
+test('onSplitClose when focused on main: closes split', async () => {
   const { result } = renderHook(() => useCompanion(mockSession))
   await act(async () => { result.current.onSplitFocus() })
   act(() => { result.current.onSplitFocus() }) // → main
   act(() => { result.current.onSplitClose() })
-  expect((window as any).overseer.killCompanion).not.toHaveBeenCalled()
-  expect(result.current.splitOpen).toBe(true)
+  expect((window as any).overseer.killCompanion).toHaveBeenCalled()
+  expect(result.current.splitOpen).toBe(false)
 })
 
 // ─── swap actions ────────────────────────────────────────────────────────────

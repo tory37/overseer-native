@@ -215,7 +215,24 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   const onSplitClose = useCallback(() => {
     const session = activeSessionRef.current
     const focused = splitFocusedRef.current
-    if (focused === 'main' || !session) return
+    if (!session) return
+    if (focused === 'main') {
+      if (!splitOpenRef.current) return
+      setCompanions(prev => {
+        const aId = prev.A.get(session.id)
+        const bId = prev.B.get(session.id)
+        if (aId) window.overseer.killCompanion(aId).catch(() => {})
+        if (bId) window.overseer.killCompanion(bId).catch(() => {})
+        const A = new Map(prev.A)
+        const B = new Map(prev.B)
+        A.delete(session.id)
+        B.delete(session.id)
+        return { A, B }
+      })
+      setSplitOpen(false)
+      setThreeWayOpen(false)
+      return
+    }
     if (focused === 'companionB') {
       setCompanions(prev => {
         const bId = prev.B.get(session.id)
