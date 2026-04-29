@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, dialog } from 'electron'
+import { ipcMain, BrowserWindow, dialog, clipboard, Menu } from 'electron'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -111,4 +111,42 @@ export function registerIpcHandlers(
   ipcMain.handle(IPC.COMPANION_KILL,   (_event, companionId: string) => companionMgr.kill(companionId))
   ipcMain.handle(IPC.COMPANION_INPUT,  (_event, companionId: string, data: string) => companionMgr.write(companionId, data))
   ipcMain.handle(IPC.COMPANION_RESIZE, (_event, companionId: string, cols: number, rows: number) => companionMgr.resize(companionId, cols, rows))
+
+  ipcMain.handle(IPC.CLIPBOARD_WRITE, (_event, text: string) => {
+    clipboard.writeText(text)
+  })
+
+  ipcMain.handle(IPC.CLIPBOARD_READ, () => {
+    return clipboard.readText()
+  })
+
+  ipcMain.on(IPC.CONTEXT_MENU_SHOW, (event, options: { x: number; y: number; hasSelection: boolean }) => {
+    const template: Electron.MenuItemConstructorOptions[] = [
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+Shift+C',
+        enabled: options.hasSelection,
+        click: () => {
+          // The renderer already handles the selection retrieval if we send it back,
+          // but for robustness we can just assume the renderer has already copied if it could.
+          // However, standard context menu "Copy" should trigger the renderer to copy.
+          event.reply('terminal:copy')
+        }
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+Shift+V',
+        click: () => {
+          event.reply('terminal:paste')
+        }
+      },
+      { type: 'separator' },
+      { role: 'selectAll' as any }
+    ]
+    const menu = Menu.buildFromTemplate(template)
+    const win = BrowserWindow.fromWebContents(event.sender)
+    if (win) {
+      menu.popup({ window: win, x: options.x, y: options.y })
+    }
+  })
 }

@@ -171,4 +171,7 @@ export const IPC = {
   SPRITE_SPEECH:     'sprite:speech',
   SPRITE_READ:       'sprite:read',
   SPRITE_WRITE:      'sprite:write',
+  CLIPBOARD_WRITE:   'clipboard:write',
+  CLIPBOARD_READ:    'clipboard:read',
+  CONTEXT_MENU_SHOW: 'context-menu:show',
 } as const

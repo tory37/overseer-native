@@ -106,4 +106,26 @@ contextBridge.exposeInMainWorld('overseer', {
 
   writeSprites: (settings: any): Promise<void> =>
     ipcRenderer.invoke(IPC.SPRITE_WRITE, settings),
+
+  copyToClipboard: (text: string): Promise<void> =>
+    ipcRenderer.invoke(IPC.CLIPBOARD_WRITE, text),
+
+  readFromClipboard: (): Promise<string> =>
+    ipcRenderer.invoke(IPC.CLIPBOARD_READ),
+
+  showContextMenu: (options: { x: number; y: number; hasSelection: boolean }): void => {
+    ipcRenderer.send(IPC.CONTEXT_MENU_SHOW, options)
+  },
+
+  onTerminalPaste: (callback: () => void) => {
+    const handler = () => callback()
+    ipcRenderer.on('terminal:paste', handler)
+    return () => ipcRenderer.removeListener('terminal:paste', handler)
+  },
+
+  onTerminalCopy: (callback: () => void) => {
+    const handler = () => callback()
+    ipcRenderer.on('terminal:copy', handler)
+    return () => ipcRenderer.removeListener('terminal:copy', handler)
+  },
 })
