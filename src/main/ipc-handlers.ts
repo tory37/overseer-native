@@ -11,8 +11,6 @@ import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
 import { parseSpriteSpeech } from './sprite-parser'
 
-const configService = new ConfigService()
-
 export async function isDirectory(p: string): Promise<boolean> {
   try {
     const stat = await fs.promises.stat(p)
@@ -25,8 +23,11 @@ export async function isDirectory(p: string): Promise<boolean> {
 export function registerIpcHandlers(
   service: SessionService,
   syncService: SyncService,
-  getWindow: () => BrowserWindow | null
+  getWindow: () => BrowserWindow | null,
+  baseDir: string
 ): void {
+  const configService = new ConfigService(baseDir)
+  
   service.onData((sessionId, data) => {
     getWindow()?.webContents.send(`pty:data:${sessionId}`, data)
     try {

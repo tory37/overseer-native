@@ -1,12 +1,18 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import os from 'os'
 import { SessionService } from './session-service/index'
 import { SyncService } from './services/sync-service'
 import { registerIpcHandlers } from './ipc-handlers'
 
+const isDev = process.env.NODE_ENV === 'development'
+const baseDir = isDev 
+  ? path.join(os.homedir(), '.overseer-dev')
+  : path.join(os.homedir(), '.overseer')
+
 let mainWindow: BrowserWindow | null = null
-const sessionService = new SessionService()
-const syncService = new SyncService()
+const sessionService = new SessionService(baseDir)
+const syncService = new SyncService(baseDir)
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -20,7 +26,7 @@ function createWindow() {
     },
   })
 
-  registerIpcHandlers(sessionService, syncService, () => mainWindow)
+  registerIpcHandlers(sessionService, syncService, () => mainWindow, baseDir)
   sessionService.restoreAll()
 
   if (process.env.NODE_ENV === 'development') {

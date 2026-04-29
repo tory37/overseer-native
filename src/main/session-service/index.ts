@@ -17,9 +17,11 @@ export class SessionService {
   private ptyManager: PtyManager
   private onDataCallback: DataCallback | null = null
   private onErrorCallback: ErrorCallback | null = null
+  private baseDir: string
 
-  constructor() {
-    this.registry = new SessionRegistry()
+  constructor(baseDir?: string) {
+    this.baseDir = baseDir || path.join(os.homedir(), '.overseer')
+    this.registry = new SessionRegistry(path.join(this.baseDir, 'sessions'))
     this.ptyManager = new PtyManager()
   }
 
@@ -102,7 +104,7 @@ export class SessionService {
   }
 
   updateSprite(sessionId: string, spriteId: string, persona: string): void {
-    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', sessionId)
+    const sessionDir = path.join(this.baseDir, 'sessions', sessionId)
     if (!fs.existsSync(sessionDir)) {
       fs.mkdirSync(sessionDir, { recursive: true })
     }

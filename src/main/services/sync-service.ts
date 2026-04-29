@@ -20,9 +20,10 @@ export class SyncService {
   private rulesDir: string
   private skillsDir: string
 
-  constructor(paths: SyncServicePaths = {}) {
+  constructor(baseDir?: string, paths: SyncServicePaths = {}) {
     const home = os.homedir()
-    this.stateFile = paths.stateFile ?? path.join(home, '.overseer', 'sync-state.json')
+    const finalBaseDir = baseDir || path.join(home, '.overseer')
+    this.stateFile = paths.stateFile ?? path.join(finalBaseDir, 'sync-state.json')
     this.aiSync    = paths.aiSync    ?? path.join(home, '.local', 'bin', 'ai-sync')
     this.rulesDir  = paths.rulesDir  ?? path.join(home, '.ai-context', 'rules')
     this.skillsDir = paths.skillsDir ?? path.join(home, '.ai-context', 'skills')
