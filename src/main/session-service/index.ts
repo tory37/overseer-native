@@ -47,8 +47,9 @@ export class SessionService {
       agentType: options.agentType,
       cwd: options.cwd || os.homedir(),
       envVars,
-      scrollbackPath: path.join(os.homedir(), '.overseer', 'sessions', id, 'scrollback.log'),
+      scrollbackPath: path.join(this.baseDir, 'sessions', id, 'scrollback.log'),
       spriteId: options.spriteId ?? null,
+      isTest: options.isTest || false,
     }
 
     if (options.persona) {
@@ -61,7 +62,7 @@ export class SessionService {
   }
 
   private ensureSessionEnvironment(session: Session): Record<string, string> {
-    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', session.id)
+    const sessionDir = path.join(this.baseDir, 'sessions', session.id)
     const binDir = path.join(sessionDir, 'bin')
     
     if (!fs.existsSync(binDir)) {
@@ -93,10 +94,10 @@ export class SessionService {
       
       let zshrcContent = ''
       if (fs.existsSync(originalZshrc)) {
-        zshrcContent += `source "\${HOME}/.zshrc"\n`
+        zshrcContent += `source "${originalZshrc}"\n`
       }
       // Re-apply our PATH at the very end of zsh initialization
-      zshrcContent += `export PATH="\${OVERSEER_SESSION_DIR}/bin:\${PATH}"\n`
+      zshrcContent += `export PATH="${binDir}:${process.env.PATH || '$PATH'}"\n`
       fs.writeFileSync(zshrcPath, zshrcContent)
     }
     
