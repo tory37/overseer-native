@@ -61,17 +61,38 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
         const sel = term.getSelection()
-        if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+        if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
+        return false
+      }
+      if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyV') {
+        window.overseer.readFromClipboard().then(text => {
+          if (text) window.overseer.sendCompanionInput(companionId, text)
+        }).catch(() => {})
         return false
       }
       return !matchKeybinding(keybindingsRef.current, e)
     })
 
-    const handleContextMenu = () => {
-      const sel = term.getSelection()
-      if (sel) navigator.clipboard.writeText(sel).catch(() => {})
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+      window.overseer.showContextMenu({
+        x: e.clientX,
+        y: e.clientY,
+        hasSelection: !!term.getSelection()
+      })
     }
     containerRef.current.addEventListener('contextmenu', handleContextMenu)
+
+    const unsubCopy = window.overseer.onTerminalCopy(() => {
+      const sel = term.getSelection()
+      if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
+    })
+
+    const unsubPaste = window.overseer.onTerminalPaste(() => {
+      window.overseer.readFromClipboard().then(text => {
+        if (text) window.overseer.sendCompanionInput(companionId, text)
+      }).catch(() => {})
+    })
 
     const unsubscribeData = window.overseer.onCompanionData((id, data) => {
       if (id === companionId) term.write(data)
@@ -90,6 +111,8 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
 
     return () => {
       unsubscribeData()
+      unsubCopy()
+      unsubPaste()
       observer.disconnect()
       containerRef.current?.removeEventListener('contextmenu', handleContextMenu)
       term.dispose()
