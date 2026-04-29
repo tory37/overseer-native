@@ -174,4 +174,6 @@ export const IPC = {
   CLIPBOARD_WRITE:   'clipboard:write',
   CLIPBOARD_READ:    'clipboard:read',
   CONTEXT_MENU_SHOW: 'context-menu:show',
+  DEV_OPEN_DATA_FOLDER: 'dev:open-data-folder',
+  DEV_CLEAR_AND_RESTART: 'dev:clear-and-restart',
 } as const

@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, dialog, clipboard, Menu } from 'electron'
+import { ipcMain, BrowserWindow, dialog, clipboard, Menu, shell, app } from 'electron'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -149,5 +149,16 @@ export function registerIpcHandlers(
     if (win) {
       menu.popup({ window: win, x: options.x, y: options.y })
     }
+  })
+
+  ipcMain.handle(IPC.DEV_OPEN_DATA_FOLDER, async () => {
+    await shell.openPath(baseDir)
+  })
+
+  ipcMain.handle(IPC.DEV_CLEAR_AND_RESTART, async () => {
+    if (process.env.NODE_ENV !== 'development') return
+    await fs.promises.rm(baseDir, { recursive: true, force: true })
+    app.relaunch()
+    app.exit()
   })
 }
