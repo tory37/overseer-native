@@ -20,6 +20,8 @@ function makeHandlers(): ShortcutHandlers {
     onSplitSwap:            jest.fn(),
     onSplitSwapSecondary:   jest.fn(),
     onSplitToggleDirection: jest.fn(),
+    onToggleSpritePanel:   jest.fn(),
+    onOpenSpriteStudio:    jest.fn(),
   }
 }
 

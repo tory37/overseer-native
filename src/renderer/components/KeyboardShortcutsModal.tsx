@@ -31,6 +31,8 @@ const ACTION_LABELS: Record<string, string> = {
   splitSwap:            'Swap Main / Secondary Columns',
   splitSwapSecondary:   'Swap Companion Panes (3-way)',
   splitToggleDirection: 'Toggle Split Direction',
+  toggleSpritePanel:    'Toggle Sprite Panel',
+  openSpriteStudio:     'Open Sprite Studio',
 }
 
 const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
@@ -53,6 +55,10 @@ const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
   {
     title: 'GENERAL',
     actions: ['openDrawer', 'openSettings', 'openShortcuts']
+  },
+  {
+    title: 'SPRITE',
+    actions: ['toggleSpritePanel', 'openSpriteStudio']
   }
 ]
 

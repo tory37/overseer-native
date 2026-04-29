@@ -37,6 +37,8 @@ test('calls onCreate with form values on submit', async () => {
     name: 'my-session',
     agentType: 'claude',
     cwd: '/home/user/project',
+    spriteId: null,
+    persona: undefined,
   })
 })
 
@@ -111,5 +113,7 @@ test('allows Create with empty cwd', () => {
     name: 'my-session',
     agentType: 'shell',
     cwd: '',
+    spriteId: null,
+    persona: undefined,
   })
 })

@@ -3,12 +3,15 @@ import { render, screen, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import App from '../../src/renderer/App'
 
-// Mock components that use xterm
+// Mock components that use xterm or DiceBear
 jest.mock('../../src/renderer/components/TerminalPane', () => ({
   TerminalPane: () => <div data-testid="terminal-pane" />
 }))
-jest.mock('../../src/renderer/components/GitPanel', () => ({
-  GitPanel: () => <div data-testid="git-panel" />
+jest.mock('../../src/renderer/components/RightSidebar', () => ({
+  RightSidebar: () => <div data-testid="right-sidebar" />
+}))
+jest.mock('../../src/renderer/components/SpriteStudio', () => ({
+  SpriteStudio: () => <div data-testid="sprite-studio" />
 }))
 
 // Mock the window.overseer API
@@ -27,10 +30,13 @@ beforeEach(() => {
     onCompanionData: jest.fn().mockReturnValue(() => {}),
     onCompanionError: jest.fn().mockReturnValue(() => {}),
     onCompanionExit: jest.fn().mockReturnValue(() => {}),
+    onSpriteSpeech: jest.fn().mockReturnValue(() => {}),
     spawnCompanion: jest.fn().mockResolvedValue({ id: 'c1' }),
     killCompanion: jest.fn().mockResolvedValue(undefined),
     killSession: jest.fn().mockResolvedValue(undefined),
     listSessions: jest.fn().mockResolvedValue([]),
+    readSprites: jest.fn().mockResolvedValue({ sprites: [] }),
+    writeSprites: jest.fn().mockResolvedValue(undefined),
   }
 })
 
@@ -70,7 +76,7 @@ test('Slash key closes KeyboardShortcutsModal when open', async () => {
 })
 
 test('Ctrl+Shift+W requires two presses to kill session', async () => {
-  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', envVars: {}, scrollbackPath: '' }
+  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', envVars: {}, scrollbackPath: '', spriteId: null }
   ;(window as any).overseer.listSessions.mockResolvedValue([session])
 
   render(<App />)
@@ -97,4 +103,23 @@ test('Ctrl+Shift+W requires two presses to kill session', async () => {
   
   // Should have called killSession
   expect((window as any).overseer.killSession).toHaveBeenCalledWith('s1')
+})
+
+test('Ctrl+Shift+P toggles SpriteStudio', async () => {
+  render(<App />)
+
+  // Initially not present
+  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
+
+  // Press Ctrl+Shift+P to open
+  await act(async () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(screen.getByTestId('sprite-studio')).toBeInTheDocument()
+
+  // Press Ctrl+Shift+P again to close
+  await act(async () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
 })

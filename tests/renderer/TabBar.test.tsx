@@ -5,8 +5,8 @@ import { TabBar } from '../../src/renderer/components/TabBar'
 import type { Session } from '../../src/renderer/types/ipc'
 
 const sessions: Session[] = [
-  { id: 'a', name: 'claude-main', agentType: 'claude', cwd: '/tmp', envVars: {}, scrollbackPath: '' },
-  { id: 'b', name: 'gemini-test', agentType: 'gemini', cwd: '/tmp', envVars: {}, scrollbackPath: '' },
+  { id: 'a', name: 'claude-main', agentType: 'claude', cwd: '/tmp', envVars: {}, scrollbackPath: '', spriteId: null },
+  { id: 'b', name: 'gemini-test', agentType: 'gemini', cwd: '/tmp', envVars: {}, scrollbackPath: '', spriteId: null },
 ]
 
 test('renders a tab for each session', () => {

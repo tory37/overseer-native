@@ -17,6 +17,7 @@ function makeSession(id: string): Session {
     cwd: os.tmpdir(),
     envVars: {},
     scrollbackPath: path.join(tmpDir, `${id}.log`),
+    spriteId: null,
   }
 }
 

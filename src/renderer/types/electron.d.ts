@@ -29,6 +29,9 @@ declare global {
       resizeCompanion: (companionId: string, cols: number, rows: number) => Promise<void>
       onCompanionData: (callback: (id: string, data: string) => void) => () => void
       onCompanionExit: (callback: (id: string) => void) => () => void
+      onSpriteSpeech: (callback: (payload: { sessionId: string; text: string }) => void) => () => void
+      readSprites: () => Promise<any>
+      writeSprites: (settings: any) => Promise<void>
     }
   }
 }
