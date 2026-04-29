@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { formatKeybinding } from '../types/ipc'
+import { formatKeybinding, matchKeybinding } from '../types/ipc'
 import type { DriftStatus, SyncResult, Keybindings, KeybindingAction } from '../types/ipc'
 import { useThemeStore, BUILTIN_THEMES } from '../store/theme'
 
@@ -45,6 +45,21 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
   useEffect(() => {
     window.overseer.syncStatus().then(setStatus)
   }, [])
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (capturingAction) return
+      if (e.key === 'Escape') { e.preventDefault(); onClose(); return }
+      
+      const action = matchKeybinding(keybindings, e)
+      if (action === 'openSettings') {
+        e.preventDefault()
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleGlobalKeyDown)
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown)
+  }, [onClose, capturingAction, keybindings])
 
   useEffect(() => {
     if (!capturingAction) return

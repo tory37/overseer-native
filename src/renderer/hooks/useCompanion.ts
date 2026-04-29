@@ -132,7 +132,11 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
         setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, id) }))
         setSplitOpen(true)
         setSplitFocused('companionA')
-      }).catch((err: unknown) => console.error('companion spawn failed:', err))
+      }).catch((err: unknown) => {
+        console.error('companion spawn failed:', err)
+        // Ensure split still opens if we intended to show something
+        setSplitOpen(true)
+      })
       return
     }
     if (!splitOpenRef.current) {
