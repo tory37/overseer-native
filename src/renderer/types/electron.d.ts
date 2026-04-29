@@ -32,6 +32,15 @@ declare global {
       onSpriteSpeech: (callback: (payload: { sessionId: string; text: string }) => void) => () => void
       readSprites: () => Promise<any>
       writeSprites: (settings: any) => Promise<void>
+      copyToClipboard: (text: string) => Promise<void>
+      readFromClipboard: () => Promise<string>
+      showContextMenu: (options: { x: number; y: number; hasSelection: boolean }) => void
+      onTerminalPaste: (callback: () => void) => () => void
+      onTerminalCopy: (callback: () => void) => () => void
+      isDev: boolean
+      appVersion: string
+      openDataFolder: () => Promise<void>
+      clearAndRestart: () => Promise<void>
     }
   }
 }

@@ -19,7 +19,7 @@ function makeService(overrides: {
   rulesDir?: string
   skillsDir?: string
 } = {}) {
-  return new SyncService({
+  return new SyncService(undefined, {
     stateFile: overrides.stateFile ?? path.join(tmpDir, 'sync-state.json'),
     aiSync: overrides.aiSync ?? path.join(tmpDir, 'no-such-script'),
     rulesDir: overrides.rulesDir ?? path.join(tmpDir, 'rules'),
@@ -55,7 +55,7 @@ test('getDriftStatus returns empty lists when files predate lastSyncedAt', () =>
   fs.writeFileSync(path.join(rulesDir, 'global.md'), '# global')
   const stateFile = path.join(tmpDir, 'sync-state.json')
   fs.writeFileSync(stateFile, JSON.stringify({ lastSyncedAt: new Date(Date.now() + 60_000).toISOString() }))
-  const svc = new SyncService({
+  const svc = new SyncService(undefined, {
     stateFile,
     rulesDir,
     skillsDir: path.join(tmpDir, 'skills'),
@@ -84,7 +84,7 @@ test('runSync returns ok:true and writes state file when script exits 0', async 
   fs.writeFileSync(scriptPath, '#!/bin/sh\necho synced')
   fs.chmodSync(scriptPath, 0o755)
   const stateFile = path.join(tmpDir, 'sync-state.json')
-  const svc = new SyncService({
+  const svc = new SyncService(undefined, {
     aiSync: scriptPath,
     stateFile,
     rulesDir: path.join(tmpDir, 'rules'),
@@ -102,7 +102,7 @@ test('runSync returns ok:false and does not update state file when script exits 
   fs.writeFileSync(scriptPath, '#!/bin/sh\necho failed >&2\nexit 1')
   fs.chmodSync(scriptPath, 0o755)
   const stateFile = path.join(tmpDir, 'sync-state.json')
-  const svc = new SyncService({
+  const svc = new SyncService(undefined, {
     aiSync: scriptPath,
     stateFile,
     rulesDir: path.join(tmpDir, 'rules'),
