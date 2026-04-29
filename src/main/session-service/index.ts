@@ -3,6 +3,7 @@ import { SessionRegistry } from './registry'
 import { PtyManager } from './pty-manager'
 import { ScrollbackManager } from './scrollback'
 import { readAgentEnvVars } from './agent-config'
+import { CLAUDE_WRAPPER, GEMINI_WRAPPER } from './wrapper-templates'
 import type { Session, CreateSessionOptions } from '../../renderer/types/ipc'
 import os from 'os'
 import path from 'path'
@@ -42,11 +43,16 @@ export class SessionService {
     }
 
     const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', id)
-    fs.mkdirSync(path.join(sessionDir, 'bin'), { recursive: true })
+    const binDir = path.join(sessionDir, 'bin')
+    fs.mkdirSync(binDir, { recursive: true })
     fs.writeFileSync(
       path.join(sessionDir, 'context.json'),
       JSON.stringify({ persona: options.persona, spriteId: options.spriteId }, null, 2)
     )
+
+    // Write wrappers
+    fs.writeFileSync(path.join(binDir, 'claude'), CLAUDE_WRAPPER, { mode: 0o755 })
+    fs.writeFileSync(path.join(binDir, 'gemini'), GEMINI_WRAPPER, { mode: 0o755 })
 
     const session: Session = {
       id,

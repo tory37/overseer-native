@@ -27,4 +27,12 @@ describe('SessionService Sprite Injection', () => {
     const context = JSON.parse(fs.readFileSync(path.join(sessionDir, 'context.json'), 'utf8'))
     expect(context.persona).toBe('Test Persona')
   })
+
+  it('creates wrapper scripts with correct permissions', () => {
+    const session = service.create({ name: 'Test', agentType: 'shell' })
+    const binDir = path.join(os.homedir(), '.overseer', 'sessions', session.id, 'bin')
+    expect(fs.existsSync(path.join(binDir, 'claude'))).toBe(true)
+    const stats = fs.statSync(path.join(binDir, 'claude'))
+    expect(stats.mode & 0o111).toBeTruthy() // executable
+  })
 })
