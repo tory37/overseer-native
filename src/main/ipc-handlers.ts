@@ -83,7 +83,20 @@ export function registerIpcHandlers(
   ipcMain.handle(IPC.THEME_WRITE, (_event, settings: ThemeSettings) => configService.write('theme-settings.json', settings))
 
   ipcMain.handle(IPC.SPRITE_READ,  () => configService.read<any>('sprites.json'))
-  ipcMain.handle(IPC.SPRITE_WRITE, (_event, settings: any) => configService.write('sprites.json', settings))
+  ipcMain.handle(IPC.SPRITE_WRITE, (_event, settings: any) => {
+    configService.write('sprites.json', settings)
+    
+    // Propagate updates to active sessions using these sprites
+    const sessions = service.list()
+    for (const session of sessions) {
+      if (session.spriteId) {
+        const sprite = settings.sprites?.find((s: any) => s.id === session.spriteId)
+        if (sprite) {
+          service.updateSprite(session.id, sprite.id, sprite.persona)
+        }
+      }
+    }
+  })
 
   const companionMgr = new CompanionPtyManager()
 

@@ -42,4 +42,11 @@ describe('SessionService Sprite Injection', () => {
     expect(session.envVars['PATH']).toContain(session.id)
     expect(session.envVars['PATH']).toContain('/bin:')
   })
+
+  it('updates context.json live', () => {
+    const session = service.create({ name: 'Test', agentType: 'claude', persona: 'Old' })
+    service.updateSprite(session.id, 'sprite-1', 'New Persona')
+    const context = JSON.parse(fs.readFileSync(path.join(sessionBaseDir, session.id, 'context.json'), 'utf8'))
+    expect(context.persona).toBe('New Persona')
+  })
 })

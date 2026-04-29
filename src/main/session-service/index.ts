@@ -71,6 +71,16 @@ export class SessionService {
     return session
   }
 
+  updateSprite(sessionId: string, spriteId: string, persona: string): void {
+    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', sessionId)
+    if (fs.existsSync(sessionDir)) {
+      fs.writeFileSync(
+        path.join(sessionDir, 'context.json'),
+        JSON.stringify({ persona, spriteId }, null, 2)
+      )
+    }
+  }
+
   getScrollback(sessionId: string): Buffer | null {
     const session = this.registry.list().find(s => s.id === sessionId)
     if (!session) return null
