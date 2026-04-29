@@ -6,6 +6,7 @@ export interface Session {
   envVars: Record<string, string>
   scrollbackPath: string
   spriteId: string | null
+  isTest?: boolean
 }
 
 export interface CreateSessionOptions {
@@ -14,6 +15,7 @@ export interface CreateSessionOptions {
   cwd?: string
   spriteId?: string | null
   persona?: string
+  isTest?: boolean
 }
 
 export interface GitCommandResult {
