@@ -20,30 +20,6 @@
 
   "requirements": [
     {
-      "priority": "P1",
-      "category": "D",
-      "name": "Can't Copy From Terminal",
-      "description": "Can't copy from the terminal. Can't right click, and ctrl+shift+c doesn't work either."
-    },
-    {
-      "priority": "P1",
-      "category": "D",
-      "name": "Clicking Terminal Doesn't Focus It",
-      "description": "Clicking on a terminal should focus it. It doesn't right now, and that's a step down from normal terminals or vscode experience, which we're modeling after."
-    },
-    {
-      "priority": "P1",
-      "category": "C",
-      "name": "Deleting Panel Breaks Adjacent Panels",
-      "description": "Deleting one panel, the panel it shifted to on close broke. It was split three way, and the two secondary terminals disappeared, though ctrl+shift+= opened them back up in the same state."
-    },
-    {
-      "priority": "P1",
-      "category": "B",
-      "name": "ctrl+shift+\\ Not Opening Second Window",
-      "description": "ctrl+shift+\\ is not opening the second window, but it does switch focus between open panels when they're there."
-    },
-    {
       "priority": "P2",
       "category": "A",
       "name": "Broken Formatting When Switching Sessions",
@@ -61,12 +37,6 @@
     {
       "priority": "P2",
       "category": "B",
-      "name": "Settings Shortcut Doesn't Toggle Closed",
-      "description": "The shortcut to open settings doesn't close it too. Any menu we have other than the keyboard shortcuts likely behaves the same way. Let's fix that."
-    },
-    {
-      "priority": "P2",
-      "category": "B",
       "name": "No Keyboard Shortcut to Close Active Terminal",
       "description": "No keyboard shortcut to close the active terminal, reducing the open windows and handling that accordingly."
     },
@@ -75,12 +45,6 @@
       "category": "A",
       "name": "Separator Between Secondary Panels Disappeared",
       "description": "The separator between the two secondary panels disappeared. It's really confusing — it looks like one big terminal when that happens."
-    },
-    {
-      "priority": "P3",
-      "category": "A",
-      "name": "App Is Too Tall",
-      "description": "The whole app seems to be too tall. You can scroll it a small bit."
     },
     {
       "priority": "P3",

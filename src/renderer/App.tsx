@@ -114,7 +114,7 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', fontFamily: 'sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', fontFamily: 'sans-serif', overflow: 'hidden' }}>
       <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-header)' }}>
         <button
           onClick={() => setShowDrawer(true)}
