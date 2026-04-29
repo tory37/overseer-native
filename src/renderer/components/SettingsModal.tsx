@@ -20,6 +20,15 @@ const ACTION_LABELS: Record<string, string> = {
   openDrawer:       'Open Session List',
   openSettings:     'Open Settings',
   openShortcuts:    'Show Keyboard Shortcuts',
+  splitFocus:       'Focus Next Pane',
+  splitFocusPrev:   'Focus Prev Pane',
+  splitOpenThreeWay: 'Open 3-Way Split',
+  splitClose:       'Close Active Pane',
+  splitSwap:        'Swap Panes',
+  splitSwapSecondary: 'Swap Secondary Panes',
+  splitToggleDirection: 'Toggle Split Dir',
+  toggleSpritePanel: 'Toggle Sprite Panel',
+  openSpriteStudio: 'Open Sprite Studio',
 }
 
 interface Props {
@@ -29,6 +38,7 @@ interface Props {
 }
 
 export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props) {
+  const { isDev, openDataFolder, clearAndRestart } = window.overseer || {}
   const { activeThemeId, customThemes, setActiveTheme } = useThemeStore()
   const allThemes = [...BUILTIN_THEMES, ...customThemes]
 
@@ -43,7 +53,7 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
   const isKbDirty = JSON.stringify(pendingKb) !== JSON.stringify(keybindings)
 
   useEffect(() => {
-    window.overseer.syncStatus().then(setStatus)
+    window.overseer?.syncStatus?.().then(setStatus)
   }, [])
 
   useEffect(() => {
@@ -79,6 +89,7 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
   }, [capturingAction])
 
   const handleSync = async () => {
+    if (!window.overseer?.syncRun) return
     setSyncing(true)
     setLastResult(null)
     const result = await window.overseer.syncRun()
@@ -235,14 +246,14 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
           <div style={divider}>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
-                onClick={() => window.overseer.openDataFolder()}
+                onClick={() => openDataFolder?.()}
                 style={{ background: 'var(--bg-main)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13 }}
               >
                 Open Data Folder
               </button>
-              {(window as any).overseer.isDev && (
+              {isDev && (
                 <button
-                  onClick={() => { if (confirm('Clear ALL data and restart?')) window.overseer.clearAndRestart() }}
+                  onClick={() => { if (confirm('Clear ALL data and restart?')) clearAndRestart?.() }}
                   style={{ background: 'rgba(255, 0, 0, 0.1)', color: '#f88', border: '1px solid #c00', padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13 }}
                 >
                   Clear & Restart (Dev Only)

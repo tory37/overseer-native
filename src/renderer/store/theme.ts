@@ -197,9 +197,10 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   setActiveTheme: (id) => {
     set({ activeThemeId: id })
     const { activeThemeId, customThemes } = get()
-    window.overseer.writeTheme({ activeThemeId, customThemes })
+    window.overseer?.writeTheme?.({ activeThemeId, customThemes })
   },
   loadSettings: async () => {
+    if (!window.overseer?.readTheme) return
     const settings = await window.overseer.readTheme()
     if (settings) {
       set({ 

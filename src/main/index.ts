@@ -5,10 +5,13 @@ import { SessionService } from './session-service/index'
 import { SyncService } from './services/sync-service'
 import { registerIpcHandlers } from './ipc-handlers'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = !app.isPackaged
 const baseDir = isDev 
   ? path.join(os.homedir(), '.overseer-dev')
   : path.join(os.homedir(), '.overseer')
+
+process.env.OVERSEER_VERSION = app.getVersion()
+process.env.OVERSEER_IS_DEV = isDev ? 'true' : 'false'
 
 let mainWindow: BrowserWindow | null = null
 const sessionService = new SessionService(baseDir)
@@ -26,13 +29,18 @@ function createWindow() {
     },
   })
 
-  registerIpcHandlers(sessionService, syncService, () => mainWindow, baseDir)
+  registerIpcHandlers(sessionService, syncService, () => mainWindow, baseDir, isDev)
   sessionService.restoreAll()
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5173')
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL
+  if (isDev && devServerUrl) {
+    mainWindow.loadURL(devServerUrl)
+    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(path.join(__dirname, '../../renderer/index.html'))
+    if (isDev) {
+      mainWindow.webContents.openDevTools()
+    }
   }
 
   mainWindow.on('closed', () => { mainWindow = null })

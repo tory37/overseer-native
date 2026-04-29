@@ -129,8 +129,8 @@ contextBridge.exposeInMainWorld('overseer', {
     return () => ipcRenderer.removeListener('terminal:copy', handler)
   },
 
-  isDev: process.env.NODE_ENV === 'development',
-  appVersion: require('../../package.json').version,
+  isDev: process.env.OVERSEER_IS_DEV === 'true',
+  appVersion: process.env.OVERSEER_VERSION || '0.5.0',
   openDataFolder: () => ipcRenderer.invoke(IPC.DEV_OPEN_DATA_FOLDER),
   clearAndRestart: () => ipcRenderer.invoke(IPC.DEV_CLEAR_AND_RESTART),
 })

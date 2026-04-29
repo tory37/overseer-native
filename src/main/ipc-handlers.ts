@@ -24,7 +24,8 @@ export function registerIpcHandlers(
   service: SessionService,
   syncService: SyncService,
   getWindow: () => BrowserWindow | null,
-  baseDir: string
+  baseDir: string,
+  isDev: boolean
 ): void {
   const configService = new ConfigService(baseDir)
   
@@ -156,7 +157,7 @@ export function registerIpcHandlers(
   })
 
   ipcMain.handle(IPC.DEV_CLEAR_AND_RESTART, async () => {
-    if (process.env.NODE_ENV !== 'development') return
+    if (!isDev) return
     await fs.promises.rm(baseDir, { recursive: true, force: true })
     app.relaunch()
     app.exit()

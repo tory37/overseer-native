@@ -29,20 +29,21 @@ export const useSpritesStore = create<SpritesState>((set, get) => ({
   createSprite: (s) => {
     const sprite: Sprite = { ...s, id: crypto.randomUUID() }
     set(state => ({ sprites: [...state.sprites, sprite] }))
-    window.overseer.writeSprites({ sprites: get().sprites })
+    window.overseer?.writeSprites?.({ sprites: get().sprites })
     return sprite
   },
   updateSprite: (id, patch) => {
     set(state => ({
       sprites: state.sprites.map(s => s.id === id ? { ...s, ...patch } : s),
     }))
-    window.overseer.writeSprites({ sprites: get().sprites })
+    window.overseer?.writeSprites?.({ sprites: get().sprites })
   },
   deleteSprite: (id) => {
     set(state => ({ sprites: state.sprites.filter(s => s.id !== id) }))
-    window.overseer.writeSprites({ sprites: get().sprites })
+    window.overseer?.writeSprites?.({ sprites: get().sprites })
   },
   loadSprites: async () => {
+    if (!window.overseer?.readSprites) return
     const settings = await window.overseer.readSprites()
     const sprites = settings?.sprites || [DEFAULT_SPRITE]
     if (!sprites.find((s: any) => s.id === DEFAULT_SPRITE.id)) {

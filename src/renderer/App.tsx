@@ -142,11 +142,11 @@ export default function App() {
             fontWeight: 'bold', 
             padding: '3px 8px', 
             borderRadius: '4px',
-            backgroundColor: (window as any).overseer.isDev ? 'rgba(255, 165, 0, 0.2)' : 'rgba(128, 128, 128, 0.1)',
-            color: (window as any).overseer.isDev ? 'orange' : 'var(--text-muted)',
-            border: `1px solid ${(window as any).overseer.isDev ? 'orange' : 'transparent'}`
+            backgroundColor: window.overseer?.isDev ? 'rgba(255, 165, 0, 0.2)' : 'rgba(128, 128, 128, 0.1)',
+            color: window.overseer?.isDev ? 'orange' : 'var(--text-muted)',
+            border: `1px solid ${window.overseer?.isDev ? 'orange' : 'transparent'}`
           }}>
-            {(window as any).overseer.isDev ? 'DEV MODE' : `PRODUCTION v${(window as any).overseer.appVersion}`}
+            {window.overseer?.isDev ? 'DEV MODE' : `PRODUCTION v${window.overseer?.appVersion || '???'}`}
           </span>
           <button
             onClick={() => setShowSettings(true)}
