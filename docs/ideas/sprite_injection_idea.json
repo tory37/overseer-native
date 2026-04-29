@@ -1,0 +1,22 @@
+{
+  "title": "New Sprite Injecction",
+  "reason": "What if the shell we open overrides all the agents 'open' commands",
+
+  "requirements": [
+    "Is it possible to, when the shell starts, override clauge, gemini, and agent, to proxy the full call with the passed in needed vars?",
+    "This would enable the user to open and close an agent whenever they want in the agent terminal, and always get whatever specific instructions we want.",
+    "We could then even, on terminal opening, create shell level variables that the embedded prompt could just point to. Right now that's just the sprites, but could expand.",
+    "This would make the injected prompt always static, and the variables would be terminal level.  they would live through opening and closing any agent in a single session. but not bleed to other sessions.",
+    "This could even be a file that gets written, based on the session / session ID.  and then we point it to a file.  Instructions could be written into there even, and the prompt just points to file with 'do this', and then we could use this in future for better sessions persistence."
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [],
+
+  "references": [],
+
+  "open_questions": [
+    "Is this possible?"
+  ]
+}

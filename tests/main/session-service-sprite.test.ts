@@ -12,6 +12,7 @@ describe('SessionService Sprite Injection', () => {
 
   beforeEach(() => {
     service = new SessionService()
+    jest.clearAllMocks()
   })
 
   it('creates session directory and context.json', () => {
@@ -36,11 +37,15 @@ describe('SessionService Sprite Injection', () => {
     expect(stats.mode & 0o111).toBeTruthy() // executable
   })
 
-  it('sets OVERSEER_SESSION_DIR and updates PATH', () => {
+  it('sets OVERSEER_SESSION_DIR and updates PATH in spawned environment', () => {
+    const spawnSpy = jest.spyOn(PtyManager.prototype, 'spawn')
     const session = service.create({ name: 'Test', agentType: 'claude' })
-    expect(session.envVars['OVERSEER_SESSION_DIR']).toContain(session.id)
-    expect(session.envVars['PATH']).toContain(session.id)
-    expect(session.envVars['PATH']).toContain('/bin:')
+    
+    expect(spawnSpy).toHaveBeenCalled()
+    const env = spawnSpy.mock.calls[0][1]
+    expect(env['OVERSEER_SESSION_DIR']).toContain(session.id)
+    expect(env['PATH']).toContain(session.id)
+    expect(env['PATH']).toContain('/bin:')
   })
 
   it('updates context.json live', () => {

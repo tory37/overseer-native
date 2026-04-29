@@ -35,7 +35,7 @@ export class SessionRegistry {
     }
   }
 
-  private save(): void {
+  save(): void {
     fs.writeFileSync(this.filePath, JSON.stringify(this.sessions, null, 2))
   }
 }

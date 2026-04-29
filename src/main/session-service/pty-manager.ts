@@ -8,7 +8,7 @@ export class PtyManager {
   private ptys = new Map<string, pty.IPty>()
   private scrollbacks = new Map<string, ScrollbackManager>()
 
-  spawn(session: Session, onData: DataCallback, onError?: (err: string) => void): void {
+  spawn(session: Session, env: Record<string, string>, onData: DataCallback, onError?: (err: string) => void): void {
     const shell = process.env.SHELL || '/bin/bash'
     try {
       const ptyProcess = pty.spawn(shell, [], {
@@ -16,7 +16,7 @@ export class PtyManager {
         cols: 80,
         rows: 24,
         cwd: session.cwd,
-        env: { ...process.env, ...session.envVars } as Record<string, string>,
+        env: env,
       })
 
       const scrollback = new ScrollbackManager(session.scrollbackPath)

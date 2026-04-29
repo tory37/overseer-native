@@ -26,7 +26,9 @@
 	  "the whole app seems to be too tall.  you can scroll it small bit.",
 	  "we need another small indicator of focused terminal, like changing border color or something",
 	  "clicking on a terminal should focus it.  it doesn't right now, and that's a step down from normal terminals, or vscode experience, which we're modeling after",
-	  "when a terminal has a long history, switching back to that session the terminal seems to scroll really fast, maybe from all the way top, to bottom before settling back to normal.  why isn't the terminal just doing what it does, just like if I were using vscode? is it because we remove it from the screen? would this all work better if we just hid it with css instead of removing from screen entirely?"
+	  "when a terminal has a long history, switching back to that session the terminal seems to scroll really fast, maybe from all the way top, to bottom before settling back to normal.  why isn't the terminal just doing what it does, just like if I were using vscode? is it because we remove it from the screen? would this all work better if we just hid it with css instead of removing from screen entirely?",
+	  "i can't copy from the terminal.  can't right click, and ctrl shift c doesn't work either.  ",
+	  "if any tests are creating test sessions, we need them to be cleaned up.  and we need a rule that any ai running test sessions to verify things need to clean them up"
   ],
 
   "out_of_scope": [],

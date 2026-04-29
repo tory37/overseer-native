@@ -26,7 +26,7 @@ test('spawns a PTY and receives stdout', (done) => {
   const session = makeSession('pty-test-1')
   const received: string[] = []
 
-  mgr.spawn(session, (data) => {
+  mgr.spawn(session, process.env as Record<string, string>, (data) => {
     received.push(data)
     if (received.join('').includes('hello-overseer')) {
       mgr.kill(session.id)
@@ -40,7 +40,7 @@ test('spawns a PTY and receives stdout', (done) => {
 test('kill removes the PTY from the manager', (done) => {
   const mgr = new PtyManager()
   const session = makeSession('pty-test-2')
-  mgr.spawn(session, () => {})
+  mgr.spawn(session, process.env as Record<string, string>, () => {})
   setTimeout(() => {
     mgr.kill(session.id)
     expect(mgr.has(session.id)).toBe(false)

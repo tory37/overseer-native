@@ -38,46 +38,85 @@ export class SessionService {
   create(options: CreateSessionOptions): Session {
     const id = randomUUID()
     const envVars = readAgentEnvVars(options.agentType)
-    if (options.persona) {
-      envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
-    }
-
-    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', id)
-    const binDir = path.join(sessionDir, 'bin')
-    fs.mkdirSync(binDir, { recursive: true })
-    fs.writeFileSync(
-      path.join(sessionDir, 'context.json'),
-      JSON.stringify({ persona: options.persona, spriteId: options.spriteId }, null, 2)
-    )
-
-    // Write wrappers
-    fs.writeFileSync(path.join(binDir, 'claude'), CLAUDE_WRAPPER, { mode: 0o755 })
-    fs.writeFileSync(path.join(binDir, 'gemini'), GEMINI_WRAPPER, { mode: 0o755 })
-
-    envVars['OVERSEER_SESSION_DIR'] = sessionDir
-    envVars['PATH'] = `${binDir}:${process.env.PATH}`
-
+    
     const session: Session = {
       id,
       name: options.name,
       agentType: options.agentType,
       cwd: options.cwd || os.homedir(),
       envVars,
-      scrollbackPath: path.join(sessionDir, 'scrollback.log'),
+      scrollbackPath: path.join(os.homedir(), '.overseer', 'sessions', id, 'scrollback.log'),
       spriteId: options.spriteId ?? null,
     }
+
+    if (options.persona) {
+      session.envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
+    }
+
     this.registry.add(session)
     this.spawnPty(session)
     return session
   }
 
+  private ensureSessionEnvironment(session: Session): Record<string, string> {
+    const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', session.id)
+    const binDir = path.join(sessionDir, 'bin')
+    
+    if (!fs.existsSync(binDir)) {
+      fs.mkdirSync(binDir, { recursive: true })
+    }
+
+    // Ensure context.json exists
+    const contextPath = path.join(sessionDir, 'context.json')
+    if (!fs.existsSync(contextPath)) {
+      fs.writeFileSync(contextPath, JSON.stringify({ 
+        persona: session.envVars['OVERSEER_SPRITE_PERSONA'] || '', 
+        spriteId: session.spriteId 
+      }, null, 2))
+    }
+
+    // Ensure wrappers exist
+    fs.writeFileSync(path.join(binDir, 'claude'), CLAUDE_WRAPPER, { mode: 0o755 })
+    fs.writeFileSync(path.join(binDir, 'gemini'), GEMINI_WRAPPER, { mode: 0o755 })
+
+    const env = { ...process.env, ...session.envVars }
+    env['OVERSEER_SESSION_DIR'] = sessionDir
+    env['PATH'] = `${binDir}:${env['PATH'] || process.env.PATH}`
+
+    // Special handling for Zsh to prevent ~/.zshrc from overriding our PATH
+    if (process.env.SHELL?.includes('zsh')) {
+      env['ZDOTDIR'] = sessionDir
+      const zshrcPath = path.join(sessionDir, '.zshrc')
+      const originalZshrc = path.join(os.homedir(), '.zshrc')
+      
+      let zshrcContent = ''
+      if (fs.existsSync(originalZshrc)) {
+        zshrcContent += `source "\${HOME}/.zshrc"\n`
+      }
+      // Re-apply our PATH at the very end of zsh initialization
+      zshrcContent += `export PATH="\${OVERSEER_SESSION_DIR}/bin:\${PATH}"\n`
+      fs.writeFileSync(zshrcPath, zshrcContent)
+    }
+    
+    return env as Record<string, string>
+  }
+
   updateSprite(sessionId: string, spriteId: string, persona: string): void {
     const sessionDir = path.join(os.homedir(), '.overseer', 'sessions', sessionId)
-    if (fs.existsSync(sessionDir)) {
-      fs.writeFileSync(
-        path.join(sessionDir, 'context.json'),
-        JSON.stringify({ persona, spriteId }, null, 2)
-      )
+    if (!fs.existsSync(sessionDir)) {
+      fs.mkdirSync(sessionDir, { recursive: true })
+    }
+    fs.writeFileSync(
+      path.join(sessionDir, 'context.json'),
+      JSON.stringify({ persona, spriteId }, null, 2)
+    )
+    
+    // Also update the session in registry so it persists
+    const session = this.registry.list().find(s => s.id === sessionId)
+    if (session) {
+      session.envVars['OVERSEER_SPRITE_PERSONA'] = persona
+      session.spriteId = spriteId
+      this.registry.save() // Need to make save public or add an update method
     }
   }
 
@@ -109,8 +148,10 @@ export class SessionService {
   }
 
   private spawnPty(session: Session): void {
+    const env = this.ensureSessionEnvironment(session)
     this.ptyManager.spawn(
       session,
+      env,
       (data) => { this.onDataCallback?.(session.id, data) },
       (err) => { this.onErrorCallback?.(session.id, err) }
     )
