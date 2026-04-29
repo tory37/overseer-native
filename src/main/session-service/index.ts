@@ -87,18 +87,24 @@ export class SessionService {
       (err) => { this.onErrorCallback?.(session.id, err) }
     )
     const persona = session.envVars['OVERSEER_SPRITE_PERSONA']
-    if (persona && session.agentType === 'claude') {
+    if (persona && (session.agentType === 'claude' || session.agentType === 'gemini')) {
       const escaped = persona
         .replace(/\\/g, '\\\\')
         .replace(/"/g, '\\"')
         .replace(/\n/g, ' ')
+
+      const cmd = session.agentType === 'claude'
+        ? `claude --system-prompt "${escaped}"`
+        : `gemini -i "system: ${escaped}"`
+
       setTimeout(() => {
         try {
-          this.ptyManager.write(session.id, `claude --system-prompt "${escaped}"\r`)
+          console.log(`[Sprite] Injecting persona for session ${session.id} (${session.agentType})`)
+          this.ptyManager.write(session.id, `${cmd}\r`)
         } catch (err) {
           console.error(`[Sprite] Persona injection failed for session ${session.id}:`, err)
         }
-      }, 300)
+      }, 800)
     }
   }
 }
