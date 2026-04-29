@@ -229,6 +229,28 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
             )}
           </div>
         </div>
+
+        <div style={{ marginTop: 24 }}>
+          <h3 style={sectionHeading}>Data Management</h3>
+          <div style={divider}>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => window.overseer.openDataFolder()}
+                style={{ background: 'var(--bg-main)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13 }}
+              >
+                Open Data Folder
+              </button>
+              {(window as any).overseer.isDev && (
+                <button
+                  onClick={() => { if (confirm('Clear ALL data and restart?')) window.overseer.clearAndRestart() }}
+                  style={{ background: 'rgba(255, 0, 0, 0.1)', color: '#f88', border: '1px solid #c00', padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13 }}
+                >
+                  Clear & Restart (Dev Only)
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
