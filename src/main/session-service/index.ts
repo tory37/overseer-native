@@ -23,6 +23,34 @@ export class SessionService {
     this.baseDir = baseDir || path.join(os.homedir(), '.overseer')
     this.registry = new SessionRegistry(path.join(this.baseDir, 'sessions'))
     this.ptyManager = new PtyManager()
+    
+    this.purgeTestSessions()
+    this.sweepOrphanedDirectories()
+  }
+
+  private purgeTestSessions(): void {
+    const testSessions = this.registry.list().filter(s => s.isTest)
+    for (const session of testSessions) {
+      this.kill(session.id)
+    }
+  }
+
+  private sweepOrphanedDirectories(): void {
+    const sessionsDir = path.join(this.baseDir, 'sessions')
+    if (!fs.existsSync(sessionsDir)) return
+    
+    const registeredIds = new Set(this.registry.list().map(s => s.id))
+    const items = fs.readdirSync(sessionsDir)
+    
+    for (const item of items) {
+      const fullPath = path.join(sessionsDir, item)
+      if (fs.statSync(fullPath).isDirectory() && !registeredIds.has(item)) {
+        // Only delete if it looks like a UUID to avoid registry.json or other files
+        if (item.match(/^[0-9a-f-]{36}$/i)) {
+          fs.rmSync(fullPath, { recursive: true, force: true })
+        }
+      }
+    }
   }
 
   onData(cb: DataCallback): void {
