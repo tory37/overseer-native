@@ -85,7 +85,8 @@ export function TerminalPane({
 
   const isRow = splitDirection === 'horizontal'
   const activeCompanionAId = allCompanions.find(c => c.sessionId === activeSessionId)?.companionId ?? null
-  const showCompanion = splitOpen && !!activeCompanionAId
+  const activeCompanionBId = allCompanionsB.find(c => c.sessionId === activeSessionId)?.companionId ?? null
+  const showCompanion = splitOpen && (!!activeCompanionAId || !!activeCompanionBId)
 
   const sessionStack = sessions.map(session => {
     const isVisible = session.id === activeSessionId

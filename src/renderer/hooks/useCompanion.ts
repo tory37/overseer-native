@@ -246,6 +246,28 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
       setSplitFocused('companionA')
       return
     }
+    // Focused on companionA
+    if (threeWayOpenRef.current) {
+      // 3-way split: shift B to A
+      setCompanions(prev => {
+        const aId = prev.A.get(session.id)
+        const bId = prev.B.get(session.id)
+        if (aId) window.overseer.killCompanion(aId).catch(() => {})
+        const A = new Map(prev.A)
+        const B = new Map(prev.B)
+        if (bId) {
+          A.set(session.id, bId)
+          B.delete(session.id)
+        } else {
+          A.delete(session.id)
+        }
+        return { A, B }
+      })
+      setThreeWayOpen(false)
+      setSplitFocused('companionA')
+      return
+    }
+    // 2-way split: close everything
     setCompanions(prev => {
       const aId = prev.A.get(session.id)
       const bId = prev.B.get(session.id)
