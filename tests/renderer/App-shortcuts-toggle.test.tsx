@@ -35,6 +35,8 @@ beforeEach(() => {
     killCompanion: jest.fn().mockResolvedValue(undefined),
     killSession: jest.fn().mockResolvedValue(undefined),
     listSessions: jest.fn().mockResolvedValue([]),
+    readSprites: jest.fn().mockResolvedValue({ sprites: [] }),
+    writeSprites: jest.fn().mockResolvedValue(undefined),
   }
 })
 
@@ -101,4 +103,23 @@ test('Ctrl+Shift+W requires two presses to kill session', async () => {
   
   // Should have called killSession
   expect((window as any).overseer.killSession).toHaveBeenCalledWith('s1')
+})
+
+test('Ctrl+Shift+P toggles SpriteStudio', async () => {
+  render(<App />)
+
+  // Initially not present
+  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
+
+  // Press Ctrl+Shift+P to open
+  await act(async () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(screen.getByTestId('sprite-studio')).toBeInTheDocument()
+
+  // Press Ctrl+Shift+P again to close
+  await act(async () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
 })

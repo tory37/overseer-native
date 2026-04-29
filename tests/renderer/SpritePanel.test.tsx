@@ -3,6 +3,7 @@ import { render, screen, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { SpritePanel } from '../../src/renderer/components/SpritePanel'
 import { useSpritesStore } from '../../src/renderer/store/sprites'
+import { mockOverseer } from './setup'
 
 jest.mock('@dicebear/core', () => ({
   createAvatar: jest.fn(() => ({ toString: () => '<svg data-testid="mock-avatar"></svg>' })),
@@ -12,9 +13,7 @@ jest.mock('@dicebear/collection', () => ({ bottts: {} }))
 beforeEach(() => {
   localStorage.clear()
   useSpritesStore.setState({ sprites: [] })
-  ;(window as any).overseer = {
-    onSpriteSpeech: jest.fn().mockReturnValue(() => {}),
-  }
+  ;(window as any).overseer = { ...mockOverseer }
 })
 
 test('renders empty state when spriteId is null', () => {

@@ -1,8 +1,10 @@
 import { useSpritesStore } from '../../src/renderer/store/sprites'
+import { mockOverseer } from './setup'
 
 beforeEach(() => {
   localStorage.clear()
   useSpritesStore.setState({ sprites: [] })
+  ;(window as any).overseer = { ...mockOverseer }
 })
 
 test('createSprite adds a sprite with a generated id', () => {
