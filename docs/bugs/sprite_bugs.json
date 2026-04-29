@@ -1,0 +1,9 @@
+{
+    "feature": "everything related to sprites",
+    "bugs": [
+        "keyboard shortcut to open the studio does not also close it.  it should",
+        "sprites do not persist through opening  / closing the app",
+        "we said there would be a default sprite, but its not there",
+        "injection of the persona does not seem to work.  do i need to select a CLI from the 'new' menu for it to work? I tried it with a normal shell first, then went into cli"
+    ]
+}
