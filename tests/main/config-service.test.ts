@@ -23,3 +23,18 @@ describe('ConfigService', () => {
     expect(read).toBeNull()
   })
 })
+
+describe('ConfigService Custom Dir', () => {
+  const customDir = path.join(os.tmpdir(), 'overseer-test-custom')
+  
+  afterEach(async () => {
+    try { await fs.promises.rm(customDir, { recursive: true, force: true }) } catch {}
+  })
+
+  it('should use the provided custom base directory', async () => {
+    const service = new ConfigService(customDir)
+    await service.write('test.json', { foo: 'bar' })
+    const exists = fs.existsSync(path.join(customDir, 'test.json'))
+    expect(exists).toBe(true)
+  })
+})
