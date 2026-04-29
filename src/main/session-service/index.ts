@@ -140,6 +140,11 @@ export class SessionService {
   kill(sessionId: string): void {
     this.ptyManager.kill(sessionId)
     this.registry.remove(sessionId)
+    
+    const sessionDir = path.join(this.baseDir, 'sessions', sessionId)
+    if (fs.existsSync(sessionDir)) {
+      fs.rmSync(sessionDir, { recursive: true, force: true })
+    }
   }
 
   restoreAll(): void {
