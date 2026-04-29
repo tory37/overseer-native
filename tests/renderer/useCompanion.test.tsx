@@ -157,19 +157,20 @@ test('onSplitClose when focused on companionB: kills B, sets threeWayOpen=false,
   expect(result.current.allCompanionsB).toHaveLength(0)
 })
 
-test('onSplitClose when focused on companionA: kills A and B, closes split, focuses main', async () => {
+test('onSplitClose when focused on companionA: kills A and shifts B to A', async () => {
   const { result } = renderHook(() => useCompanion(mockSession))
   await act(async () => { result.current.onSplitFocus() })
   await act(async () => { result.current.onSplitOpenThreeWay() })
-  act(() => { result.current.onSplitFocus() }) // → main
-  act(() => { result.current.onSplitFocus() }) // → companionA
+  act(() => { result.current.onSetSplitFocused('companionA') })
   expect(result.current.splitFocused).toBe('companionA')
   act(() => { result.current.onSplitClose() })
   expect((window as any).overseer.killCompanion).toHaveBeenCalledWith('companion-a-id')
-  expect((window as any).overseer.killCompanion).toHaveBeenCalledWith('companion-b-id')
-  expect(result.current.splitOpen).toBe(false)
+  expect((window as any).overseer.killCompanion).not.toHaveBeenCalledWith('companion-b-id')
+  expect(result.current.splitOpen).toBe(true)
   expect(result.current.threeWayOpen).toBe(false)
-  expect(result.current.splitFocused).toBe('main')
+  expect(result.current.splitFocused).toBe('companionA')
+  expect(result.current.allCompanions).toHaveLength(1)
+  expect(result.current.allCompanions[0].companionId).toBe('companion-b-id')
 })
 
 test('onSplitClose when focused on main: closes split', async () => {
