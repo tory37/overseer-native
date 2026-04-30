@@ -51,6 +51,7 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   const splitOpenRef      = useRef(splitOpen)
   const threeWayOpenRef   = useRef(threeWayOpen)
   const splitFocusedRef   = useRef(splitFocused)
+  const lastSessionIdForPersist = useRef(activeSession?.id)
 
   useEffect(() => { activeSessionRef.current  = activeSession  }, [activeSession])
   // companionsRef must be updated before the normalization effect reads it
@@ -59,32 +60,76 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   useEffect(() => { threeWayOpenRef.current   = threeWayOpen   }, [threeWayOpen])
   useEffect(() => { splitFocusedRef.current   = splitFocused   }, [splitFocused])
 
-  // Load layout when session changes
+  // Load layout and spawn missing companions
   useEffect(() => {
-    if (activeSession?.layout) {
-      const { layout } = activeSession
-      setSplitOpen(layout.splitOpen)
-      setThreeWayOpen(layout.threeWayOpen)
-      setSplitDirection(layout.splitDirection)
-      setSplitSwapped(layout.splitSwapped)
-      setSecondarySwapped(layout.secondarySwapped)
-      setOuterSplitRatio(layout.outerSplitRatio)
-      setInnerSplitRatio(layout.innerSplitRatio)
-    } else {
-      // Defaults if no layout persisted
-      setSplitOpen(false)
-      setThreeWayOpen(false)
-      setSplitDirection('horizontal')
-      setSplitSwapped(false)
-      setSecondarySwapped(false)
-      setOuterSplitRatio(0.5)
-      setInnerSplitRatio(0.5)
+    let isCancelled = false
+
+    const loadAndSpawn = async () => {
+      const session = activeSession
+      if (!session) return
+
+      const layoutToUse = session.layout || {
+        splitOpen: false,
+        threeWayOpen: false,
+        splitDirection: 'horizontal' as const,
+        splitSwapped: false,
+        secondarySwapped: false,
+        outerSplitRatio: 0.5,
+        innerSplitRatio: 0.5,
+      }
+
+      setSplitOpen(layoutToUse.splitOpen)
+      setThreeWayOpen(layoutToUse.threeWayOpen)
+      setSplitDirection(layoutToUse.splitDirection)
+      setSplitSwapped(layoutToUse.splitSwapped)
+      setSecondarySwapped(layoutToUse.secondarySwapped)
+      setOuterSplitRatio(layoutToUse.outerSplitRatio)
+      setInnerSplitRatio(layoutToUse.innerSplitRatio)
+
+      if (layoutToUse.splitOpen) {
+        const comps = companionsRef.current
+        let aId = comps.A.get(session.id)
+        if (!aId) {
+          try {
+            aId = await window.overseer.spawnCompanion(session.cwd)
+            if (isCancelled) return
+            setCompanions(p => ({ ...p, A: new Map(p.A).set(session.id, aId!) }))
+          } catch (err) {
+            console.error('companion A restore spawn failed:', err)
+          }
+        }
+        if (layoutToUse.threeWayOpen) {
+          let bId = comps.B.get(session.id)
+          if (!bId) {
+            try {
+              bId = await window.overseer.spawnCompanion(session.cwd)
+              if (isCancelled) return
+              setCompanions(p => ({ ...p, B: new Map(p.B).set(session.id, bId!) }))
+            } catch (err) {
+              console.error('companion B restore spawn failed:', err)
+            }
+          }
+        }
+      } else {
+        // If we switched to a session that doesn't expect splits, focus main
+        setSplitFocused('main')
+      }
+    }
+    
+    loadAndSpawn()
+
+    return () => {
+      isCancelled = true
     }
   }, [activeSession?.id])
 
   // Persist layout changes
   useEffect(() => {
     if (!activeSession) return
+    if (lastSessionIdForPersist.current !== activeSession.id) {
+      lastSessionIdForPersist.current = activeSession.id
+      return
+    }
     const layout: SessionLayout = {
       splitOpen,
       threeWayOpen,
@@ -99,29 +144,6 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
     // To be safe, we can compare with existing layout, but let's keep it simple first.
     useSessionStore.getState().updateSession(activeSession.id, { layout })
   }, [activeSession?.id, splitOpen, threeWayOpen, splitDirection, splitSwapped, secondarySwapped, outerSplitRatio, innerSplitRatio])
-
-  // Normalize split layout state when the active session changes.
-  // splitOpen/threeWayOpen are global, but companion existence is per-session —
-  // this keeps them in sync so stale values from a previous session don't bleed over.
-  useEffect(() => {
-    const session = activeSession
-    if (!session) return
-    const comps = companionsRef.current
-    const aId = comps.A.get(session.id)
-    const bId = comps.B.get(session.id)
-    if (!aId) {
-      setThreeWayOpen(false)
-      setSplitFocused('main')
-    } else {
-      if (!splitOpenRef.current) setSplitOpen(true)
-      if (!bId) {
-        setThreeWayOpen(false)
-        setSplitFocused(f => f === 'companionB' ? 'companionA' : f)
-      } else {
-        if (!threeWayOpenRef.current) setThreeWayOpen(true)
-      }
-    }
-  }, [activeSession?.id])
 
   useEffect(() => {
     const unsub = window.overseer.onCompanionExit((companionId) => {
