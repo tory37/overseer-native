@@ -43,6 +43,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          generate_release_notes: true
           files: |
             dist/package/*.AppImage
             dist/package/*.dmg
