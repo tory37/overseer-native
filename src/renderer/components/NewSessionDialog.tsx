@@ -38,6 +38,7 @@ export function NewSessionDialog({ onCreate, onCancel }: Props) {
       agentType,
       cwd,
       spriteId: sprite?.id ?? null,
+      spriteName: sprite?.name,
       persona: sprite?.persona,
     })
   }

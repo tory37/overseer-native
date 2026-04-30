@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { SessionRegistry } from './registry'
 import { PtyManager } from './pty-manager'
 import { ScrollbackManager } from './scrollback'
-import { readAgentEnvVars } from './agent-config'
+import { readAgentConfig } from './agent-config'
 import { CLAUDE_WRAPPER, GEMINI_WRAPPER } from './wrapper-templates'
 import type { Session, CreateSessionOptions } from '../../renderer/types/ipc'
 import os from 'os'
@@ -67,14 +67,15 @@ export class SessionService {
 
   create(options: CreateSessionOptions): Session {
     const id = randomUUID()
-    const envVars = readAgentEnvVars(options.agentType)
+    const config = readAgentConfig(options.agentType, this.baseDir)
     
     const session: Session = {
       id,
       name: options.name,
       agentType: options.agentType,
       cwd: options.cwd || os.homedir(),
-      envVars,
+      envVars: config.env,
+      instructions: config.instructions,
       scrollbackPath: path.join(this.baseDir, 'sessions', id, 'scrollback.log'),
       spriteId: options.spriteId ?? null,
       isTest: options.isTest || false,
@@ -82,6 +83,9 @@ export class SessionService {
 
     if (options.persona) {
       session.envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
+    }
+    if (options.spriteName) {
+      (session as any).spriteName = options.spriteName
     }
 
     this.registry.add(session)
@@ -97,14 +101,24 @@ export class SessionService {
       fs.mkdirSync(binDir, { recursive: true })
     }
 
-    // Ensure context.json exists
+    // Always update context.json with current session state
     const contextPath = path.join(sessionDir, 'context.json')
-    if (!fs.existsSync(contextPath)) {
-      fs.writeFileSync(contextPath, JSON.stringify({ 
-        persona: session.envVars['OVERSEER_SPRITE_PERSONA'] || '', 
-        spriteId: session.spriteId 
-      }, null, 2))
+    
+    // Try to get existing context to preserve spriteName if not in session object
+    let spriteName = (session as any).spriteName || ''
+    if (!spriteName && fs.existsSync(contextPath)) {
+      try {
+        const oldCtx = JSON.parse(fs.readFileSync(contextPath, 'utf8'))
+        spriteName = oldCtx.spriteName || ''
+      } catch (e) {}
     }
+
+    fs.writeFileSync(contextPath, JSON.stringify({ 
+      persona: session.envVars['OVERSEER_SPRITE_PERSONA'] || '', 
+      instructions: session.instructions || '',
+      spriteId: session.spriteId,
+      spriteName
+    }, null, 2))
 
     // Ensure wrappers exist
     fs.writeFileSync(path.join(binDir, 'claude'), CLAUDE_WRAPPER, { mode: 0o755 })
@@ -132,16 +146,20 @@ export class SessionService {
     return env as Record<string, string>
   }
 
-  updateSprite(sessionId: string, spriteId: string, persona: string): void {
+  updateSprite(sessionId: string, spriteId: string, name: string, persona: string): void {
     const sessionDir = path.join(this.baseDir, 'sessions', sessionId)
     if (!fs.existsSync(sessionDir)) {
       fs.mkdirSync(sessionDir, { recursive: true })
     }
+
+    const session = this.registry.list().find(s => s.id === sessionId)
+    const instructions = session?.instructions || ''
+
     fs.writeFileSync(
       path.join(sessionDir, 'context.json'),
-      JSON.stringify({ persona, spriteId }, null, 2)
+      JSON.stringify({ persona, instructions, spriteId, spriteName: name }, null, 2)
     )
-    
+
     // Also update the session in registry so it persists
     this.registry.update(sessionId, { spriteId, envVars: { ...this.registry.list().find(s => s.id === sessionId)?.envVars, OVERSEER_SPRITE_PERSONA: persona } })
   }
@@ -176,6 +194,13 @@ export class SessionService {
 
   restoreAll(): void {
     for (const session of this.registry.list()) {
+      // Refresh instructions from config on restore
+      const config = readAgentConfig(session.agentType, this.baseDir)
+      if (config.instructions && !session.instructions) {
+        session.instructions = config.instructions
+        this.registry.update(session.id, { instructions: session.instructions })
+      }
+
       if (!this.ptyManager.has(session.id)) {
         this.spawnPty(session)
       }
@@ -192,3 +217,4 @@ export class SessionService {
     )
   }
 }
+

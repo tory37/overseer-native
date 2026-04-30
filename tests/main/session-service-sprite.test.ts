@@ -22,7 +22,15 @@ describe('SessionService Sprite Injection', () => {
     fs.rmSync(tmpBaseDir, { recursive: true, force: true })
   })
 
-  it('creates session directory and context.json', () => {
+  it('creates session directory and context.json with instructions', () => {
+    // Mock the agent config
+    const agentsDir = path.join(tmpBaseDir, 'agents')
+    fs.mkdirSync(agentsDir, { recursive: true })
+    fs.writeFileSync(
+      path.join(agentsDir, 'claude.json'),
+      JSON.stringify({ env: {}, instructions: 'System Scaffolding' })
+    )
+
     const session = service.create({
       name: 'Test Session',
       agentType: 'claude',
@@ -35,6 +43,25 @@ describe('SessionService Sprite Injection', () => {
     expect(fs.existsSync(path.join(sessionDir, 'context.json'))).toBe(true)
     const context = JSON.parse(fs.readFileSync(path.join(sessionDir, 'context.json'), 'utf8'))
     expect(context.persona).toBe('Test Persona')
+    expect(context.instructions).toContain('You are an AI assistant running inside Overseer')
+    expect(context.instructions).toContain('System Scaffolding')
+  })
+
+  it('preserves instructions on sprite update', () => {
+    // Mock the agent config
+    const agentsDir = path.join(tmpBaseDir, 'agents')
+    fs.mkdirSync(agentsDir, { recursive: true })
+    fs.writeFileSync(
+      path.join(agentsDir, 'claude.json'),
+      JSON.stringify({ env: {}, instructions: 'Keep Me' })
+    )
+
+    const session = service.create({ name: 'Test', agentType: 'claude', persona: 'Old', isTest: true })
+    service.updateSprite(session.id, 'sprite-1', 'Sprite 1', 'New Persona')
+    const context = JSON.parse(fs.readFileSync(path.join(sessionBaseDir, session.id, 'context.json'), 'utf8'))
+    expect(context.persona).toBe('New Persona')
+    expect(context.instructions).toContain('You are an AI assistant running inside Overseer')
+    expect(context.instructions).toContain('Keep Me')
   })
 
   it('creates wrapper scripts with correct permissions', () => {
@@ -54,12 +81,5 @@ describe('SessionService Sprite Injection', () => {
     expect(env['OVERSEER_SESSION_DIR']).toContain(session.id)
     expect(env['PATH']).toContain(session.id)
     expect(env['PATH']).toContain('/bin:')
-  })
-
-  it('updates context.json live', () => {
-    const session = service.create({ name: 'Test', agentType: 'claude', persona: 'Old', isTest: true })
-    service.updateSprite(session.id, 'sprite-1', 'New Persona')
-    const context = JSON.parse(fs.readFileSync(path.join(sessionBaseDir, session.id, 'context.json'), 'utf8'))
-    expect(context.persona).toBe('New Persona')
   })
 })

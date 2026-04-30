@@ -96,7 +96,7 @@ export function registerIpcHandlers(
       if (session.spriteId) {
         const sprite = settings.sprites?.find((s: any) => s.id === session.spriteId)
         if (sprite) {
-          service.updateSprite(session.id, sprite.id, sprite.persona)
+          service.updateSprite(session.id, sprite.id, sprite.name, sprite.persona)
         }
       }
     }

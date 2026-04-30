@@ -130,6 +130,20 @@ export function SpriteStudio({ onClose, editingId: initialEditingId }: Props) {
       >
         + Create New Sprite
       </button>
+
+      <div style={{ 
+        marginTop: '12px', padding: '12px', background: 'var(--bg-main)', 
+        borderRadius: '4px', border: '1px dotted var(--border)', fontSize: '13px' 
+      }}>
+        <div style={{ color: 'var(--text-main)', fontWeight: 'bold', marginBottom: '4px' }}>How to use Sprites</div>
+        <div style={{ color: 'var(--text-muted)', lineHeight: '1.4' }}>
+          Assign a sprite to your session. When the AI outputs text wrapped in 
+          <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 4px', borderRadius: '3px', margin: '0 4px', color: 'var(--accent)' }}>
+            &lt;speak&gt;...&lt;/speak&gt;
+          </code> 
+          tags, it will appear in the sprite's speech bubble.
+        </div>
+      </div>
     </div>
   )
 

@@ -14,6 +14,7 @@ export interface Session {
   agentType: 'claude' | 'gemini' | 'cursor' | 'shell'
   cwd: string
   envVars: Record<string, string>
+  instructions?: string
   scrollbackPath: string
   spriteId: string | null
   isTest?: boolean
@@ -25,6 +26,7 @@ export interface CreateSessionOptions {
   agentType: Session['agentType']
   cwd?: string
   spriteId?: string | null
+  spriteName?: string
   persona?: string
   isTest?: boolean
 }
