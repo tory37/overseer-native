@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { formatKeybinding, matchKeybinding } from '../types/ipc'
-import type { DriftStatus, SyncResult, Keybindings, KeybindingAction } from '../types/ipc'
+import type { DriftStatus, SyncResult, Keybindings, KeybindingAction, UpdateStatus } from '../types/ipc'
 import { useThemeStore, BUILTIN_THEMES } from '../store/theme'
 
 const ACTION_LABELS: Record<string, string> = {
@@ -49,11 +49,13 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
   const [pendingKb,       setPendingKb]       = useState<Keybindings>(() => keybindings)
   const [capturingAction, setCapturingAction] = useState<KeybindingAction | null>(null)
   const [savingKb,        setSavingKb]        = useState(false)
+  const [updateStatus,    setUpdateStatus]    = useState<UpdateStatus>({ type: 'idle' })
 
   const isKbDirty = JSON.stringify(pendingKb) !== JSON.stringify(keybindings)
 
   useEffect(() => {
     window.overseer?.syncStatus?.().then(setStatus)
+    return window.overseer?.updateStatus?.(setUpdateStatus)
   }, [])
 
   useEffect(() => {
@@ -105,6 +107,10 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
     setSavingKb(true)
     await onSaveKeybindings(pendingKb)
     setSavingKb(false)
+  }
+
+  const handleCheckUpdates = async () => {
+    await window.overseer?.updateCheck?.()
   }
 
   const formatTimestamp = (iso: string | null) =>
@@ -238,6 +244,28 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
                 {savingKb ? 'Saving…' : 'Save Shortcuts'}
               </button>
             )}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 24 }}>
+          <h3 style={sectionHeading}>Updates</h3>
+          <div style={divider}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                onClick={handleCheckUpdates}
+                style={{ background: 'var(--bg-main)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '6px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 13 }}
+              >
+                Check for Updates
+              </button>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                {updateStatus.type === 'checking' && 'Checking...'}
+                {updateStatus.type === 'idle' && 'App is up to date.'}
+                {updateStatus.type === 'error' && `Error: ${updateStatus.message}`}
+                {updateStatus.type === 'available' && `Update ${updateStatus.version} found!`}
+                {updateStatus.type === 'downloading' && `Downloading... ${Math.round(updateStatus.percent)}%`}
+                {updateStatus.type === 'downloaded' && `Version ${updateStatus.version} ready.`}
+              </span>
+            </div>
           </div>
         </div>
 
