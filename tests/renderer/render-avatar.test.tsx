@@ -23,11 +23,11 @@ test('returns SVG string', () => {
   expect(result).toBe('<svg>test-avatar</svg>')
 })
 
-test('passes seed and options to createAvatar', () => {
+test('passes seed and options to createAvatar, wrapping string values in arrays', () => {
   renderAvatar({ id: '1', name: 'Bot', style: 'bottts', seed: 'myseed', options: { eyes: 'bulging' }, persona: '' })
   expect(mockCreateAvatar).toHaveBeenCalledWith(
     { __id: 'bottts' },
-    expect.objectContaining({ seed: 'myseed', eyes: 'bulging' })
+    expect.objectContaining({ seed: 'myseed', eyes: ['bulging'] })
   )
 })
 
@@ -39,11 +39,11 @@ test('uses first style as fallback when style id is unknown', () => {
   )
 })
 
-test('spreads options over seed so explicit options override seed-based values', () => {
+test('wraps string options in arrays but passes array options (colors) through unchanged', () => {
   renderAvatar({ id: '1', name: 'Bot', style: 'bottts', seed: 's', options: { eyes: 'glow', baseColor: ['ff0000'] }, persona: '' })
   const callArgs = mockCreateAvatar.mock.calls[0][1]
-  expect(callArgs.eyes).toBe('glow')
-  expect(callArgs.baseColor).toEqual(['ff0000'])
+  expect(callArgs.eyes).toEqual(['glow'])       // string → wrapped in array
+  expect(callArgs.baseColor).toEqual(['ff0000']) // already an array → unchanged
   expect(callArgs.seed).toBe('s')
 })
 
