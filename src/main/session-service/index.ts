@@ -125,7 +125,7 @@ export class SessionService {
         zshrcContent += `source "${originalZshrc}"\n`
       }
       // Re-apply our PATH at the very end of zsh initialization
-      zshrcContent += `export PATH="${binDir}:${process.env.PATH || '$PATH'}"\n`
+      zshrcContent += `export PATH="${binDir}:$PATH"\n`
       fs.writeFileSync(zshrcPath, zshrcContent)
     }
     

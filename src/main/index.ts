@@ -1,7 +1,12 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import os from 'os'
+import { loadShellEnv } from './services/shell-env'
 import { SessionService } from './session-service/index'
+
+// Load shell environment before initializing services
+loadShellEnv()
+
 import { SyncService } from './services/sync-service'
 import { registerIpcHandlers } from './ipc-handlers'
 
