@@ -56,6 +56,9 @@ export function registerIpcHandlers(
   })
 
   ipcMain.handle(IPC.SESSION_KILL, (_event, sessionId: string) => service.kill(sessionId))
+  ipcMain.handle(IPC.SESSION_UPDATE, (_event, sessionId: string, partial: Partial<Session>) => {
+    service.updateSession(sessionId, partial)
+  })
   ipcMain.handle(IPC.SCROLLBACK_GET, (_event, sessionId: string) => {
     const buf = service.getScrollback(sessionId)
     return buf ? buf.toString('binary') : null

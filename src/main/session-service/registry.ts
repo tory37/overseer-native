@@ -29,6 +29,14 @@ export class SessionRegistry {
     this.save()
   }
 
+  update(id: string, partial: Partial<Session>): void {
+    const session = this.sessions.find(s => s.id === id)
+    if (session) {
+      Object.assign(session, partial)
+      this.save()
+    }
+  }
+
   private load(): Session[] {
     if (!fs.existsSync(this.filePath)) return []
     try {

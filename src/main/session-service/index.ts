@@ -143,12 +143,11 @@ export class SessionService {
     )
     
     // Also update the session in registry so it persists
-    const session = this.registry.list().find(s => s.id === sessionId)
-    if (session) {
-      session.envVars['OVERSEER_SPRITE_PERSONA'] = persona
-      session.spriteId = spriteId
-      this.registry.save() // Need to make save public or add an update method
-    }
+    this.registry.update(sessionId, { spriteId, envVars: { ...this.registry.list().find(s => s.id === sessionId)?.envVars, OVERSEER_SPRITE_PERSONA: persona } })
+  }
+
+  updateSession(sessionId: string, partial: Partial<Session>): void {
+    this.registry.update(sessionId, partial)
   }
 
   getScrollback(sessionId: string): Buffer | null {
