@@ -18,29 +18,7 @@
     "P4": "Infrastructure"
   },
 
-  "requirements": [
-    {
-      "priority": "P3",
-      "category": "D",
-      "name": "No Visual Indicator of Focused Terminal",
-      "description": "We need another small indicator of focused terminal, like changing border color or something."
-    },
-    {
-      "priority": "P3",
-      "category": "C",
-      "name": "No Window Layout Persistence",
-      "description": "Should persist terminal setup through app launches within a session.",
-      "ex1": "If split to three, should open it that way.",
-      "ex2": "If split into 2, open that way.",
-      "ex3": "If split into more than 1, and sizing is adjusted through drag handles, open it that way."
-    },
-    {
-      "priority": "P4",
-      "category": "E",
-      "name": "TypeScript Buffer Type Missing in Renderer",
-      "description": "TerminalInstance.tsx line 71 uses Buffer.from() to decode scrollback data, but the renderer tsconfig doesn't include Node.js types, so TypeScript reports TS2591: Cannot find name 'Buffer'. Pre-existing. Fix by adding @types/node to the renderer tsconfig or switching to a browser-native decode approach."
-    }
-  ],
+  "requirements": [],
 
   "out_of_scope": [],
   "ui_notes": [],
