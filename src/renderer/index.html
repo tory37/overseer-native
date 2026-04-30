@@ -12,6 +12,24 @@
         overflow: hidden;
         background: #1e1e1e; /* Fallback before theme loads */
       }
+      @keyframes overseer-idle-breath {
+        from { transform: translateY(0); }
+        to { transform: translateY(3px); }
+      }
+      @keyframes overseer-thinking-wobble {
+        0% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(1.02) rotate(-1deg); }
+        75% { transform: scale(1.02) rotate(1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+      }
+      @keyframes overseer-speaking-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.04); }
+        100% { transform: scale(1); }
+      }
+      .overseer-sprite-idle { animation: overseer-idle-breath 3s ease-in-out infinite alternate; }
+      .overseer-sprite-thinking { animation: overseer-thinking-wobble 0.6s ease-in-out infinite; }
+      .overseer-sprite-speaking { animation: overseer-speaking-pulse 0.2s ease-in-out infinite; }
     </style>
   </head>
   <body>

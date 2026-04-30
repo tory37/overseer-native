@@ -2,6 +2,15 @@ import React, { useEffect, useState, useRef } from 'react'
 import { renderAvatar } from '../lib/render-avatar'
 import { useSpritesStore } from '../store/sprites'
 
+const MOUTH_MAP: Record<string, string> = {
+  'bottts': 'bite',
+  'pixel-art': 'happy13',
+  'fun-emoji': 'shout',
+  'avataaars': 'screamOpen',
+  'micah': 'laughing',
+  'personas': 'surprise',
+}
+
 interface Props {
   sessionId: string | null
   spriteId: string | null
@@ -14,6 +23,8 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
   const sprites = useSpritesStore(s => s.sprites)
   const sprite = spriteId ? (sprites.find(s => s.id === spriteId) ?? null) : null
   const [speechText, setSpeechText] = useState('')
+  const [lastPtyTime, setLastPtyTime] = useState(0)
+  const [isMouthOpen, setIsMouthOpen] = useState(false)
   const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -30,12 +41,40 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
     }
   }, [sessionId])
 
+  useEffect(() => {
+    if (!sessionId) return
+    const unsub = window.overseer.onCompanionData((_id, _data) => {
+      setLastPtyTime(Date.now())
+    })
+    return unsub
+  }, [sessionId])
+
+  useEffect(() => {
+    if (!speechText) {
+      setIsMouthOpen(false)
+      return
+    }
+    const interval = setInterval(() => {
+      setIsMouthOpen(prev => !prev)
+    }, 150)
+    return () => clearInterval(interval)
+  }, [speechText])
+
   if (!visible) return null
+
+  const now = Date.now()
+  const isThinking = !speechText && (now - lastPtyTime < 2000)
+  const isSpeaking = !!speechText
+  const animationClass = isSpeaking ? 'overseer-sprite-speaking' : (isThinking ? 'overseer-sprite-thinking' : 'overseer-sprite-idle')
 
   let avatarSvg = ''
   if (sprite) {
     try {
-      avatarSvg = renderAvatar(sprite)
+      const overrides: Record<string, unknown> = {}
+      if (isSpeaking && isMouthOpen) {
+        overrides.mouth = MOUTH_MAP[sprite.style] || 'smile'
+      }
+      avatarSvg = renderAvatar(sprite, overrides)
     } catch (err) {
       console.error(`[Sprite] Avatar render failed for sprite ${sprite.id}:`, err)
     }
@@ -88,6 +127,7 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
       )}
       {avatarSvg && (
         <div
+          className={animationClass}
           style={{ width: '80px', height: '80px' }}
           dangerouslySetInnerHTML={{ __html: avatarSvg }}
         />

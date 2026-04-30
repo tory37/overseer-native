@@ -52,3 +52,12 @@ test('handles undefined options gracefully', () => {
     renderAvatar({ id: '1', name: 'Bot', style: 'bottts', seed: 'x', persona: '' })
   }).not.toThrow()
 })
+
+test('applies overrides when provided', () => {
+  renderAvatar(
+    { id: '1', name: 'Bot', style: 'bottts', seed: 's', options: { mouth: 'smile01' }, persona: '' },
+    { mouth: 'bite' }
+  )
+  const callArgs = mockCreateAvatar.mock.calls[0][1]
+  expect(callArgs.mouth).toEqual(['bite'])
+})

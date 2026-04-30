@@ -1,7 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSpritesStore, Sprite } from '../store/sprites'
 import { renderAvatar } from '../lib/render-avatar'
 import { CURATED_STYLES, type OptionDef } from '../lib/dicebear-styles'
+
+const MOUTH_MAP: Record<string, string> = {
+  'bottts': 'bite',
+  'pixel-art': 'happy13',
+  'fun-emoji': 'shout',
+  'avataaars': 'screamOpen',
+  'micah': 'laughing',
+  'personas': 'surprise',
+}
 
 interface Props {
   onClose: () => void
@@ -22,7 +31,18 @@ export function SpriteStudio({ onClose, editingId: initialEditingId }: Props) {
   const [options, setOptions] = useState<Record<string, unknown>>(editing?.options ?? {})
   const [persona, setPersona] = useState(editing?.persona ?? '')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [previewState, setPreviewState] = useState<'idle' | 'thinking' | 'speaking'>('idle')
+  const [isMouthOpen, setIsMouthOpen] = useState(false)
   const deleteTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (previewState !== 'speaking') {
+      setIsMouthOpen(false)
+      return
+    }
+    const interval = setInterval(() => setIsMouthOpen(prev => !prev), 150)
+    return () => clearInterval(interval)
+  }, [previewState])
 
   const styleDef = CURATED_STYLES.find(s => s.id === style) ?? CURATED_STYLES[0]
   const styleIdx = CURATED_STYLES.findIndex(s => s.id === style)
@@ -285,8 +305,14 @@ export function SpriteStudio({ onClose, editingId: initialEditingId }: Props) {
   const renderForm = () => {
     let previewSvg = ''
     try {
-      previewSvg = renderAvatar({ id: '', name: '', style, seed: seed || 'preview', options, persona })
+      const overrides: Record<string, unknown> = {}
+      if (previewState === 'speaking' && isMouthOpen) {
+        overrides.mouth = MOUTH_MAP[style] || 'smile'
+      }
+      previewSvg = renderAvatar({ id: '', name: '', style, seed: seed || 'preview', options, persona }, overrides)
     } catch (err) {}
+
+    const animationClass = previewState === 'speaking' ? 'overseer-sprite-speaking' : (previewState === 'thinking' ? 'overseer-sprite-thinking' : 'overseer-sprite-idle')
 
     return (
       <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} onSubmit={handleSave}>
@@ -297,12 +323,37 @@ export function SpriteStudio({ onClose, editingId: initialEditingId }: Props) {
 
         {/* Name + preview side by side */}
         <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-          <label style={{ ...labelStyle, flex: 1 }} htmlFor="sprite-name">
-            Name
-            <input id="sprite-name" aria-label="Name" style={inputStyle} value={name} onChange={e => setName(e.target.value)} required autoFocus />
-          </label>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <label style={labelStyle} htmlFor="sprite-name">
+              Name
+              <input id="sprite-name" aria-label="Name" style={inputStyle} value={name} onChange={e => setName(e.target.value)} required autoFocus />
+            </label>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {(['idle', 'thinking', 'speaking'] as const).map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setPreviewState(s)}
+                  style={{
+                    flex: 1,
+                    fontSize: '10px',
+                    padding: '4px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    background: previewState === s ? 'var(--accent)' : 'var(--bg-main)',
+                    color: previewState === s ? '#fff' : 'var(--text-muted)',
+                    border: '1px solid var(--border)',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
           {previewSvg && (
             <div
+              className={animationClass}
               style={{ width: '80px', height: '80px', flexShrink: 0 }}
               dangerouslySetInnerHTML={{ __html: previewSvg }}
             />

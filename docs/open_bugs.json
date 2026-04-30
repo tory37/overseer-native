@@ -46,6 +46,12 @@
           "priority": "P2"
         }
       ]
+    },
+    {
+      "system": "Auto Update",
+      "issues": [
+        "Working on Linux, but On Mac: Error: Cannot find latest-mac.yml in the latest release artifacts (https://github.com/tory37/overseer-native/releases/download/v0.11.0/latest-mac.yml): HttpError: 404 \"method: GET url: https://github.com/tory37/overseer-native/releases/download/v0.11.0/latest-mac.yml/n/nPlease double check that your authentication token is correct. Due to security reasons, actual status maybe not reported, but 404.\n\" Headers: { \"cache-control\": \"no-cache\", \"content-length\": \"9\", \"content-security-policy\": \"default-src 'none'; base-uri 'self'; connect-src 'self'; form-action 'self'; img-src 'self' data:; script-src 'self'; style-src 'unsafe-inline'", "content-type\": \"text/plain; charset=utf-8", "date\": \"Thu, 30 Apr 2026 15:14:16 GMT", "referrer-policy\": \"no-referrer-when-downgrade", "server\": \"github.com", "strict-transport-security\": \"max-age=31536000; includeSubdomains; preload", "vary\": \"X-PJAX, X-PJAX-Container, Turbo-Visit, Turbo-Frame, X-Requested-With, Sec-Fetch-Site,Accept-Encoding, Accept, X-Requested-With", "x-content-type-options\": \"nosniff", "x-frame-options\": \"deny", "x-github-request-id\": \"C75D:1CD720:63E84BC:844A915:69F371C8", "x-xss-protection\": \"0\" } at createHttpError (/Applications/Overseer.app/Contents/Resources/app.asar/node_modules/builder-util-runtime/out/httpExecutor.js:21:12) at ElectronHttpExecutor.handleResponse (/Applications/Overseer.app/Contents/Resources/app.asar/node_modules/builder-util-runtime/out/httpExecutor.js:121:20) at ClientRequest.<anonymous> (/Applications/Overseer.app/Contents/Resources/app.asar/node_modules/builder-util-runtime/out/httpExecutor.js:87:26) at ClientRequest.emit (node:events:519:28) at SimpleURLLoaderWrapper.<anonymous> (node:electron/js2c/browser_init:2:114269) at SimpleURLLoaderWrapper.emit (node:events:519:28)"
+      ]
     }		
   ],
 
