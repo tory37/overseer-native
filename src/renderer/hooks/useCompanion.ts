@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import type { Session } from '../types/ipc'
+import { useSessionStore } from '../store/sessions'
+import type { Session, SessionLayout } from '../types/ipc'
 
 interface CompanionMaps {
   A: Map<string, string> // sessionId → companionId
@@ -57,6 +58,47 @@ export function useCompanion(activeSession: Session | undefined): CompanionAPI {
   useEffect(() => { splitOpenRef.current      = splitOpen      }, [splitOpen])
   useEffect(() => { threeWayOpenRef.current   = threeWayOpen   }, [threeWayOpen])
   useEffect(() => { splitFocusedRef.current   = splitFocused   }, [splitFocused])
+
+  // Load layout when session changes
+  useEffect(() => {
+    if (activeSession?.layout) {
+      const { layout } = activeSession
+      setSplitOpen(layout.splitOpen)
+      setThreeWayOpen(layout.threeWayOpen)
+      setSplitDirection(layout.splitDirection)
+      setSplitSwapped(layout.splitSwapped)
+      setSecondarySwapped(layout.secondarySwapped)
+      setOuterSplitRatio(layout.outerSplitRatio)
+      setInnerSplitRatio(layout.innerSplitRatio)
+    } else {
+      // Defaults if no layout persisted
+      setSplitOpen(false)
+      setThreeWayOpen(false)
+      setSplitDirection('horizontal')
+      setSplitSwapped(false)
+      setSecondarySwapped(false)
+      setOuterSplitRatio(0.5)
+      setInnerSplitRatio(0.5)
+    }
+  }, [activeSession?.id])
+
+  // Persist layout changes
+  useEffect(() => {
+    if (!activeSession) return
+    const layout: SessionLayout = {
+      splitOpen,
+      threeWayOpen,
+      splitDirection,
+      splitSwapped,
+      secondarySwapped,
+      outerSplitRatio,
+      innerSplitRatio,
+    }
+    // Only update if it actually changed to avoid infinite loops if store update triggers re-render
+    // But store update is shallow, and we check activeSession?.id in the loader effect.
+    // To be safe, we can compare with existing layout, but let's keep it simple first.
+    useSessionStore.getState().updateSession(activeSession.id, { layout })
+  }, [activeSession?.id, splitOpen, threeWayOpen, splitDirection, splitSwapped, secondarySwapped, outerSplitRatio, innerSplitRatio])
 
   // Normalize split layout state when the active session changes.
   // splitOpen/threeWayOpen are global, but companion existence is per-session —
