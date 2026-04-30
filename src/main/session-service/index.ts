@@ -131,16 +131,28 @@ export class SessionService {
     // Special handling for Zsh to prevent ~/.zshrc from overriding our PATH
     if (process.env.SHELL?.includes('zsh')) {
       env['ZDOTDIR'] = sessionDir
-      const zshrcPath = path.join(sessionDir, '.zshrc')
-      const originalZshrc = path.join(os.homedir(), '.zshrc')
       
-      let zshrcContent = ''
-      if (fs.existsSync(originalZshrc)) {
-        zshrcContent += `source "${originalZshrc}"\n`
+      const home = os.homedir()
+      const files = ['.zshenv', '.zprofile', '.zshrc', '.zlogin']
+      
+      for (const file of files) {
+        const dotFile = path.join(sessionDir, file)
+        const originalFile = path.join(home, file)
+        
+        let content = ''
+        if (fs.existsSync(originalFile)) {
+          content += `source "${originalFile}"\n`
+        }
+        
+        if (file === '.zshrc') {
+          // Re-apply our PATH at the very end of zsh initialization
+          content += `export PATH="${binDir}:$PATH"\n`
+        }
+        
+        if (content) {
+          fs.writeFileSync(dotFile, content)
+        }
       }
-      // Re-apply our PATH at the very end of zsh initialization
-      zshrcContent += `export PATH="${binDir}:$PATH"\n`
-      fs.writeFileSync(zshrcPath, zshrcContent)
     }
     
     return env as Record<string, string>
