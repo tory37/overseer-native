@@ -5,6 +5,7 @@ export interface Sprite {
   name: string
   style: string
   seed: string
+  options?: Record<string, unknown>
   persona: string
 }
 
@@ -13,6 +14,7 @@ const DEFAULT_SPRITE: Sprite = {
   name: 'Overseer',
   style: 'bottts',
   seed: 'overseer',
+  options: {},
   persona: 'You are the Overseer, a helpful AI assistant. You are witty, concise, and professional.',
 }
 

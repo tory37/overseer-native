@@ -46,9 +46,32 @@ describe('useSpritesStore', () => {
       seed: 'delete',
       persona: '...'
     })
-    
+
     deleteSprite(newSprite.id)
     const { sprites } = useSpritesStore.getState()
     expect(sprites.find(s => s.id === newSprite.id)).toBeUndefined()
+  })
+
+  test('sprite has options field', () => {
+    const { createSprite } = useSpritesStore.getState()
+    const sprite = createSprite({
+      name: 'Options Bot',
+      style: 'bottts',
+      seed: 'test',
+      options: { eyes: 'bulging' },
+      persona: '',
+    })
+    expect(sprite.options).toEqual({ eyes: 'bulging' })
+  })
+
+  test('sprite options defaults to undefined when omitted', () => {
+    const { createSprite } = useSpritesStore.getState()
+    const sprite = createSprite({
+      name: 'No Options Bot',
+      style: 'bottts',
+      seed: 'test',
+      persona: '',
+    })
+    expect(sprite.options).toBeUndefined()
   })
 })
