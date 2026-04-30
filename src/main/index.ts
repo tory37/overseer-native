@@ -8,6 +8,7 @@ import { SessionService } from './session-service/index'
 loadShellEnv()
 
 import { SyncService } from './services/sync-service'
+import { UpdateService } from './services/update-service'
 import { registerIpcHandlers } from './ipc-handlers'
 
 const isDev = !app.isPackaged
@@ -21,6 +22,7 @@ process.env.OVERSEER_IS_DEV = isDev ? 'true' : 'false'
 let mainWindow: BrowserWindow | null = null
 const sessionService = new SessionService(baseDir)
 const syncService = new SyncService(baseDir)
+const updateService = new UpdateService(() => mainWindow)
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -34,8 +36,9 @@ function createWindow() {
     },
   })
 
-  registerIpcHandlers(sessionService, syncService, () => mainWindow, baseDir, isDev)
+  registerIpcHandlers(sessionService, syncService, updateService, () => mainWindow, baseDir, isDev)
   sessionService.restoreAll()
+  updateService.init()
 
   const devServerUrl = process.env.VITE_DEV_SERVER_URL
   if (isDev && devServerUrl) {

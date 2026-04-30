@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC } from '../renderer/types/ipc'
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings } from '../renderer/types/ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus } from '../renderer/types/ipc'
 
 contextBridge.exposeInMainWorld('overseer', {
   listSessions: (): Promise<Session[]> =>
@@ -131,6 +131,18 @@ contextBridge.exposeInMainWorld('overseer', {
     ipcRenderer.on('terminal:copy', handler)
     return () => ipcRenderer.removeListener('terminal:copy', handler)
   },
+
+  updateStatus: (callback: (status: UpdateStatus) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, status: UpdateStatus) => callback(status)
+    ipcRenderer.on(IPC.UPDATE_STATUS, handler)
+    return () => ipcRenderer.removeListener(IPC.UPDATE_STATUS, handler)
+  },
+
+  updateCheck: (): Promise<void> =>
+    ipcRenderer.invoke(IPC.UPDATE_CHECK),
+
+  updateInstall: (): Promise<void> =>
+    ipcRenderer.invoke(IPC.UPDATE_INSTALL),
 
   isDev: process.env.OVERSEER_IS_DEV === 'true',
   appVersion: process.env.OVERSEER_VERSION || '0.5.0',

@@ -5,6 +5,7 @@ import path from 'path'
 import { SessionService } from './session-service/index'
 import { SyncService } from './services/sync-service'
 import { ConfigService } from './services/config-service'
+import { UpdateService } from './services/update-service'
 import { IPC } from '../renderer/types/ipc'
 import type { Session, CreateSessionOptions, Keybindings, ThemeSettings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
@@ -23,6 +24,7 @@ export async function isDirectory(p: string): Promise<boolean> {
 export function registerIpcHandlers(
   service: SessionService,
   syncService: SyncService,
+  updateService: UpdateService,
   getWindow: () => BrowserWindow | null,
   baseDir: string,
   isDev: boolean
@@ -164,4 +166,7 @@ export function registerIpcHandlers(
     app.relaunch()
     app.exit()
   })
+
+  ipcMain.handle(IPC.UPDATE_CHECK, () => updateService.manualCheck())
+  ipcMain.handle(IPC.UPDATE_INSTALL, () => updateService.install())
 }
