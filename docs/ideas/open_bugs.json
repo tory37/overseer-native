@@ -20,33 +20,6 @@
 
   "requirements": [
     {
-      "priority": "P2",
-      "category": "A",
-      "name": "Broken Formatting When Switching Sessions",
-      "description": "When we switch back to a session, the terminal is formatted poorly, but resizing resets it to what it should be. It currently seems to make the content real narrow until resizing resets something.",
-      "context1": "When switching to a session with terminals that only have no AI output, it seems to be fine.",
-      "context2": "When switching to a window with only 1 terminal and AI output, it shows the malformation for a literal second or two, then something resets it correctly.",
-      "context3": "It really only seems to be a window with AI output, but fixes on resizing."
-    },
-    {
-      "priority": "P2",
-      "category": "A",
-      "name": "Fast Scroll Jump on Session Switch With Long History",
-      "description": "When a terminal has a long history, switching back to that session the terminal seems to scroll really fast, maybe from all the way top to bottom before settling back to normal. Why isn't the terminal just doing what it does, just like if I were using vscode? Is it because we remove it from the screen? Would this all work better if we just hid it with CSS instead of removing from screen entirely?"
-    },
-    {
-      "priority": "P2",
-      "category": "B",
-      "name": "No Keyboard Shortcut to Close Active Terminal",
-      "description": "No keyboard shortcut to close the active terminal, reducing the open windows and handling that accordingly."
-    },
-    {
-      "priority": "P2",
-      "category": "A",
-      "name": "Separator Between Secondary Panels Disappeared",
-      "description": "The separator between the two secondary panels disappeared. It's really confusing — it looks like one big terminal when that happens."
-    },
-    {
       "priority": "P3",
       "category": "D",
       "name": "No Visual Indicator of Focused Terminal",
@@ -60,12 +33,6 @@
       "ex1": "If split to three, should open it that way.",
       "ex2": "If split into 2, open that way.",
       "ex3": "If split into more than 1, and sizing is adjusted through drag handles, open it that way."
-    },
-    {
-      "priority": "P4",
-      "category": "E",
-      "name": "Test Sessions Must Be Cleaned Up",
-      "description": "If any tests are creating test sessions, we need them to be cleaned up. Any AI running test sessions to verify things needs to clean them up."
     },
     {
       "priority": "P4",
