@@ -159,9 +159,6 @@ export function TerminalPane({
           position: 'relative', 
           overflow: 'hidden', 
           order: splitSwapped ? 2 : 0,
-          outline: splitFocused === 'main' ? '2px solid var(--accent)' : 'none',
-          outlineOffset: '-2px',
-          zIndex: splitFocused === 'main' ? 10 : 1
         }}
       >
         {sessionStack}
@@ -196,9 +193,6 @@ export function TerminalPane({
             position: 'relative', 
             overflow: 'hidden', 
             order: secondarySwapped ? 2 : 0,
-            outline: splitFocused === 'companionA' ? '2px solid var(--accent)' : 'none',
-            outlineOffset: '-2px',
-            zIndex: splitFocused === 'companionA' ? 10 : 1
           }}
         >
           {companionAStack}
@@ -222,9 +216,6 @@ export function TerminalPane({
           overflow: 'hidden',
           order: secondarySwapped ? 0 : 2,
           display: threeWayOpen ? undefined : 'none',
-          outline: splitFocused === 'companionB' ? '2px solid var(--accent)' : 'none',
-          outlineOffset: '-2px',
-          zIndex: splitFocused === 'companionB' ? 10 : 1
         }}>
           {companionBStack}
         </div>
