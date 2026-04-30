@@ -19,6 +19,9 @@ export const mockOverseer = {
   listSessions: jest.fn().mockResolvedValue([]),
   readSprites: jest.fn().mockResolvedValue({ sprites: [] }),
   writeSprites: jest.fn().mockResolvedValue(undefined),
+  updateStatus: jest.fn().mockReturnValue(() => {}),
+  updateCheck: jest.fn().mockResolvedValue(undefined),
+  updateInstall: jest.fn().mockResolvedValue(undefined),
 }
 
 beforeEach(() => {

@@ -19,12 +19,18 @@
   },
 
   "requirements": [
-	{
-		"system": "Sprites",
-		"issues": [
-			"parseing of apostrophe seems to have messed up, this statement showed a hexcode for the apostrophe, need to handle the parseing for this case:  <speak>Poke! Mission accomplished. Every sprite in Overseer now has a name and the AI knows exactly who it's playing!</speak>"
-		]
-  	}	
+    {
+      "system": "Sprites",
+      "issues": [
+        "parseing of apostrophe seems to have messed up, this statement showed a hexcode for the apostrophe, need to handle the parseing for this case:  <speak>Poke! Mission accomplished. Every sprite in Overseer now has a name and the AI knows exactly who it's playing!</speak>"
+      ]
+  	},
+    {
+      "system": "Session / Terminals",
+      "issues": [
+        "the 'MAIN' badge appears even when no session is open.  It should not."
+      ]
+  	}		
   ],
 
   "out_of_scope": [],

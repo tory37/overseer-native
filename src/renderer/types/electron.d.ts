@@ -1,4 +1,4 @@
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings } from './ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus } from './ipc'
 
 declare global {
   interface Window {
@@ -38,6 +38,9 @@ declare global {
       showContextMenu: (options: { x: number; y: number; hasSelection: boolean }) => void
       onTerminalPaste: (callback: () => void) => () => void
       onTerminalCopy: (callback: () => void) => () => void
+      updateStatus: (callback: (status: UpdateStatus) => void) => () => void
+      updateCheck: () => Promise<void>
+      updateInstall: () => Promise<void>
       isDev: boolean
       appVersion: string
       openDataFolder: () => Promise<void>
