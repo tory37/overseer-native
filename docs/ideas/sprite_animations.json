@@ -1,0 +1,25 @@
+{
+  "title": "Sprite Animations",
+  "main_idea": "Add missing sprite animations to both views",
+  "reason": "Making the gimmick better, more clippy like",
+
+  "requirements": [
+    "We shouuld support, at the very least, Idle, Speaking, and Thinking.",
+    "Idle plays when the AI is not providing anything at that moment.",
+    "Speaking happens for the length of the speech bubble, whenever it appears.",
+    "Thinking happens when their is text being generated in the main terminal, but it's not parseing speak tags",
+    "Since DiceBear doesn't actually have animations, our goal would be, per package, to determine appropriate elemenst we can swap back and fourth, at least for speaking",
+    "Other animations can be clever like css animations or something",
+    "Speaking animation would be toggling our selected open and closed mouth, then going back to the chosen mouth after the fact.",
+    "We need to be able to preview all animations in the persona studio.",
+    "If you can think of other animations that would be fun that we could somehow do, that'd be great.  We could even modify the system prompt to propose new tags that would trigger other fun animations at key moments, etc."
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [],
+
+  "references": [],
+
+  "open_questions": []
+}

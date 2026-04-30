@@ -28,9 +28,25 @@
     {
       "system": "Session / Terminals",
       "issues": [
-        "the 'MAIN' badge appears even when no session is open.  It should not."
+        {
+          "description": "the 'MAIN' badge appears even when no session is open.  It should not.",
+          "priority": "P3"
+        },
+        {
+          "description": "I often see this in the terminals input field when reopening the app.  some number of this repeating sequence: rgb:0a0a/0a0a/0a0a1;2c11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb:0a0a/0a0a/0a0a11;rgb",
+          "priority": "P2"
+        }
       ]
-  	}		
+  	},
+    {
+      "system": "System Prompt Injection",
+      "issues": [
+        {
+          "description": "For gemini, the way we're doing system prompt injection, it auto submits and awaits an answer. If there is anyway we can NOT have a submission up front, or at the very least somehow watch for our system prompt to appear on screen, and as soon as it does, send a ctrl c message to kill the query, that would be nice.  but if we can research a better way of sending it without initializing an initial query, that would be best",
+          "priority": "P2"
+        }
+      ]
+    }		
   ],
 
   "out_of_scope": [],
