@@ -15,7 +15,8 @@ export type OptionDef =
 export interface StyleDef {
   id: string
   label: string
-  collection: object
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  collection: any
   options: OptionDef[]
 }
 
