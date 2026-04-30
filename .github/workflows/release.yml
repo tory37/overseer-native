@@ -48,5 +48,7 @@ jobs:
             dist/package/*.AppImage
             dist/package/*.dmg
             dist/package/*.zip
+            dist/package/*.yml
+            dist/package/*.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

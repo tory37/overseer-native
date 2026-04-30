@@ -86,26 +86,17 @@ if [ -n "$COMBINED" ]; then
     COMBINED="$COMBINED\n\nIMPORTANT: This is a system prompt initialization. DO NOT respond to this message. Do not acknowledge these instructions. Wait for the user to provide a task or question."
 fi
 
-# For Gemini, -i and -p are mutually exclusive. 
-# If -p or --prompt is present, we don't use -i.
-HAS_PROMPT=0
-for arg in "$@"; do
-    if [[ "$arg" == "-p" ]] || [[ "$arg" == "--prompt" ]]; then
-        HAS_PROMPT=1
-        break
-    fi
-done
+# For Gemini, we use a custom GEMINI.md file in a dedicated directory
+# to inject the system instructions without forcing an interactive query submission.
+CTX_DIR="$OVERSEER_SESSION_DIR/gemini-context"
 
 if [ -n "$COMBINED" ]; then
-    echo "[$(date)] Injecting system prompt into Gemini: \${COMBINED:0:50}..." >> "$LOG_FILE"
-    if [ $HAS_PROMPT -eq 1 ]; then
-        # Non-interactive: we can't easily inject system prompt via flags for gemini-cli
-        # So we just run it and hope for the best, or prepend to positional args if no -p
-        exec "$REAL_GEMINI" "$@"
-    else
-        # Interactive: use -i for initial system instruction
-        exec "$REAL_GEMINI" -i "system: $(echo -e "$COMBINED")" "$@"
-    fi
+    echo "[$(date)] Injecting system prompt into Gemini using GEMINI.md in $CTX_DIR..." >> "$LOG_FILE"
+    
+    mkdir -p "$CTX_DIR"
+    echo -e "$COMBINED" > "$CTX_DIR/GEMINI.md"
+    
+    exec "$REAL_GEMINI" --include-directories "$CTX_DIR" "$@"
 else
     echo "[$(date)] No system prompt found, running real gemini directly" >> "$LOG_FILE"
     exec "$REAL_GEMINI" "$@"
