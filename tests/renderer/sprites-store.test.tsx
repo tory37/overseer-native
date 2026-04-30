@@ -54,3 +54,22 @@ test('deleteSprite leaves other sprites untouched', () => {
   expect(useSpritesStore.getState().sprites).toHaveLength(1)
   expect(useSpritesStore.getState().sprites[0].id).toBe(b.id)
 })
+
+test('loadSprites merges new default sprites into existing user sprites', async () => {
+  const existingSprites = [{ id: 'old-custom-sprite', name: 'Custom', style: 'bottts', seed: 'seed', persona: 'test' }]
+  ;(window as any).overseer.readSprites = jest.fn().mockResolvedValue({ sprites: existingSprites })
+  ;(window as any).overseer.writeSprites = jest.fn()
+
+  const { loadSprites } = useSpritesStore.getState()
+  await loadSprites()
+
+  const sprites = useSpritesStore.getState().sprites
+  // 15 defaults + 1 custom = 16
+  expect(sprites.length).toBe(16)
+  // Ensure the existing one is still there
+  expect(sprites.find(s => s.id === 'old-custom-sprite')).toBeTruthy()
+  // Ensure new defaults are there
+  expect(sprites.find(s => s.id === 'default-overseer')).toBeTruthy()
+  expect(sprites.find(s => s.id === 'default-seamus')).toBeTruthy()
+  expect((window as any).overseer.writeSprites).toHaveBeenCalled()
+})
