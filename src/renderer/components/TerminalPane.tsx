@@ -152,7 +152,18 @@ export function TerminalPane({
   return (
     <div ref={outerRef} style={{ flex: 1, display: 'flex', flexDirection: isRow ? 'row' : 'column', background: 'var(--bg-main)' }}>
       {/* Main panel */}
-      <div onClick={() => onFocusPane('main')} style={{ flex: mainFlex, position: 'relative', overflow: 'hidden', order: splitSwapped ? 2 : 0 }}>
+      <div 
+        onClick={() => onFocusPane('main')} 
+        style={{ 
+          flex: mainFlex, 
+          position: 'relative', 
+          overflow: 'hidden', 
+          order: splitSwapped ? 2 : 0,
+          outline: splitFocused === 'main' ? '2px solid var(--accent)' : 'none',
+          outlineOffset: '-2px',
+          zIndex: splitFocused === 'main' ? 10 : 1
+        }}
+      >
         {sessionStack}
       </div>
 
@@ -178,7 +189,18 @@ export function TerminalPane({
         }}
       >
         {/* CompanionA pane */}
-        <div onClick={() => onFocusPane('companionA')} style={{ flex: companionAFlex, position: 'relative', overflow: 'hidden', order: secondarySwapped ? 2 : 0 }}>
+        <div 
+          onClick={() => onFocusPane('companionA')} 
+          style={{ 
+            flex: companionAFlex, 
+            position: 'relative', 
+            overflow: 'hidden', 
+            order: secondarySwapped ? 2 : 0,
+            outline: splitFocused === 'companionA' ? '2px solid var(--accent)' : 'none',
+            outlineOffset: '-2px',
+            zIndex: splitFocused === 'companionA' ? 10 : 1
+          }}
+        >
           {companionAStack}
         </div>
 
@@ -200,6 +222,9 @@ export function TerminalPane({
           overflow: 'hidden',
           order: secondarySwapped ? 0 : 2,
           display: threeWayOpen ? undefined : 'none',
+          outline: splitFocused === 'companionB' ? '2px solid var(--accent)' : 'none',
+          outlineOffset: '-2px',
+          zIndex: splitFocused === 'companionB' ? 10 : 1
         }}>
           {companionBStack}
         </div>

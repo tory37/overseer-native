@@ -7,6 +7,7 @@ interface SessionStore {
   load: () => Promise<void>
   createSession: (options: CreateSessionOptions) => Promise<Session>
   killSession: (id: string) => Promise<void>
+  updateSession: (id: string, partial: Partial<Session>) => Promise<void>
   setActive: (id: string) => void
 }
 
@@ -39,6 +40,14 @@ export const useSessionStore = create<SessionStore>((set) => ({
         state.activeSessionId === id ? (sessions[0]?.id ?? null) : state.activeSessionId
       return { sessions, activeSessionId }
     })
+  },
+
+  updateSession: async (id: string, partial: Partial<Session>) => {
+    if (!window.overseer?.updateSession) return
+    await window.overseer.updateSession(id, partial)
+    set(state => ({
+      sessions: state.sessions.map(s => s.id === id ? { ...s, ...partial } : s)
+    }))
   },
 
   setActive: (id: string) => set({ activeSessionId: id }),
