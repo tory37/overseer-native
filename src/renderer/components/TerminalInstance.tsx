@@ -18,10 +18,12 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
   const keybindingsRef = useRef(keybindings)
+  const focusedRef     = useRef(focused)
   const isReplayingRef = useRef(true)
   const ptyBufferRef   = useRef<string[]>([])
 
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
+  useEffect(() => { focusedRef.current = focused }, [focused])
 
   useEffect(() => {
     if (termRef.current) {
@@ -93,11 +95,13 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
     containerRef.current.addEventListener('contextmenu', handleContextMenu)
 
     const unsubCopy = window.overseer.onTerminalCopy(() => {
+      if (!focusedRef.current) return
       const sel = term.getSelection()
       if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
     })
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
+      if (!focusedRef.current) return
       window.overseer.readFromClipboard().then(text => {
         if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
       }).catch(() => {})

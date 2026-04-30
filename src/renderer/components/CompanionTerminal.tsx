@@ -18,8 +18,10 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
   const keybindingsRef = useRef(keybindings)
+  const focusedRef     = useRef(focused)
 
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
+  useEffect(() => { focusedRef.current = focused }, [focused])
 
   useEffect(() => {
     if (termRef.current) {
@@ -84,11 +86,13 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
     containerRef.current.addEventListener('contextmenu', handleContextMenu)
 
     const unsubCopy = window.overseer.onTerminalCopy(() => {
+      if (!focusedRef.current) return
       const sel = term.getSelection()
       if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
     })
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
+      if (!focusedRef.current) return
       window.overseer.readFromClipboard().then(text => {
         if (text) window.overseer.sendCompanionInput(companionId, text)
       }).catch(() => {})
