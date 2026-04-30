@@ -33,3 +33,12 @@ You are executing the Bug Triage Pipeline. Follow these phases exactly in order.
 1. Implement the fix following the approved plan.
 2. Utilize the `test-driven-development` and `systematic-debugging` skills as required.
 3. Verify the fix locally by running the relevant tests or build commands.
+
+## Phase 6: Wrap-up
+1. Ask the user to verify the fix locally.
+2. Once the user verifies the fix, ask if they want you to close the issue. If yes, run `gh issue close <number>`.
+3. Ask the user if they want to pull the list again to select another bug, or exit the triage loop.
+
+## General Error Handling
+- If any `gh` command fails (e.g., rate limits, network issues), inform the user and pause the pipeline.
+- Do not skip steps or make assumptions about the codebase without verifying through search tools.
