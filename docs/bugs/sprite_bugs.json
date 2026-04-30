@@ -1,7 +1,0 @@
-{
-    "feature": "everything related to sprites",
-    "bugs": [
-        "sprites STILL do not persist through opening  / closing the app",
-        "Error injecting sprite: unknown argument system prompt.",
-    ]
-}

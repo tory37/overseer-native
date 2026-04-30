@@ -1,0 +1,21 @@
+{
+  "title": "Auto Update",
+  "main_idea": "Ability to auto or manually update from within the app.",
+  "reason": "Good UX",
+
+  "requirements": [
+    "App periodically checks for updates and offers a 'update now' button when it detects one",
+    "We follow the norms and standards of other applications that already do this.",
+    "Works for mac and linux, the two builds we support"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [
+    "Button should be placed well, front and center, to notice but not interrupt any other UX"
+  ],
+
+  "references": [],
+
+  "open_questions": []
+}
