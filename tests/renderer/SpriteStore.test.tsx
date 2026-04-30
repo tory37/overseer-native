@@ -10,7 +10,7 @@ describe('useSpritesStore', () => {
   test('initializes with default sprite', () => {
     const state = useSpritesStore.getState()
     expect(state.sprites.length).toBeGreaterThanOrEqual(1)
-    expect(state.sprites[0].id).toBe('default-sprite')
+    expect(state.sprites[0].id).toBe('default-overseer')
   })
 
   test('can create a new sprite', () => {
