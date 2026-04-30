@@ -38,3 +38,10 @@ test('ignores speak tags within system prompt instructions', () => {
   const instruction = 'When you want to speak as your character persona, wrap your comments in <speak></speak> tags (e.g., <speak>Hello!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  Your persona is: '
   expect(parseSpriteSpeech(instruction)).toEqual([])
 })
+
+test('decodes HTML entities in speech text', () => {
+  const chunk = '<speak>Every sprite in Overseer now has a name and the AI knows exactly who it&#x27;s playing!</speak>'
+  expect(parseSpriteSpeech(chunk)).toEqual([
+    { type: 'speech', text: "Every sprite in Overseer now has a name and the AI knows exactly who it's playing!" }
+  ])
+})

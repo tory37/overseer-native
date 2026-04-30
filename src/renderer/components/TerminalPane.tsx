@@ -186,7 +186,7 @@ export function TerminalPane({
         }}
       >
         {sessionStack}
-        <HUDBadge label="Main" focused={splitFocused === 'main'} />
+        {activeSessionId && <HUDBadge label="Main" focused={splitFocused === 'main'} />}
       </div>
 
       {/* Outer drag handle — only when companion is visible */}
@@ -221,7 +221,7 @@ export function TerminalPane({
           }}
         >
           {companionAStack}
-          <HUDBadge label="Companion A" focused={splitFocused === 'companionA'} />
+          {activeSessionId && <HUDBadge label="Companion A" focused={splitFocused === 'companionA'} />}
         </div>
 
         {/* Inner drag handle — only in 3-way mode */}
@@ -244,7 +244,7 @@ export function TerminalPane({
           display: threeWayOpen ? undefined : 'none',
         }}>
           {companionBStack}
-          <HUDBadge label="Companion B" focused={splitFocused === 'companionB'} />
+          {activeSessionId && <HUDBadge label="Companion B" focused={splitFocused === 'companionB'} />}
         </div>
       </div>
     </div>
