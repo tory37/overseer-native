@@ -10,8 +10,8 @@ export function loadShellEnv() {
 
   try {
     const shell = process.env.SHELL || '/bin/bash'
-    // Run an interactive shell and print the environment
-    const rawEnv = execSync(`${shell} -i -c 'env'`, {
+    // Run a login shell and print the environment
+    const rawEnv = execSync(`${shell} -l -c 'env'`, {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
       timeout: 5000
