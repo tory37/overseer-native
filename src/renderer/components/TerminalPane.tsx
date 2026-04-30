@@ -23,6 +23,30 @@ interface Props {
   onFocusPane: (which: 'main' | 'companionA' | 'companionB') => void
 }
 
+function HUDBadge({ label, focused }: { label: string; focused: boolean }) {
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '8px',
+      right: '8px',
+      padding: '2px 6px',
+      borderRadius: '4px',
+      fontSize: '10px',
+      fontWeight: 'bold',
+      pointerEvents: 'none',
+      zIndex: 20,
+      backgroundColor: focused ? 'var(--accent)' : 'transparent',
+      color: focused ? '#fff' : 'var(--text-muted)',
+      border: focused ? '1px solid var(--accent)' : '1px solid var(--text-muted)',
+      textTransform: 'uppercase',
+      transition: 'all 0.15s ease-in-out',
+      letterSpacing: '0.05em'
+    }}>
+      {label}
+    </div>
+  )
+}
+
 function DragHandle({
   direction,
   onRatio,
@@ -162,6 +186,7 @@ export function TerminalPane({
         }}
       >
         {sessionStack}
+        <HUDBadge label="Main" focused={splitFocused === 'main'} />
       </div>
 
       {/* Outer drag handle — only when companion is visible */}
@@ -196,6 +221,7 @@ export function TerminalPane({
           }}
         >
           {companionAStack}
+          <HUDBadge label="Companion A" focused={splitFocused === 'companionA'} />
         </div>
 
         {/* Inner drag handle — only in 3-way mode */}
@@ -218,6 +244,7 @@ export function TerminalPane({
           display: threeWayOpen ? undefined : 'none',
         }}>
           {companionBStack}
+          <HUDBadge label="Companion B" focused={splitFocused === 'companionB'} />
         </div>
       </div>
     </div>
