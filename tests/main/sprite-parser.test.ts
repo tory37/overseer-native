@@ -33,3 +33,8 @@ test('handles speak tag mixed with other output', () => {
   const chunk = '[32msome ansi[0m <speak>hello sailor</speak> more text'
   expect(parseSpriteSpeech(chunk)).toEqual([{ type: 'speech', text: 'hello sailor' }])
 })
+
+test('ignores speak tags within system prompt instructions', () => {
+  const instruction = 'When you want to speak as your character persona, wrap your comments in <speak></speak> tags (e.g., <speak>Hello!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  Your persona is: '
+  expect(parseSpriteSpeech(instruction)).toEqual([])
+})

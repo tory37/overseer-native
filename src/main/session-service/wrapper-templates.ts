@@ -23,7 +23,7 @@ fi
 # Combine persona and instructions
 # Order: Instructions -> Bridge (if persona exists) -> Persona
 COMBINED=""
-BRIDGE="When you want to speak as your character persona, wrap your comments in <speak> tags (e.g., <speak>Looks like we're fixing the bug!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  You're persona is: "
+BRIDGE="When you want to speak as your character persona, wrap your comments in <speak></speak> tags (e.g., <speak>Hello!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  Your persona is: "
 
 if [ -n "$PERSONA" ] && [ -n "$INSTRUCTIONS" ]; then
     COMBINED="$INSTRUCTIONS\n\n$BRIDGE\n\n$PERSONA"
@@ -71,7 +71,7 @@ fi
 # Combine persona and instructions
 # Order: Instructions -> Bridge (if persona exists) -> Persona
 COMBINED=""
-BRIDGE="When you want to speak as your character persona, wrap your comments in <speak> tags (e.g., <speak>Looks like we're fixing the bug!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  You're persona is: "
+BRIDGE="When you want to speak as your character persona, wrap your comments in <speak></speak> tags (e.g., <speak>Hello!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  Your persona is: "
 
 if [ -n "$PERSONA" ] && [ -n "$INSTRUCTIONS" ]; then
     COMBINED="$INSTRUCTIONS\n\n$BRIDGE\n\n$PERSONA"

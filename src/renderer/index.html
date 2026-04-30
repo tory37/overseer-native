@@ -24,16 +24,16 @@
       }
       @keyframes overseer-speaking-pulse {
         0% { transform: scale(1); }
-        50% { transform: scale(1.04); }
         100% { transform: scale(1); }
       }
       .overseer-sprite-idle { animation: overseer-idle-breath 3s ease-in-out infinite alternate; }
       .overseer-sprite-thinking { animation: overseer-thinking-wobble 0.6s ease-in-out infinite; }
-      .overseer-sprite-speaking { animation: overseer-speaking-pulse 0.2s ease-in-out infinite; }
+      .overseer-sprite-speaking { /* No body animation during speaking, only mouth moves */ }
     </style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="overlay-root"></div>
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>

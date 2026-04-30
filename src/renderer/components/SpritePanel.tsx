@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import { renderAvatar } from '../lib/render-avatar'
 import { useSpritesStore } from '../store/sprites'
 
@@ -19,21 +20,104 @@ interface Props {
   onOpenStudio: () => void
 }
 
+function ProminentBubble({ text, targetRef }: { text: string, targetRef: React.RefObject<HTMLDivElement | null> }) {
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, height: 0 })
+
+  useEffect(() => {
+    const update = () => {
+      if (targetRef.current) {
+        const rect = targetRef.current.getBoundingClientRect()
+        setCoords({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        })
+      }
+    }
+    update()
+    // Small delay to ensure layout is settled
+    const timer = setTimeout(update, 50)
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('resize', update)
+      clearTimeout(timer)
+    }
+  }, [targetRef, text])
+
+  if (!text) return null
+
+  const root = document.getElementById('overlay-root')
+  if (!root) return null
+
+  return ReactDOM.createPortal(
+    <div style={{
+      position: 'fixed',
+      top: coords.top - 60,
+      left: coords.left - 100,
+      width: coords.width + 120,
+      minHeight: coords.height + 40,
+      background: 'var(--bg-main)',
+      border: '2px solid var(--accent)',
+      borderRadius: '16px',
+      padding: '16px 20px',
+      fontSize: '16px',
+      fontWeight: '500',
+      color: 'var(--text-main)',
+      textAlign: 'center',
+      boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+      zIndex: 9999,
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxSizing: 'border-box',
+    }}>
+      {text}
+      {/* Speech bubble pointer */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-12px',
+        left: 'calc(50% + 30px)',
+        transform: 'translateX(-50%)',
+        width: 0,
+        height: 0,
+        borderLeft: '12px solid transparent',
+        borderRight: '12px solid transparent',
+        borderTop: '12px solid var(--accent)',
+      }} />
+    </div>,
+    root
+  )
+}
+
 export function SpritePanel({ sessionId, spriteId, animationState: _animationState, visible, onOpenStudio }: Props) {
   const sprites = useSpritesStore(s => s.sprites)
   const sprite = spriteId ? (sprites.find(s => s.id === spriteId) ?? null) : null
   const [speechText, setSpeechText] = useState('')
+  const [lastMessage, setLastMessage] = useState('')
   const [lastPtyTime, setLastPtyTime] = useState(0)
   const [isMouthOpen, setIsMouthOpen] = useState(false)
   const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const bubbleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setSpeechText('')
+    setLastMessage('')
+  }, [sessionId])
 
   useEffect(() => {
     if (!sessionId) return
     const unsub = window.overseer.onSpriteSpeech(({ sessionId: sid, text }) => {
       if (sid !== sessionId) return
+      
       setSpeechText(text)
+      setLastMessage(text)
+      
       if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
-      clearTimerRef.current = setTimeout(() => setSpeechText(''), 8000)
+      clearTimerRef.current = setTimeout(() => {
+        setSpeechText('')
+      }, 8000)
     })
     return () => {
       unsub()
@@ -86,21 +170,22 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '8px',
-    minHeight: '160px',
+    gap: '4px',
+    minHeight: '180px',
   }
   const labelStyle: React.CSSProperties = {
     color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'flex-start',
+    marginBottom: '8px',
   }
 
   if (!sprite) {
     return (
       <div style={containerStyle}>
         <div style={labelStyle}>Sprite</div>
-        <div style={{ color: 'var(--text-muted)', fontSize: '12px', textAlign: 'center' }}>No Sprite assigned</div>
+        <div style={{ color: 'var(--text-muted)', fontSize: '12px', textAlign: 'center', flex: 1, display: 'flex', alignItems: 'center' }}>No Sprite assigned</div>
         <button
           onClick={onOpenStudio}
-          style={{ background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: '4px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px' }}
+          style={{ background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: '4px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', marginTop: '8px' }}
         >
           Open Studio
         </button>
@@ -111,20 +196,36 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
   return (
     <div style={containerStyle}>
       <div style={labelStyle}>Sprite — {sprite.name}</div>
-      {speechText && (
+      
+      {/* Persistent Bubble Area */}
+      <div ref={bubbleRef} style={{
+        minHeight: '64px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginBottom: '4px',
+        position: 'relative',
+      }}>
         <div style={{
           background: 'var(--bg-main)',
           border: '1px solid var(--border)',
           borderRadius: '8px',
-          padding: '8px 10px',
-          fontSize: '12px',
-          color: 'var(--text-main)',
+          padding: '8px 12px',
+          fontSize: '11px',
+          color: 'var(--text-muted)',
           maxWidth: '220px',
           textAlign: 'center',
+          opacity: lastMessage ? 0.8 : 0.3,
+          fontStyle: lastMessage ? 'normal' : 'italic',
         }}>
-          {speechText}
+          {lastMessage || "Awaiting transmission..."}
         </div>
-      )}
+      </div>
+
+      {/* Prominent Overlay (Portal) */}
+      <ProminentBubble text={speechText} targetRef={bubbleRef} />
+
       {avatarSvg && (
         <div
           className={animationClass}
@@ -135,3 +236,4 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
     </div>
   )
 }
+
