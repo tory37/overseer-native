@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { createAvatar } from '@dicebear/core'
-import { bottts } from '@dicebear/collection'
+import { renderAvatar } from '../lib/render-avatar'
 import { useSpritesStore } from '../store/sprites'
 
 interface Props {
@@ -36,7 +35,7 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
   let avatarSvg = ''
   if (sprite) {
     try {
-      avatarSvg = createAvatar(bottts, { seed: sprite.seed }).toString()
+      avatarSvg = renderAvatar(sprite)
     } catch (err) {
       console.error(`[Sprite] Avatar render failed for sprite ${sprite.id}:`, err)
     }

@@ -5,10 +5,9 @@ import { SpritePanel } from '../../src/renderer/components/SpritePanel'
 import { useSpritesStore } from '../../src/renderer/store/sprites'
 import { mockOverseer } from './setup'
 
-jest.mock('@dicebear/core', () => ({
-  createAvatar: jest.fn(() => ({ toString: () => '<svg data-testid="mock-avatar"></svg>' })),
+jest.mock('../../src/renderer/lib/render-avatar', () => ({
+  renderAvatar: jest.fn(() => '<svg data-testid="mock-avatar"></svg>'),
 }))
-jest.mock('@dicebear/collection', () => ({ bottts: {} }))
 
 beforeEach(() => {
   localStorage.clear()
