@@ -11,23 +11,24 @@ jest.mock('@dicebear/collection', () => ({
 }))
 
 describe('CURATED_STYLES', () => {
-  test('has exactly 7 entries', () => {
-    expect(CURATED_STYLES).toHaveLength(7)
+  test('has exactly 6 entries', () => {
+    expect(CURATED_STYLES).toHaveLength(6)
   })
 
   test('each style has required fields', () => {
-    for (const style of CURATED_STYLES) {
+    CURATED_STYLES.forEach(style => {
       expect(style.id).toBeTruthy()
       expect(style.label).toBeTruthy()
       expect(style.collection).toBeTruthy()
       expect(Array.isArray(style.options)).toBe(true)
-    }
+    })
   })
 
   test('ids are the expected style slugs', () => {
     const ids = CURATED_STYLES.map(s => s.id)
-    expect(ids).toEqual(['bottts', 'pixel-art', 'fun-emoji', 'avataaars', 'micah', 'lorelei', 'personas'])
+    expect(ids).toEqual(['bottts', 'pixel-art', 'fun-emoji', 'avataaars', 'micah', 'personas'])
   })
+
 
   test('each option has type, key, and label', () => {
     for (const style of CURATED_STYLES) {

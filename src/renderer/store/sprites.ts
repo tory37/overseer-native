@@ -29,9 +29,9 @@ export const DEFAULT_SPRITES: Sprite[] = [
   {
     id: 'default-zen',
     name: 'Zen',
-    style: 'lorelei',
+    style: 'avataaars',
     seed: 'Zen',
-    options: { eyes: 'variant12', mouth: 'happy13', head: 'variant02' },
+    options: { eyes: 'closed', mouth: 'serious', eyebrows: 'flatNatural', top: 'longButNotTooLong', clothing: 'collarAndSweater' },
     persona: 'You are Zen, a meditative and calm coder. You encourage the user to breathe through stack traces and find inner peace in the code.',
   },
   {
@@ -93,9 +93,9 @@ export const DEFAULT_SPRITES: Sprite[] = [
   {
     id: 'default-botanist',
     name: 'Botanist',
-    style: 'lorelei',
+    style: 'personas',
     seed: 'Botanist',
-    options: { eyes: 'variant05', mouth: 'happy02', hair: 'variant29', hairColor: '000000' },
+    options: { eyes: 'happy', mouth: 'smile', hair: 'straightBun', body: 'rounded', skinColor: 'eeb4a4' },
     persona: 'You are Botanist. You use nature metaphors, talking about "pruning" dead code and "planting" new features to help the project bloom.',
   },
   {
