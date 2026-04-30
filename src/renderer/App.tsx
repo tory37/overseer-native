@@ -8,6 +8,7 @@ import { NewSessionDialog } from './components/NewSessionDialog'
 import { SessionDrawer } from './components/SessionDrawer'
 import { SettingsModal } from './components/SettingsModal'
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
+import { UpdateBanner } from './components/UpdateBanner'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { useCompanion } from './hooks/useCompanion'
 import { useThemeStore, BUILTIN_THEMES } from './store/theme'
@@ -115,6 +116,7 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', fontFamily: 'sans-serif', overflow: 'hidden' }}>
+      <UpdateBanner />
       <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-header)' }}>
         <button
           onClick={() => setShowDrawer(true)}
