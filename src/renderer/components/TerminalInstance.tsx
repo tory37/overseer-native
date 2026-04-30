@@ -18,6 +18,8 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
   const termRef        = useRef<Terminal | null>(null)
   const fitRef         = useRef<FitAddon | null>(null)
   const keybindingsRef = useRef(keybindings)
+  const isReplayingRef = useRef(true)
+  const ptyBufferRef   = useRef<string[]>([])
 
   useEffect(() => { keybindingsRef.current = keybindings }, [keybindings])
 
@@ -46,6 +48,9 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
   useEffect(() => {
     if (!containerRef.current) return
+
+    isReplayingRef.current = true
+    ptyBufferRef.current = []
 
     const term = new Terminal({ 
       theme: { 
@@ -97,9 +102,6 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
         if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
       }).catch(() => {})
     })
-
-    const isReplayingRef = useRef(true)
-    const ptyBufferRef = useRef<string[]>([])
 
     const unsubscribe = window.overseer.onPtyData(session.id, (data) => {
       if (isReplayingRef.current) {
