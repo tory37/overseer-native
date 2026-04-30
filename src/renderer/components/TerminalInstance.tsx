@@ -51,6 +51,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
   useEffect(() => {
     if (!containerRef.current) return
 
+    let isDisposed = false
     isReplayingRef.current = true
     ptyBufferRef.current = []
 
@@ -77,7 +78,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
       }
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyV') {
         window.overseer.readFromClipboard().then(text => {
-          if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
+          if (text && !isReplayingRef.current && !isDisposed) window.overseer.sendInput(session.id, text)
         }).catch(() => {})
         return false
       }
@@ -95,19 +96,20 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
     containerRef.current.addEventListener('contextmenu', handleContextMenu)
 
     const unsubCopy = window.overseer.onTerminalCopy(() => {
-      if (!focusedRef.current) return
+      if (!focusedRef.current || isDisposed) return
       const sel = term.getSelection()
       if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
     })
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
-      if (!focusedRef.current) return
+      if (!focusedRef.current || isDisposed) return
       window.overseer.readFromClipboard().then(text => {
-        if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
+        if (text && !isReplayingRef.current && !isDisposed) window.overseer.sendInput(session.id, text)
       }).catch(() => {})
     })
 
     const unsubscribe = window.overseer.onPtyData(session.id, (data) => {
+      if (isDisposed) return
       if (isReplayingRef.current) {
         ptyBufferRef.current.push(data)
       } else {
@@ -116,11 +118,14 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
     })
 
     const unsubscribeError = window.overseer.onPtyError(session.id, (err) => {
+      if (isDisposed) return
       term.write(`\r\n\x1b[31m[Overseer] ${err}\x1b[0m\r\n`)
     })
 
     window.overseer.getScrollback(session.id).then(data => {
+      if (isDisposed) return
       const finishReplay = () => {
+        if (isDisposed) return
         isReplayingRef.current = false
         while (ptyBufferRef.current.length > 0) {
           term.write(ptyBufferRef.current.shift()!)
@@ -135,19 +140,20 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
     })
 
     term.onData((data) => {
-      if (!isReplayingRef.current) {
+      if (!isReplayingRef.current && !isDisposed) {
         window.overseer.sendInput(session.id, data)
       }
     })
 
     const observer = new ResizeObserver(() => {
-      if (!containerRef.current || containerRef.current.clientWidth === 0) return
+      if (!containerRef.current || containerRef.current.clientWidth === 0 || isDisposed) return
       fit.fit()
       window.overseer.resize(session.id, term.cols, term.rows)
     })
     observer.observe(containerRef.current)
 
     return () => {
+      isDisposed = true
       unsubscribe()
       unsubscribeError()
       unsubCopy()

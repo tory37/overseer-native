@@ -16,7 +16,7 @@ function decodeEntities(text: string): string {
 
 function stripAnsi(text: string): string {
   // eslint-disable-next-line no-control-regex
-  return text.replace(/\x1B\[[0-9;]*[JKmsu]/g, '');
+  return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 }
 
 export class SpriteParser {
@@ -36,8 +36,11 @@ export class SpriteParser {
       const startIdx = this.buffer.indexOf('<speak>')
       if (startIdx === -1) {
         // No start tag. 
-        // Keep only the very end in case a tag was split like "<spe" | "ak>"
-        this.buffer = this.buffer.slice(-20)
+        // Keep a bit of the end in case a tag was split like "<spe" | "ak>"
+        // 100 characters is plenty and safer than 20.
+        if (this.buffer.length > 100) {
+          this.buffer = this.buffer.slice(-100)
+        }
         break
       }
 
