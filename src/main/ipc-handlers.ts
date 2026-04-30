@@ -10,7 +10,7 @@ import { IPC } from '../renderer/types/ipc'
 import type { Session, CreateSessionOptions, Keybindings, ThemeSettings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
-import { parseSpriteSpeech } from './sprite-parser'
+import { SpriteParser } from './sprite-parser'
 
 export async function isDirectory(p: string): Promise<boolean> {
   try {
@@ -30,11 +30,15 @@ export function registerIpcHandlers(
   isDev: boolean
 ): void {
   const configService = new ConfigService(baseDir)
+  const spriteParsers = new Map<string, SpriteParser>()
   
   service.onData((sessionId, data) => {
     getWindow()?.webContents.send(`pty:data:${sessionId}`, data)
     try {
-      const events = parseSpriteSpeech(data)
+      if (!spriteParsers.has(sessionId)) {
+        spriteParsers.set(sessionId, new SpriteParser())
+      }
+      const events = spriteParsers.get(sessionId)!.parse(data)
       for (const ev of events) {
         if (ev.type === 'speech') {
           getWindow()?.webContents.send(IPC.SPRITE_SPEECH, { sessionId, text: ev.text })
@@ -57,7 +61,10 @@ export function registerIpcHandlers(
     return session
   })
 
-  ipcMain.handle(IPC.SESSION_KILL, (_event, sessionId: string) => service.kill(sessionId))
+  ipcMain.handle(IPC.SESSION_KILL, (_event, sessionId: string) => {
+    spriteParsers.delete(sessionId)
+    return service.kill(sessionId)
+  })
   ipcMain.handle(IPC.SESSION_UPDATE, (_event, sessionId: string, partial: Partial<Session>) => {
     service.updateSession(sessionId, partial)
   })

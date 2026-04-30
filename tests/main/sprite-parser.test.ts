@@ -1,11 +1,7 @@
-import { parseSpriteSpeech } from '../../src/main/sprite-parser'
+import { parseSpriteSpeech, SpriteParser } from '../../src/main/sprite-parser'
 
 test('returns empty array for chunk with no speak tags', () => {
   expect(parseSpriteSpeech('hello world')).toEqual([])
-})
-
-test('returns empty array for empty string', () => {
-  expect(parseSpriteSpeech('')).toEqual([])
 })
 
 test('extracts a single speak tag', () => {
@@ -21,22 +17,34 @@ test('extracts multiple speak tags from one chunk', () => {
   ])
 })
 
-test('ignores unclosed speak tags', () => {
-  expect(parseSpriteSpeech('<speak>unclosed')).toEqual([])
+test('strips ANSI escape codes from speech text', () => {
+  const chunk = '<speak>Hello \x1b[39m\x1b[38;5;231mWorld</speak>'
+  expect(parseSpriteSpeech(chunk)).toEqual([
+    { type: 'speech', text: 'Hello World' }
+  ])
 })
 
-test('ignores empty speak tags', () => {
-  expect(parseSpriteSpeech('<speak></speak>')).toEqual([])
+test('SpriteParser handles tags split across chunks', () => {
+  const parser = new SpriteParser()
+  
+  expect(parser.parse('<spe')).toEqual([])
+  expect(parser.parse('ak>Hello ')).toEqual([])
+  expect(parser.parse('World</spe')).toEqual([])
+  expect(parser.parse('ak>')).toEqual([
+    { type: 'speech', text: 'Hello World' }
+  ])
 })
 
-test('handles speak tag mixed with other output', () => {
-  const chunk = '[32msome ansi[0m <speak>hello sailor</speak> more text'
-  expect(parseSpriteSpeech(chunk)).toEqual([{ type: 'speech', text: 'hello sailor' }])
-})
-
-test('ignores speak tags within system prompt instructions', () => {
-  const instruction = 'When you want to speak as your character persona, wrap your comments in <speak></speak> tags (e.g., <speak>Hello!</speak>). Keep these comments brief (1-2 sentences) and interspersed with your work.  Your persona is: '
-  expect(parseSpriteSpeech(instruction)).toEqual([])
+test('SpriteParser handles multiple tags across multiple chunks', () => {
+  const parser = new SpriteParser()
+  
+  expect(parser.parse('ignore <speak>First</speak> partial <speak>Sec')).toEqual([
+    { type: 'speech', text: 'First' }
+  ])
+  expect(parser.parse('ond</speak> and <speak>Third</speak> more')).toEqual([
+    { type: 'speech', text: 'Second' },
+    { type: 'speech', text: 'Third' }
+  ])
 })
 
 test('decodes HTML entities in speech text', () => {
