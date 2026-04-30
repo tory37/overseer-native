@@ -1,3 +1,13 @@
+export interface SessionLayout {
+  splitOpen: boolean
+  threeWayOpen: boolean
+  splitDirection: 'horizontal' | 'vertical'
+  splitSwapped: boolean
+  secondarySwapped: boolean
+  outerSplitRatio: number
+  innerSplitRatio: number
+}
+
 export interface Session {
   id: string
   name: string
@@ -7,6 +17,7 @@ export interface Session {
   scrollbackPath: string
   spriteId: string | null
   isTest?: boolean
+  layout?: SessionLayout
 }
 
 export interface CreateSessionOptions {
@@ -151,6 +162,7 @@ export const IPC = {
   SESSION_CREATE:    'session:create',
   SESSION_LIST:      'session:list',
   SESSION_KILL:      'session:kill',
+  SESSION_UPDATE:    'session:update',
   PTY_INPUT:         'pty:input',
   PTY_RESIZE:        'pty:resize',
   SCROLLBACK_GET:    'scrollback:get',

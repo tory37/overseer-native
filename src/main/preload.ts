@@ -12,7 +12,10 @@ contextBridge.exposeInMainWorld('overseer', {
   killSession: (sessionId: string): Promise<void> =>
     ipcRenderer.invoke(IPC.SESSION_KILL, sessionId),
 
-  getScrollback: (sessionId: string): Promise<string | null> =>
+  updateSession: (sessionId: string, partial: Partial<Session>): Promise<void> =>
+    ipcRenderer.invoke(IPC.SESSION_UPDATE, sessionId, partial),
+
+  getScrollback: (sessionId: string): Promise<Uint8Array | null> =>
     ipcRenderer.invoke(IPC.SCROLLBACK_GET, sessionId),
 
   sendInput: (sessionId: string, data: string): Promise<void> =>
