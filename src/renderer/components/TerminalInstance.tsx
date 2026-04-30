@@ -70,7 +70,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
       }
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyV') {
         window.overseer.readFromClipboard().then(text => {
-          if (text) window.overseer.sendInput(session.id, text)
+          if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
         }).catch(() => {})
         return false
       }
@@ -94,28 +94,44 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
       window.overseer.readFromClipboard().then(text => {
-        if (text) window.overseer.sendInput(session.id, text)
+        if (text && !isReplayingRef.current) window.overseer.sendInput(session.id, text)
       }).catch(() => {})
     })
 
-    window.overseer.getScrollback(session.id).then(data => {
-      if (data) {
-        term.write(data)
-      } else {
-        term.write('\r\nWelcome to Overseer\r\n\r\n')
-      }
-    })
+    const isReplayingRef = useRef(true)
+    const ptyBufferRef = useRef<string[]>([])
 
     const unsubscribe = window.overseer.onPtyData(session.id, (data) => {
-      term.write(data)
+      if (isReplayingRef.current) {
+        ptyBufferRef.current.push(data)
+      } else {
+        term.write(data)
+      }
     })
 
     const unsubscribeError = window.overseer.onPtyError(session.id, (err) => {
       term.write(`\r\n\x1b[31m[Overseer] ${err}\x1b[0m\r\n`)
     })
 
+    window.overseer.getScrollback(session.id).then(data => {
+      const finishReplay = () => {
+        isReplayingRef.current = false
+        while (ptyBufferRef.current.length > 0) {
+          term.write(ptyBufferRef.current.shift()!)
+        }
+      }
+
+      if (data) {
+        term.write(data, finishReplay)
+      } else {
+        term.write('\r\nWelcome to Overseer\r\n\r\n', finishReplay)
+      }
+    })
+
     term.onData((data) => {
-      window.overseer.sendInput(session.id, data)
+      if (!isReplayingRef.current) {
+        window.overseer.sendInput(session.id, data)
+      }
     })
 
     const observer = new ResizeObserver(() => {
