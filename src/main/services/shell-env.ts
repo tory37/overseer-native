@@ -1,4 +1,15 @@
 import { execSync } from 'child_process'
+import os from 'os'
+
+const BLACKLIST = [
+  'NODE_ENV',
+  'ELECTRON_RUN_AS_NODE',
+  'ELECTRON_NO_ASAR',
+  'ELECTRON_ENABLE_LOGGING',
+  'ELECTRON_ENABLE_STACK_DUMPING',
+  'OVERSEER_VERSION',
+  'OVERSEER_IS_DEV'
+]
 
 /**
  * Loads the user's shell environment (PATH, etc.) into the current process.
@@ -9,7 +20,15 @@ export function loadShellEnv() {
   if (process.platform === 'win32') return
 
   try {
-    const shell = process.env.SHELL || '/bin/bash'
+    let shell: string | undefined = process.env.SHELL
+    if (!shell) {
+      try {
+        shell = os.userInfo().shell || undefined
+      } catch {
+        shell = process.platform === 'darwin' ? '/bin/zsh' : '/bin/bash'
+      }
+    }
+
     // Run a login shell and print the environment
     const rawEnv = execSync(`${shell} -l -c 'env'`, {
       encoding: 'utf8',
@@ -19,13 +38,12 @@ export function loadShellEnv() {
 
     const lines = rawEnv.split('\n')
     for (const line of lines) {
-      const parts = line.split('=')
-      if (parts.length >= 2) {
-        const key = parts[0]
-        const value = parts.slice(1).join('=')
+      const index = line.indexOf('=')
+      if (index > 0) {
+        const key = line.slice(0, index)
+        const value = line.slice(index + 1)
         
-        // Only update key variables that are often missing or wrong in Electron prod
-        if (['PATH', 'NODE_PATH', 'NVM_DIR', 'NVM_BIN', 'NVM_INC'].includes(key)) {
+        if (!BLACKLIST.includes(key)) {
           process.env[key] = value
         }
       }
