@@ -6,7 +6,8 @@ declare global {
       listSessions: () => Promise<Session[]>
       createSession: (options: CreateSessionOptions) => Promise<Session>
       killSession: (sessionId: string) => Promise<void>
-      getScrollback: (sessionId: string) => Promise<string | null>
+      updateSession: (sessionId: string, partial: Partial<Session>) => Promise<void>
+      getScrollback: (sessionId: string) => Promise<Uint8Array | null>
       sendInput: (sessionId: string, data: string) => Promise<void>
       resize: (sessionId: string, cols: number, rows: number) => Promise<void>
       onPtyData: (sessionId: string, callback: (data: string) => void) => () => void
