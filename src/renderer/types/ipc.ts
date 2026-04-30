@@ -93,6 +93,14 @@ export type KeybindingAction =
   | 'toggleSpritePanel'
   | 'openSpriteStudio'
 
+export type UpdateStatus = 
+  | { type: 'idle' }
+  | { type: 'checking' }
+  | { type: 'available'; version: string }
+  | { type: 'downloading'; percent: number }
+  | { type: 'downloaded'; version: string }
+  | { type: 'error'; message: string }
+
 export type Keybindings = Record<KeybindingAction, Keybinding>
 
 export const DEFAULT_KEYBINDINGS: Keybindings = {
@@ -192,4 +200,7 @@ export const IPC = {
   CONTEXT_MENU_SHOW: 'context-menu:show',
   DEV_OPEN_DATA_FOLDER: 'dev:open-data-folder',
   DEV_CLEAR_AND_RESTART: 'dev:clear-and-restart',
+  UPDATE_CHECK:      'update:check',
+  UPDATE_INSTALL:    'update:install',
+  UPDATE_STATUS:     'update:status',
 } as const
