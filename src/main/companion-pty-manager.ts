@@ -9,9 +9,10 @@ export class CompanionPtyManager {
 
   spawn(cwd: string, onData: DataCallback, onExit: ExitCallback): string {
     const shell = process.env.SHELL || '/bin/bash'
+    const args = process.platform !== 'win32' ? ['-l'] : []
     const id = randomUUID()
 
-    const proc = pty.spawn(shell, [], {
+    const proc = pty.spawn(shell, args, {
       name: 'xterm-256color',
       cols: 80,
       rows: 24,

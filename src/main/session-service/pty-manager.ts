@@ -10,8 +10,9 @@ export class PtyManager {
 
   spawn(session: Session, env: Record<string, string>, onData: DataCallback, onError?: (err: string) => void): void {
     const shell = process.env.SHELL || '/bin/bash'
+    const args = process.platform !== 'win32' ? ['-l'] : []
     try {
-      const ptyProcess = pty.spawn(shell, [], {
+      const ptyProcess = pty.spawn(shell, args, {
         name: 'xterm-256color',
         cols: 80,
         rows: 24,
