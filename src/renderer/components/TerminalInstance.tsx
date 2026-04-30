@@ -100,7 +100,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
     window.overseer.getScrollback(session.id).then(data => {
       if (data) {
-        term.write(Buffer.from(data, 'binary'))
+        term.write(data)
       } else {
         term.write('\r\nWelcome to Overseer\r\n\r\n')
       }
