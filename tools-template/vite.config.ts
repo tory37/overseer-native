@@ -11,6 +11,9 @@ export default defineConfig(({ command }) => {
   // vite build — library mode: one entry per tool, outputs to dist/
   return {
     plugins: [react()],
+    // Replace process.env.NODE_ENV at build time — React references it, and
+    // the renderer has no Node globals (contextIsolation:true, nodeIntegration:false).
+    define: { 'process.env.NODE_ENV': '"production"' },
     build: {
       lib: {
         entry: { git: path.resolve(__dirname, 'src/git/index.tsx') },
