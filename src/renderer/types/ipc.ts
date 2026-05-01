@@ -101,6 +101,14 @@ export type UpdateStatus =
   | { type: 'downloaded'; version: string }
   | { type: 'error'; message: string }
 
+export interface PluginTool {
+  id: string         // unique identifier within the plugin
+  name: string       // display name shown in the tab bar
+  icon: string       // icon name (reserved for future use)
+  entry: string      // absolute path to the built JS entry point (resolved by main process)
+  pluginName: string // name from plugin.json — used for error messages
+}
+
 export type Keybindings = Record<KeybindingAction, Keybinding>
 
 export const DEFAULT_KEYBINDINGS: Keybindings = {
@@ -203,4 +211,5 @@ export const IPC = {
   UPDATE_CHECK:      'update:check',
   UPDATE_INSTALL:    'update:install',
   UPDATE_STATUS:     'update:status',
+  PLUGINS_GET:       'plugins:get',
 } as const
