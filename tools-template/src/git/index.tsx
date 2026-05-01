@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
-import { exec } from 'child_process'
-import { promisify } from 'util'
 import type { ToolContext } from '../types'
 
-const execAsync = promisify(exec)
+// window.overseer is exposed by Overseer's preload via contextBridge.
+// Plugins run in the renderer with contextIsolation:true / nodeIntegration:false,
+// so IPC is the only path to Node.js / git — never child_process directly.
+declare const window: Window & {
+  overseer: {
+    gitStatus: (cwd: string) => Promise<{ stdout: string; stderr: string; exitCode: number }>
+    gitCommit: (cwd: string, message: string) => Promise<{ stdout: string; stderr: string; exitCode: number }>
+    gitPush: (cwd: string) => Promise<{ stdout: string; stderr: string; exitCode: number }>
+    gitPull: (cwd: string) => Promise<{ stdout: string; stderr: string; exitCode: number }>
+  }
+}
 
 type GitAction = 'Status' | 'Commit' | 'Push' | 'Pull'
 
@@ -11,16 +19,6 @@ interface CommandResult {
   stdout: string
   stderr: string
   exitCode: number
-}
-
-async function runGit(cwd: string, args: string[]): Promise<CommandResult> {
-  try {
-    const { stdout, stderr } = await execAsync(`git ${args.join(' ')}`, { cwd })
-    return { stdout, stderr, exitCode: 0 }
-  } catch (err: unknown) {
-    const e = err as { stdout?: string; stderr?: string; code?: number }
-    return { stdout: e.stdout ?? '', stderr: e.stderr ?? String(err), exitCode: e.code ?? 1 }
-  }
 }
 
 export default function GitPanel({ context }: { context: ToolContext }) {
@@ -35,13 +33,13 @@ export default function GitPanel({ context }: { context: ToolContext }) {
     if (action === 'Commit') {
       const message = window.prompt('Commit message:')
       if (!message) { setLoading(false); return }
-      result = await runGit(context.cwd, ['commit', '-m', message])
+      result = await window.overseer.gitCommit(context.cwd, message)
     } else if (action === 'Status') {
-      result = await runGit(context.cwd, ['status'])
+      result = await window.overseer.gitStatus(context.cwd)
     } else if (action === 'Push') {
-      result = await runGit(context.cwd, ['push'])
+      result = await window.overseer.gitPush(context.cwd)
     } else {
-      result = await runGit(context.cwd, ['pull'])
+      result = await window.overseer.gitPull(context.cwd)
     }
 
     setOutput(result)
