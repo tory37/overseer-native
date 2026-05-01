@@ -21,3 +21,7 @@ Rules:
 - **Session Logs:** Read the latest files in ~/vault/logs/ at the start of a session to resume state.
 - **Architecture Notes:** Check ~/vault/permanent/ for long-term decisions.
 - **Session End:** Always write a summary of work, decisions, and pending tasks to a new log in ~/vault/logs/YYYY-MM-DD-session-id.md.
+
+## Automation
+- **Sync Chats:** Run `bash ~/vault/scripts/sync_claude_obsidian.sh` to import recent conversations into the vault.
+- **Export Graph:** Run `python3 ~/vault/scripts/export_graph_to_obsidian.py . ~/vault/graphify/overseer` to update the Obsidian visualization.

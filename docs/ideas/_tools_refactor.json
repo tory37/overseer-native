@@ -1,0 +1,28 @@
+{
+  "title": "Tools Refactor",
+  "main_idea": "We refactor the concept of the tools sidebar to be a container that loads custom component from a configured directory",
+  "reason": "Needed tools vary greatly per user. Let's just make it work for anyone with some guided rules, etc.  Tools don't ever need this applications state.",
+
+  "requirements": [
+    "The tools sidebar becomes a container that loads in a folder of created / built tools into tabs that can be switched.",
+    "We create an embedded project, with a structured templated layout, that users can clone and add their own components.",
+    "Their will be a build job that outputs them to a configured location, and our app would have a configurationt to know to look there.",
+    "We could have an easy toolkit that renders a minimalistic frame of the app, with included tools loaded into the sidebar for testing"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [
+    "We need to consider what it would look like for 2 tools vs 100 tools.  maybe we need an organization structure, and some well designed navigation setup to get between tools.",
+    "Maybe we have a favorites list, can have like 5 tools in your favorites bar, and the tabs get smaller as you add, and you have to click a button and nav to open another tool.",
+    "Maybe we pin it"
+  ],
+
+  "references": [],
+
+  "open_questions": [
+    "Does this make sense?",
+    "Is this possible?",
+    "Which UI UX should we go with?"
+  ]
+}
