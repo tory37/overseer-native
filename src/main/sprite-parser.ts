@@ -23,41 +23,50 @@ export class SpriteParser {
   private buffer = ''
 
   parse(chunk: string): ParsedSpriteEvent[] {
-    // Ignore chunks that look like they contain the system prompt instructions.
+    this.buffer += chunk
+    
+    // Safety: if the buffer grows too large, something is wrong.
+    if (this.buffer.length > 50000) {
+      this.buffer = this.buffer.slice(-1000)
+    }
+
+    // Ignore if the buffer currently contains the system prompt instructions.
     // This prevents extracting example tags from the LLM instructions.
-    if (chunk.includes('When you want to speak as your character persona')) {
+    if (this.buffer.includes('When you want to speak as your character persona')) {
+      // If we see the instructions, clear the buffer after them to avoid capturing examples
+      const idx = this.buffer.lastIndexOf('Your persona is:')
+      if (idx !== -1) {
+        this.buffer = this.buffer.slice(idx)
+      }
       return []
     }
 
-    this.buffer += chunk
     const events: ParsedSpriteEvent[] = []
 
     while (true) {
-      const startIdx = this.buffer.indexOf('<speak>')
-      if (startIdx === -1) {
-        // No start tag. 
-        // Keep a bit of the end in case a tag was split like "<spe" | "ak>"
-        // 100 characters is plenty and safer than 20.
-        if (this.buffer.length > 100) {
+      const endIdx = this.buffer.indexOf('</speak>')
+      if (endIdx === -1) {
+        // No end tag yet. 
+        // We only care about text starting from the LAST <speak>
+        const lastStartIdx = this.buffer.lastIndexOf('<speak>')
+        if (lastStartIdx !== -1) {
+          this.buffer = this.buffer.slice(lastStartIdx)
+        } else if (this.buffer.length > 200) {
+          // No start tag either, keep only a small tail to catch split tags
           this.buffer = this.buffer.slice(-100)
         }
         break
       }
 
-      const endIdx = this.buffer.indexOf('</speak>', startIdx)
-      if (endIdx === -1) {
-        // Start tag found but no end tag yet.
-        // Discard everything before the start tag to keep buffer clean.
-        this.buffer = this.buffer.slice(startIdx)
-        
-        // Safety: if the buffer grows too large without an end tag, something is wrong.
-        if (this.buffer.length > 10000) {
-          this.buffer = ''
-        }
-        break
+      // Found an end tag. Look for the closest start tag BEFORE it.
+      const startIdx = this.buffer.lastIndexOf('<speak>', endIdx)
+      if (startIdx === -1) {
+        // Found </speak> but no <speak> before it. Discard and continue.
+        this.buffer = this.buffer.slice(endIdx + 8)
+        continue
       }
 
-      // Found a complete tag
+      // Found a complete tag pair
       const rawText = this.buffer.slice(startIdx + 7, endIdx).trim()
       if (rawText) {
         events.push({ 

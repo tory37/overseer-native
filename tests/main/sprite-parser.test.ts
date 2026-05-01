@@ -47,6 +47,15 @@ test('SpriteParser handles multiple tags across multiple chunks', () => {
   ])
 })
 
+test('SpriteParser handles echoed/nested tags by taking the latest start tag', () => {
+  const parser = new SpriteParser()
+  // Simulate an echo where the terminal repeats the start of the tag
+  expect(parser.parse('<speak>Hello ')).toEqual([])
+  expect(parser.parse('<speak>Hello world</speak>')).toEqual([
+    { type: 'speech', text: 'Hello world' }
+  ])
+})
+
 test('decodes HTML entities in speech text', () => {
   const chunk = '<speak>Every sprite in Overseer now has a name and the AI knows exactly who it&#x27;s playing!</speak>'
   expect(parseSpriteSpeech(chunk)).toEqual([
