@@ -11,6 +11,7 @@ import type { Session, CreateSessionOptions, Keybindings, ThemeSettings } from '
 import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
 import { SpriteParser } from './sprite-parser'
+import { discoverPlugins } from './plugin-discovery'
 
 export async function isDirectory(p: string): Promise<boolean> {
   try {
@@ -30,6 +31,7 @@ export function registerIpcHandlers(
   isDev: boolean
 ): void {
   const configService = new ConfigService(baseDir)
+  const defaultPluginsDir = path.join(os.homedir(), '.overseer', 'plugins')
   const spriteParsers = new Map<string, SpriteParser>()
   
   service.onData((sessionId, data) => {
@@ -94,6 +96,12 @@ export function registerIpcHandlers(
 
   ipcMain.handle(IPC.THEME_READ,  () => configService.read<ThemeSettings>('theme-settings.json'))
   ipcMain.handle(IPC.THEME_WRITE, (_event, settings: ThemeSettings) => configService.write('theme-settings.json', settings))
+
+  ipcMain.handle(IPC.PLUGINS_GET, async () => {
+    const config = await configService.read<{ pluginsDir?: string }>('app-config.json')
+    const pluginsDir = config?.pluginsDir ?? defaultPluginsDir
+    return discoverPlugins(pluginsDir)
+  })
 
   ipcMain.handle(IPC.SPRITE_READ,  () => configService.read<any>('sprites.json'))
   ipcMain.handle(IPC.SPRITE_WRITE, (_event, settings: any) => {
