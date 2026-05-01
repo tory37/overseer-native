@@ -19,9 +19,15 @@ import { dolphin } from './dolphin'
 import { bee } from './bee'
 import { flamingo } from './flamingo'
 import { rabbit } from './rabbit'
+import { chupacabra } from './chupacabra'
+import { bigfoot } from './bigfoot'
+import { mothman } from './mothman'
+import { kraken } from './kraken'
+import { wendigo } from './wendigo'
 
 export const ANIMAL_THEMES: Theme[] = [
   raven, bat, panther, owl, viper, squid, beetle,
   wolf, scorpion, crow, moth, orca, spider,
-  swan, fox, tiger, dolphin, bee, flamingo, rabbit
+  swan, fox, tiger, dolphin, bee, flamingo, rabbit,
+  chupacabra, bigfoot, mothman, kraken, wendigo
 ]
