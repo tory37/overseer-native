@@ -11,6 +11,16 @@ export default defineConfig(({ command }) => {
   // vite build — library mode: one entry per tool, outputs to dist/
   return {
     plugins: [react()],
+    resolve: {
+      alias: {
+        // Redirect React imports to thin shims that read from the host renderer's
+        // window.__OVERSEER_REACT__ singleton. Two React instances in one renderer
+        // = null dispatcher = useState crash. The host exposes the singleton in
+        // src/renderer/main.tsx before any plugin is loaded.
+        'react/jsx-runtime': path.resolve(__dirname, 'src/react-jsx-shim.js'),
+        'react': path.resolve(__dirname, 'src/react-shim.js'),
+      },
+    },
     // Replace process.env.NODE_ENV at build time — React references it, and
     // the renderer has no Node globals (contextIsolation:true, nodeIntegration:false).
     define: { 'process.env.NODE_ENV': '"production"' },
@@ -23,8 +33,7 @@ export default defineConfig(({ command }) => {
         // No externals: plugins run in Electron's renderer with contextIsolation:true
         // and nodeIntegration:false, so there is no require() and no Node built-ins.
         // Node APIs are reached exclusively via window.overseer IPC (contextBridge).
-        // React is bundled per-plugin (~45KB) because bare 'react' specifiers cannot
-        // be resolved by the native ESM loader used for file:// dynamic imports.
+        // React is NOT bundled — resolve.alias redirects to window shims above.
         output: { entryFileNames: '[name].js' },
       },
       outDir: 'dist',
