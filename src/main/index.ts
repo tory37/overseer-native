@@ -36,9 +36,7 @@ function createWindow() {
     },
   })
 
-  registerIpcHandlers(sessionService, syncService, updateService, () => mainWindow, baseDir, isDev)
   sessionService.restoreAll()
-  updateService.init()
 
   const devServerUrl = process.env.VITE_DEV_SERVER_URL
   if (isDev && devServerUrl) {
@@ -54,6 +52,14 @@ function createWindow() {
   mainWindow.on('closed', () => { mainWindow = null })
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  // Register IPC handlers and init update service exactly once — process-level, not window-level.
+  // Previously inside createWindow(), which caused a fatal crash on macOS: closing all windows
+  // keeps the app alive in the Dock, and clicking the icon fires 'activate' → createWindow()
+  // again → ipcMain.handle() called twice → "Attempted to register a second handler" error.
+  registerIpcHandlers(sessionService, syncService, updateService, () => mainWindow, baseDir, isDev)
+  updateService.init()
+  createWindow()
+})
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit() })
 app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow() })
