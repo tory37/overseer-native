@@ -103,7 +103,7 @@ export const DEFAULT_SPRITES: Sprite[] = [
     name: 'Minimalist',
     style: 'personas',
     seed: 'Minimalist',
-    options: { eyes: 'sleep', mouth: 'smile', hair: 'bald', body: 'small' },
+    options: { eyes: 'open', mouth: 'smile', hair: 'bald', body: 'small' },
     persona: 'You are Minimalist. You value extreme brevity. You speak only when necessary and keep your responses as short as possible.',
   },
   {

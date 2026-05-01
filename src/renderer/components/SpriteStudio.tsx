@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSpritesStore, Sprite } from '../store/sprites'
 import { renderAvatar } from '../lib/render-avatar'
-import { CURATED_STYLES, type OptionDef } from '../lib/dicebear-styles'
-
-const MOUTH_MAP: Record<string, string> = {
-  'bottts': 'bite',
-  'pixel-art': 'happy13',
-  'fun-emoji': 'shout',
-  'avataaars': 'screamOpen',
-  'micah': 'laughing',
-  'personas': 'surprise',
-}
+import { CURATED_STYLES, type OptionDef, ANIMATION_OVERRIDES } from '../lib/dicebear-styles'
 
 interface Props {
   onClose: () => void
@@ -306,9 +297,16 @@ export function SpriteStudio({ onClose, editingId: initialEditingId }: Props) {
     let previewSvg = ''
     try {
       const overrides: Record<string, unknown> = {}
-      if (previewState === 'speaking' && isMouthOpen) {
-        overrides.mouth = MOUTH_MAP[style] || 'smile'
+      const styleOverrides = ANIMATION_OVERRIDES[style]
+
+      if (previewState === 'speaking') {
+        if (isMouthOpen && styleOverrides?.speaking) {
+          Object.assign(overrides, styleOverrides.speaking)
+        }
+      } else if (previewState === 'thinking' && styleOverrides?.thinking) {
+        Object.assign(overrides, styleOverrides.thinking)
       }
+
       previewSvg = renderAvatar({ id: '', name: '', style, seed: seed || 'preview', options, persona }, overrides)
     } catch (err) {}
 

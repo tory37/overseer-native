@@ -37,7 +37,8 @@ You are executing the Bug Triage Pipeline. Follow these phases exactly in order.
 ## Phase 6: Wrap-up
 1. Ask the user to verify the fix locally.
 2. Once the user verifies the fix, ask if they want you to close the issue. If yes, run `gh issue close <number>`.
-3. Ask the user if they want to pull the list again to select another bug, or exit the triage loop.
+3. Ensure all addressed issues are closed on GitHub before finishing the session.
+4. Ask the user if they want to pull the list again to select another bug, or exit the triage loop.
 
 ## General Error Handling
 - If any `gh` command fails (e.g., rate limits, network issues), inform the user and pause the pipeline.

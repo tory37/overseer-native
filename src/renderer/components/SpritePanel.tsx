@@ -2,15 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { renderAvatar } from '../lib/render-avatar'
 import { useSpritesStore } from '../store/sprites'
-
-const MOUTH_MAP: Record<string, string> = {
-  'bottts': 'bite',
-  'pixel-art': 'happy13',
-  'fun-emoji': 'shout',
-  'avataaars': 'screamOpen',
-  'micah': 'laughing',
-  'personas': 'surprise',
-}
+import { ANIMATION_OVERRIDES } from '../lib/dicebear-styles'
 
 interface Props {
   sessionId: string | null
@@ -155,9 +147,16 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
   if (sprite) {
     try {
       const overrides: Record<string, unknown> = {}
-      if (isSpeaking && isMouthOpen) {
-        overrides.mouth = MOUTH_MAP[sprite.style] || 'smile'
+      const styleOverrides = ANIMATION_OVERRIDES[sprite.style]
+
+      if (isSpeaking) {
+        if (isMouthOpen && styleOverrides?.speaking) {
+          Object.assign(overrides, styleOverrides.speaking)
+        }
+      } else if (isThinking && styleOverrides?.thinking) {
+        Object.assign(overrides, styleOverrides.thinking)
       }
+
       avatarSvg = renderAvatar(sprite, overrides)
     } catch (err) {
       console.error(`[Sprite] Avatar render failed for sprite ${sprite.id}:`, err)
