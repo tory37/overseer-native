@@ -17,8 +17,11 @@ export default defineConfig(({ command }) => {
         formats: ['es'],
       },
       rollupOptions: {
-        // Node.js builtins are available in Electron's renderer when nodeIntegration is enabled
-        external: ['react', 'react-dom', 'child_process', 'util', 'fs', 'path', 'os'],
+        // Node.js builtins are available in Electron's renderer when nodeIntegration is enabled.
+        // NOTE: react and react-dom are intentionally NOT external — bare specifiers like 'react'
+        // cannot be resolved by the native ESM loader when a plugin is imported via file:// URL.
+        // Each plugin bundles its own React instance (~45KB, acceptable for a dev sidebar tool).
+        external: ['child_process', 'util', 'fs', 'path', 'os'],
         output: { entryFileNames: '[name].js' },
       },
       outDir: 'dist',
