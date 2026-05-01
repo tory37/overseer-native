@@ -9,6 +9,11 @@ jest.mock('../../src/renderer/lib/render-avatar', () => ({
   renderAvatar: jest.fn(() => '<svg data-testid="mock-avatar"></svg>'),
 }))
 
+jest.mock('../../src/renderer/lib/dicebear-styles', () => ({
+  CURATED_STYLES: [],
+  ANIMATION_OVERRIDES: {},
+}))
+
 beforeEach(() => {
   localStorage.clear()
   useSpritesStore.setState({ sprites: [] })
