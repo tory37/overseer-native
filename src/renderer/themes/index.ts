@@ -24,10 +24,17 @@ import { bigfoot } from './bigfoot'
 import { mothman } from './mothman'
 import { kraken } from './kraken'
 import { wendigo } from './wendigo'
+import { xenomorph } from './xenomorph'
+import { predator } from './predator'
+import { sectoid } from './sectoid'
+import { reaper } from './reaper'
+import { elite } from './elite'
+import { ridley } from './ridley'
 
 export const ANIMAL_THEMES: Theme[] = [
   raven, bat, panther, owl, viper, squid, beetle,
   wolf, scorpion, crow, moth, orca, spider,
   swan, fox, tiger, dolphin, bee, flamingo, rabbit,
-  chupacabra, bigfoot, mothman, kraken, wendigo
+  chupacabra, bigfoot, mothman, kraken, wendigo,
+  xenomorph, predator, sectoid, reaper, elite, ridley
 ]
