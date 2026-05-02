@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { matchKeybinding } from '../types/ipc'
 import type { DriftStatus, SyncResult, Keybindings, UpdateStatus } from '../types/ipc'
 import { useThemeStore, BUILTIN_THEMES } from '../store/theme'
@@ -11,7 +11,7 @@ interface Props {
 export function SettingsModal({ onClose, keybindings }: Props) {
   const { isDev, openDataFolder, clearAndRestart } = window.overseer || {}
   const { activeThemeId, customThemes, setActiveTheme } = useThemeStore()
-  const allThemes = [...BUILTIN_THEMES, ...customThemes]
+  const allThemes = useMemo(() => [...BUILTIN_THEMES, ...customThemes], [customThemes])
 
   const handlePrevTheme = () => {
     const currentIndex = allThemes.findIndex(t => t.id === activeThemeId)
@@ -39,6 +39,10 @@ export function SettingsModal({ onClose, keybindings }: Props) {
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); onClose(); return }
+
+      const isInput = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement
+      if (isInput) return
+
       if (e.key === 'ArrowLeft') { e.preventDefault(); handlePrevTheme(); return }
       if (e.key === 'ArrowRight') { e.preventDefault(); handleNextTheme(); return }
       
