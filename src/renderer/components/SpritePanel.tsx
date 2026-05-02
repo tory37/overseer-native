@@ -45,10 +45,11 @@ function ProminentBubble({ text, targetRef }: { text: string, targetRef: React.R
   return ReactDOM.createPortal(
     <div style={{
       position: 'fixed',
-      top: coords.top - 60,
+      top: coords.top - Math.min(60, coords.height),
       left: coords.left - 100,
       width: coords.width + 120,
-      minHeight: coords.height + 40,
+      maxHeight: '400px',
+      overflowY: 'auto',
       background: 'var(--bg-main)',
       border: '2px solid var(--accent)',
       borderRadius: '16px',
@@ -59,7 +60,7 @@ function ProminentBubble({ text, targetRef }: { text: string, targetRef: React.R
       textAlign: 'center',
       boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
       zIndex: 9999,
-      pointerEvents: 'none',
+      pointerEvents: 'auto',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -79,6 +80,7 @@ function ProminentBubble({ text, targetRef }: { text: string, targetRef: React.R
         borderLeft: '12px solid transparent',
         borderRight: '12px solid transparent',
         borderTop: '12px solid var(--accent)',
+        pointerEvents: 'none',
       }} />
     </div>,
     root
@@ -210,19 +212,38 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
       }}>
         <div style={{
           background: 'var(--bg-main)',
-          border: '1px solid var(--border)',
-          borderRadius: '8px',
-          padding: '8px 12px',
-          fontSize: '11px',
-          color: 'var(--text-muted)',
+          border: '1px solid var(--accent)',
+          borderRadius: '12px',
+          padding: '10px 14px',
+          fontSize: '12px',
+          fontWeight: '500',
+          color: 'var(--text-main)',
           maxWidth: '220px',
+          maxHeight: '100px',
+          overflowY: 'auto',
           textAlign: 'center',
-          opacity: lastMessage ? 0.8 : 0.3,
+          opacity: lastMessage ? 1 : 0.4,
           fontStyle: lastMessage ? 'normal' : 'italic',
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
+          boxShadow: lastMessage ? '0 4px 12px rgba(0,0,0,0.2)' : 'none',
         }}>
           {lastMessage || "Awaiting transmission..."}
+          
+          {/* Inline bubble pointer */}
+          {lastMessage && (
+            <div style={{
+              position: 'absolute',
+              bottom: '-6px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 0,
+              height: 0,
+              borderLeft: '6px solid transparent',
+              borderRight: '6px solid transparent',
+              borderTop: '6px solid var(--accent)',
+            }} />
+          )}
         </div>
       </div>
 
