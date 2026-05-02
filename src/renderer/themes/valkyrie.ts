@@ -12,9 +12,9 @@ export const valkyrie: Theme = {
     'bg-terminal': '#e1f5fe',
     'text-main': '#455a64',
     'text-muted': '#546e7a',
-    'accent': '#fbc02d',
+    'accent': '#7b5e00',
     'border': '#cfd8dc',
     'terminal-bg': '#e1f5fe',
-    'terminal-fg': '#fbc02d'
+    'terminal-fg': '#7b5e00'
   }
 }

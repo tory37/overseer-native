@@ -12,9 +12,9 @@ export const pegasus: Theme = {
     'bg-terminal': '#ffffff',
     'text-main': '#212121',
     'text-muted': '#8c6800',
-    'accent': '#2196f3',
+    'accent': '#0d47a1',
     'border': '#e0e0e0',
     'terminal-bg': '#ffffff',
-    'terminal-fg': '#2196f3'
+    'terminal-fg': '#0d47a1'
   }
 }
