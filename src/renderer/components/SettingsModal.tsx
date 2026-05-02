@@ -1,43 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { formatKeybinding, matchKeybinding } from '../types/ipc'
-import type { DriftStatus, SyncResult, Keybindings, KeybindingAction, UpdateStatus } from '../types/ipc'
+import { matchKeybinding } from '../types/ipc'
+import type { DriftStatus, SyncResult, Keybindings, UpdateStatus } from '../types/ipc'
 import { useThemeStore, BUILTIN_THEMES } from '../store/theme'
-
-const ACTION_LABELS: Record<string, string> = {
-  newSession:       'New Session',
-  killSession:      'Kill Active Session',
-  nextSession:      'Next Session',
-  prevSession:      'Previous Session',
-  sessionByIndex1:  'Switch to Session 1',
-  sessionByIndex2:  'Switch to Session 2',
-  sessionByIndex3:  'Switch to Session 3',
-  sessionByIndex4:  'Switch to Session 4',
-  sessionByIndex5:  'Switch to Session 5',
-  sessionByIndex6:  'Switch to Session 6',
-  sessionByIndex7:  'Switch to Session 7',
-  sessionByIndex8:  'Switch to Session 8',
-  sessionByIndex9:  'Switch to Session 9',
-  openDrawer:       'Open Session List',
-  openSettings:     'Open Settings',
-  openShortcuts:    'Show Keyboard Shortcuts',
-  splitFocus:       'Focus Next Pane',
-  splitFocusPrev:   'Focus Prev Pane',
-  splitOpenThreeWay: 'Open 3-Way Split',
-  splitClose:       'Close Active Pane',
-  splitSwap:        'Swap Panes',
-  splitSwapSecondary: 'Swap Secondary Panes',
-  splitToggleDirection: 'Toggle Split Dir',
-  toggleSpritePanel: 'Toggle Sprite Panel',
-  openSpriteStudio: 'Open Sprite Studio',
-}
 
 interface Props {
   onClose: () => void
   keybindings: Keybindings
-  onSaveKeybindings: (kb: Keybindings) => Promise<void>
 }
 
-export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props) {
+export function SettingsModal({ onClose, keybindings }: Props) {
   const { isDev, openDataFolder, clearAndRestart } = window.overseer || {}
   const { activeThemeId, customThemes, setActiveTheme } = useThemeStore()
   const allThemes = [...BUILTIN_THEMES, ...customThemes]
@@ -46,12 +17,7 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
   const [syncing,    setSyncing]    = useState(false)
   const [lastResult, setLastResult] = useState<SyncResult | null>(null)
 
-  const [pendingKb,       setPendingKb]       = useState<Keybindings>(() => keybindings)
-  const [capturingAction, setCapturingAction] = useState<KeybindingAction | null>(null)
-  const [savingKb,        setSavingKb]        = useState(false)
   const [updateStatus,    setUpdateStatus]    = useState<UpdateStatus>({ type: 'idle' })
-
-  const isKbDirty = JSON.stringify(pendingKb) !== JSON.stringify(keybindings)
 
   useEffect(() => {
     window.overseer?.syncStatus?.().then(setStatus)
@@ -60,7 +26,6 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (capturingAction) return
       if (e.key === 'Escape') { e.preventDefault(); onClose(); return }
       
       const action = matchKeybinding(keybindings, e)
@@ -71,24 +36,7 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
     }
     window.addEventListener('keydown', handleGlobalKeyDown)
     return () => window.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [onClose, capturingAction, keybindings])
-
-  useEffect(() => {
-    if (!capturingAction) return
-    const handleCapture = (e: KeyboardEvent) => {
-      e.preventDefault()
-      e.stopImmediatePropagation()
-      if (e.key === 'Escape') { setCapturingAction(null); return }
-      if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return
-      setPendingKb(prev => ({
-        ...prev,
-        [capturingAction]: { code: e.code, ctrl: e.ctrlKey, shift: e.shiftKey, alt: e.altKey },
-      }))
-      setCapturingAction(null)
-    }
-    window.addEventListener('keydown', handleCapture, { capture: true })
-    return () => window.removeEventListener('keydown', handleCapture, { capture: true })
-  }, [capturingAction])
+  }, [onClose, keybindings])
 
   const handleSync = async () => {
     if (!window.overseer?.syncRun) return
@@ -101,12 +49,6 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
       setStatus(updated)
     }
     setSyncing(false)
-  }
-
-  const handleSaveKb = async () => {
-    setSavingKb(true)
-    await onSaveKeybindings(pendingKb)
-    setSavingKb(false)
   }
 
   const handleCheckUpdates = async () => {
@@ -202,47 +144,6 @@ export function SettingsModal({ onClose, keybindings, onSaveKeybindings }: Props
               <pre style={{ marginTop: 12, padding: 8, background: 'var(--bg-main)', border: '1px solid #c00', borderRadius: 4, color: '#f88', fontSize: 11, maxHeight: 120, overflow: 'auto', whiteSpace: 'pre-wrap', margin: '12px 0 0' }}>
                 {lastResult.output}
               </pre>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <h3 style={sectionHeading}>Shortcuts</h3>
-          <div style={divider}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 12 }}>
-              <tbody>
-                {(Object.entries(pendingKb) as [KeybindingAction, Keybindings[KeybindingAction]][]).map(([action, kb]) => (
-                  <tr key={action} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '6px 0', color: 'var(--text-main)', fontSize: 13 }}>{ACTION_LABELS[action] ?? action}</td>
-                    <td style={{ padding: '6px 0', textAlign: 'right' }}>
-                      {capturingAction === action ? (
-                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>Press keys…</span>
-                      ) : (
-                        <kbd style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: 4, padding: '2px 6px', fontSize: 12, color: 'var(--text-main)', fontFamily: 'monospace' }}>
-                          {formatKeybinding(kb)}
-                        </kbd>
-                      )}
-                    </td>
-                    <td style={{ padding: '6px 0 6px 8px' }}>
-                      <button
-                        onClick={() => setCapturingAction(action)}
-                        style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', fontSize: 12 }}
-                      >
-                        Set
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {isKbDirty && (
-              <button
-                onClick={handleSaveKb}
-                disabled={savingKb}
-                style={{ background: 'var(--accent)', color: '#fff', border: 'none', padding: '6px 16px', borderRadius: 4, cursor: savingKb ? 'wait' : 'pointer', opacity: savingKb ? 0.7 : 1 }}
-              >
-                {savingKb ? 'Saving…' : 'Save Shortcuts'}
-              </button>
             )}
           </div>
         </div>

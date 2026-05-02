@@ -208,7 +208,6 @@ export default function App() {
         <SettingsModal
           onClose={() => setShowSettings(false)}
           keybindings={keybindings}
-          onSaveKeybindings={updateKeybindings}
         />
       )}
 
