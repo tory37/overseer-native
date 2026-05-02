@@ -215,6 +215,7 @@ export default function App() {
         <KeyboardShortcutsModal
           keybindings={keybindings}
           onClose={() => setShowShortcutsModal(false)}
+          onSaveKeybindings={updateKeybindings}
         />
       )}
 

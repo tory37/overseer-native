@@ -1,38 +1,11 @@
-import React, { useEffect } from 'react'
-import { formatKeybinding } from '../types/ipc'
+import React, { useEffect, useState, useMemo } from 'react'
+import { formatKeybinding, ACTION_LABELS } from '../types/ipc'
 import type { Keybindings, KeybindingAction } from '../types/ipc'
 
 interface Props {
   keybindings: Keybindings
   onClose: () => void
-}
-
-const ACTION_LABELS: Record<string, string> = {
-  newSession:       'New Session',
-  killSession:      'Delete Active Session',
-  nextSession:      'Next Session',
-  prevSession:      'Previous Session',
-  sessionByIndex1:  'Switch to Session 1',
-  sessionByIndex2:  'Switch to Session 2',
-  sessionByIndex3:  'Switch to Session 3',
-  sessionByIndex4:  'Switch to Session 4',
-  sessionByIndex5:  'Switch to Session 5',
-  sessionByIndex6:  'Switch to Session 6',
-  sessionByIndex7:  'Switch to Session 7',
-  sessionByIndex8:  'Switch to Session 8',
-  sessionByIndex9:  'Switch to Session 9',
-  openDrawer:           'Open Session List',
-  openSettings:         'Open Settings',
-  openShortcuts:        'Show Keyboard Shortcuts',
-  splitFocus:           'Open / Focus Next Pane',
-  splitFocusPrev:       'Focus Previous Pane',
-  splitOpenThreeWay:    'Open 3-Way Split',
-  splitClose:           'Close Focused Pane',
-  splitSwap:            'Swap Main / Secondary Columns',
-  splitSwapSecondary:   'Swap Companion Panes (3-way)',
-  splitToggleDirection: 'Toggle Split Direction',
-  toggleSpritePanel:    'Toggle Sprite Panel',
-  openSpriteStudio:     'Open Sprite Studio',
+  onSaveKeybindings: (kb: Keybindings) => Promise<void>
 }
 
 const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
@@ -62,14 +35,47 @@ const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
   }
 ]
 
-export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
+export function KeyboardShortcutsModal({ keybindings, onClose, onSaveKeybindings }: Props) {
+  const [pendingKb, setPendingKb] = useState<Keybindings>(keybindings)
+  const [capturingAction, setCapturingAction] = useState<KeybindingAction | null>(null)
+  const [savingKb, setSavingKb] = useState(false)
+
+  const isKbDirty = useMemo(() => JSON.stringify(pendingKb) !== JSON.stringify(keybindings), [pendingKb, keybindings])
+
+  useEffect(() => {
+    if (!capturingAction) return
+    const handleCapture = (e: KeyboardEvent) => {
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      if (e.key === 'Escape') { setCapturingAction(null); return }
+      if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return
+      setPendingKb(prev => ({
+        ...prev,
+        [capturingAction]: { code: e.code, ctrl: e.ctrlKey, shift: e.shiftKey, alt: e.altKey },
+      }))
+      setCapturingAction(null)
+    }
+    window.addEventListener('keydown', handleCapture, { capture: true })
+    return () => window.removeEventListener('keydown', handleCapture, { capture: true })
+  }, [capturingAction])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (capturingAction) return // Ignore global Escape if we are capturing
       if (e.key === 'Escape' || e.key === '/') { e.preventDefault(); onClose() }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
+  }, [onClose, capturingAction])
+
+  const handleSave = async () => {
+    setSavingKb(true)
+    try {
+      await onSaveKeybindings(pendingKb)
+    } finally {
+      setSavingKb(false)
+    }
+  }
 
   return (
     <div
@@ -100,14 +106,35 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {group.actions.map(action => {
-                  const kb = keybindings[action]
+                  const kb = pendingKb[action]
                   if (!kb) return null
+                  const isCapturing = capturingAction === action
                   return (
                     <div key={action} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
                       <span style={{ fontSize: 13, color: 'var(--text-main)' }}>{ACTION_LABELS[action] ?? action}</span>
-                      <kbd style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: 4, padding: '2px 6px', fontSize: 11, color: 'var(--text-main)', fontFamily: 'monospace', marginLeft: 8, whiteSpace: 'nowrap' }}>
-                        {formatKeybinding(kb)}
-                      </kbd>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {isCapturing ? (
+                          <span style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 'bold' }}>Press keys...</span>
+                        ) : (
+                          <kbd style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: 4, padding: '2px 6px', fontSize: 11, color: 'var(--text-main)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+                            {formatKeybinding(kb)}
+                          </kbd>
+                        )}
+                        <button
+                          onClick={() => setCapturingAction(isCapturing ? null : action)}
+                          style={{
+                            background: 'var(--bg-main)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 4,
+                            padding: '2px 6px',
+                            fontSize: 10,
+                            color: 'var(--text-muted)',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {isCapturing ? 'Cancel' : 'Set'}
+                        </button>
+                      </div>
                     </div>
                   )
                 })}
@@ -115,6 +142,24 @@ export function KeyboardShortcutsModal({ keybindings, onClose }: Props) {
             </div>
           ))}
         </div>
+
+        {isKbDirty && (
+          <div style={{ marginTop: 32, paddingTop: 16, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+            <button
+              onClick={() => setPendingKb(keybindings)}
+              style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-main)', padding: '6px 16px', borderRadius: 4, cursor: 'pointer' }}
+            >
+              Reset
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={savingKb}
+              style={{ background: 'var(--accent)', color: 'white', border: 'none', padding: '6px 24px', borderRadius: 4, cursor: 'pointer', opacity: savingKb ? 0.7 : 1 }}
+            >
+              {savingKb ? 'Saving...' : 'Save Shortcuts'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
