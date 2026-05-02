@@ -11,7 +11,7 @@ export const horror: Theme = {
     'bg-inactive-tab': '#002d5c',
     'bg-terminal': '#001f3f',
     'text-main': '#ff69b4',
-    'text-muted': '#8e44ad',
+    'text-muted': '#d28ceb',
     'accent': '#ffd700',
     'border': '#003366',
     'terminal-bg': '#001f3f',

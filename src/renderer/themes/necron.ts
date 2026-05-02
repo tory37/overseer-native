@@ -11,7 +11,7 @@ export const necron: Theme = {
     'bg-inactive-tab': '#252525',
     'bg-terminal': '#1a1a1a',
     'text-main': '#b0b0b0',
-    'text-muted': '#666666',
+    'text-muted': '#8e8e8e',
     'accent': '#00ff00',
     'border': '#2a2a2a',
     'terminal-bg': '#1a1a1a',

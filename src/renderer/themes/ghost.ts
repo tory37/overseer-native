@@ -11,7 +11,7 @@ export const ghost: Theme = {
     'bg-inactive-tab': '#002525',
     'bg-terminal': '#001a1a',
     'text-main': '#888888',
-    'text-muted': '#004040',
+    'text-muted': '#66aaaa',
     'accent': '#ffffff',
     'border': '#002d2d',
     'terminal-bg': '#001a1a',

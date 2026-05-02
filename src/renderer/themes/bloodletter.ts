@@ -11,7 +11,7 @@ export const bloodletter: Theme = {
     'bg-inactive-tab': '#3a0000',
     'bg-terminal': '#2a0000',
     'text-main': '#ffd700',
-    'text-muted': '#cc0000',
+    'text-muted': '#ff6666',
     'accent': '#ff4d4d',
     'border': '#4a0000',
     'terminal-bg': '#2a0000',

@@ -11,7 +11,7 @@ export const vampire: Theme = {
     'bg-inactive-tab': '#250000',
     'bg-terminal': '#1a0000',
     'text-main': '#cccccc',
-    'text-muted': '#660000',
+    'text-muted': '#b37373',
     'accent': '#f0f0f0',
     'border': '#300000',
     'terminal-bg': '#1a0000',

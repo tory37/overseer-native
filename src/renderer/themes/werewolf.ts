@@ -11,7 +11,7 @@ export const werewolf: Theme = {
     'bg-inactive-tab': '#000033',
     'bg-terminal': '#000022',
     'text-main': '#c0c0c0',
-    'text-muted': '#4d260b',
+    'text-muted': '#a68d7a',
     'accent': '#ffff00',
     'border': '#00003a',
     'terminal-bg': '#000022',
