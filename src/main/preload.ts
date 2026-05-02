@@ -110,6 +110,15 @@ contextBridge.exposeInMainWorld('overseer', {
   writeSprites: (settings: any): Promise<void> =>
     ipcRenderer.invoke(IPC.SPRITE_WRITE, settings),
 
+  readUserSettings: (): Promise<any> =>
+    ipcRenderer.invoke(IPC.USER_SETTINGS_READ),
+
+  writeUserSettings: (settings: any): Promise<void> =>
+    ipcRenderer.invoke(IPC.USER_SETTINGS_WRITE, settings),
+
+  readChangelog: (): Promise<any> =>
+    ipcRenderer.invoke(IPC.CHANGELOG_READ),
+
   copyToClipboard: (text: string): Promise<void> =>
     ipcRenderer.invoke(IPC.CLIPBOARD_WRITE, text),
 

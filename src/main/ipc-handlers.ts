@@ -111,6 +111,22 @@ export function registerIpcHandlers(
     }
   })
 
+  ipcMain.handle(IPC.USER_SETTINGS_READ,  () => configService.read<any>('user-settings.json'))
+  ipcMain.handle(IPC.USER_SETTINGS_WRITE, (_event, settings: any) => configService.write('user-settings.json', settings))
+
+  ipcMain.handle(IPC.CHANGELOG_READ, async () => {
+    try {
+      // In dev, it's in the project root. In prod, it's in the app path.
+      // app.getAppPath() usually points to the directory containing package.json
+      const changelogPath = path.join(app.getAppPath(), 'CHANGELOG.json')
+      const raw = await fs.promises.readFile(changelogPath, 'utf8')
+      return JSON.parse(raw)
+    } catch (err) {
+      console.error('[Changelog] Failed to read CHANGELOG.json:', err)
+      return {}
+    }
+  })
+
   const companionMgr = new CompanionPtyManager()
 
   ipcMain.handle(IPC.COMPANION_SPAWN, (_event, cwd: string) =>
