@@ -43,6 +43,21 @@ import { phoenix } from './phoenix'
 import { valkyrie } from './valkyrie'
 import { cerberus } from './cerberus'
 import { pegasus } from './pegasus'
+import { redRanger } from './red-ranger'
+import { blueRanger } from './blue-ranger'
+import { greenRanger } from './green-ranger'
+import { yellowRanger } from './yellow-ranger'
+import { blackRanger } from './black-ranger'
+import { pinkRanger } from './pink-ranger'
+import { whiteRanger } from './white-ranger'
+import { purpleRanger } from './purple-ranger'
+import { silverRanger } from './silver-ranger'
+import { goldRanger } from './gold-ranger'
+
+export const RANGER_THEMES: Theme[] = [
+  redRanger, blueRanger, greenRanger, yellowRanger, blackRanger,
+  pinkRanger, whiteRanger, purpleRanger, silverRanger, goldRanger
+]
 
 export const ANIMAL_THEMES: Theme[] = [
   raven, bat, panther, owl, viper, squid, beetle,
