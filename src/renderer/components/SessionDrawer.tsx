@@ -5,11 +5,12 @@ interface Props {
   sessions: Session[]
   activeSessionId: string | null
   onSelect: (id: string) => void
+  onRename: (id: string) => void
   onKill: (id: string) => void
   onClose: () => void
 }
 
-export function SessionDrawer({ sessions, activeSessionId, onSelect, onKill, onClose }: Props) {
+export function SessionDrawer({ sessions, activeSessionId, onSelect, onRename, onKill, onClose }: Props) {
   const [focusedIdx, setFocusedIdx] = useState(0)
 
   useEffect(() => {
@@ -72,13 +73,22 @@ export function SessionDrawer({ sessions, activeSessionId, onSelect, onKill, onC
               <div style={{ fontWeight: 600 }}>{s.name}</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{s.agentType} · {s.cwd}</div>
             </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); onKill(s.id) }}
-              style={{ background: 'transparent', border: 'none', color: '#c55', cursor: 'pointer', padding: '4px', fontSize: '14px' }}
-              title="Kill session"
-            >
-              ✕
-            </button>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <button
+                onClick={(e) => { e.stopPropagation(); onRename(s.id) }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px', fontSize: '14px' }}
+                title="Rename session"
+              >
+                ✎
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); onKill(s.id) }}
+                style={{ background: 'transparent', border: 'none', color: '#c55', cursor: 'pointer', padding: '4px', fontSize: '14px' }}
+                title="Kill session"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         ))}
         {sessions.length === 0 && (

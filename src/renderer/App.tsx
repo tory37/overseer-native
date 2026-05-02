@@ -13,10 +13,11 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { useCompanion } from './hooks/useCompanion'
 import { useThemeStore, BUILTIN_THEMES } from './store/theme'
 import { useSpritesStore } from './store/sprites'
+import { RenameSessionDialog } from './components/RenameSessionDialog'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
-  const { sessions, activeSessionId, load, createSession, killSession, setActive } = useSessionStore()
+  const { sessions, activeSessionId, load, createSession, killSession, updateSession, setActive } = useSessionStore()
   const { activeThemeId, customThemes, loadSettings: loadThemeSettings } = useThemeStore()
   const { loadSprites } = useSpritesStore()
 
@@ -28,6 +29,7 @@ export default function App() {
   const [showSpriteStudio,   setShowSpriteStudio]   = useState(false)
   const [spriteStudioEditId, setSpriteStudioEditId] = useState<string | null>(null)
   const [spritePanelVisible, setSpritePanelVisible] = useState(true)
+  const [renamingSessionId,  setRenamingSessionId]  = useState<string | null>(null)
 
   useEffect(() => { load(); loadThemeSettings(); loadSprites() }, [])
 
@@ -95,6 +97,7 @@ export default function App() {
     onOpenDrawer:           () => setShowDrawer(prev => !prev),
     onOpenSettings:         () => setShowSettings(prev => !prev),
     onOpenShortcuts:        () => setShowShortcutsModal(prev => !prev),
+    onRenameSession:        () => setRenamingSessionId(activeSessionId),
     onSplitFocus,
     onSplitFocusPrev,
     onSplitOpenThreeWay,
@@ -199,8 +202,20 @@ export default function App() {
           sessions={sessions}
           activeSessionId={activeSessionId}
           onSelect={setActive}
+          onRename={(id) => setRenamingSessionId(id)}
           onKill={async (id) => { try { await killSession(id) } catch (err) { console.error('kill session failed:', err) } }}
           onClose={() => setShowDrawer(false)}
+        />
+      )}
+
+      {renamingSessionId && (
+        <RenameSessionDialog
+          initialName={sessions.find(s => s.id === renamingSessionId)?.name || ''}
+          onRename={async (newName) => {
+            await updateSession(renamingSessionId, { name: newName })
+            setRenamingSessionId(null)
+          }}
+          onCancel={() => setRenamingSessionId(null)}
         />
       )}
 

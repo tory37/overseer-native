@@ -11,6 +11,7 @@ export interface ShortcutHandlers {
   onOpenDrawer:           () => void
   onOpenSettings:         () => void
   onOpenShortcuts:        () => void
+  onRenameSession:        () => void
   onSplitFocus:           () => void
   onSplitFocusPrev:       () => void
   onSplitOpenThreeWay:    () => void
@@ -51,6 +52,7 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (action === 'openDrawer')           { h.onOpenDrawer();           return }
       if (action === 'openSettings')         { h.onOpenSettings();         return }
       if (action === 'openShortcuts')        { h.onOpenShortcuts();        return }
+      if (action === 'renameSession')       { h.onRenameSession();        return }
       if (action === 'splitFocus')           { h.onSplitFocus();           return }
       if (action === 'splitFocusPrev')       { h.onSplitFocusPrev();       return }
       if (action === 'splitOpenThreeWay')    { h.onSplitOpenThreeWay();    return }
