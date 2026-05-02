@@ -64,6 +64,8 @@ function ProminentBubble({ text, targetRef }: { text: string, targetRef: React.R
       alignItems: 'center',
       justifyContent: 'center',
       boxSizing: 'border-box',
+      whiteSpace: 'pre-wrap',
+      wordBreak: 'break-word',
     }}>
       {text}
       {/* Speech bubble pointer */}
@@ -217,6 +219,8 @@ export function SpritePanel({ sessionId, spriteId, animationState: _animationSta
           textAlign: 'center',
           opacity: lastMessage ? 0.8 : 0.3,
           fontStyle: lastMessage ? 'normal' : 'italic',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
         }}>
           {lastMessage || "Awaiting transmission..."}
         </div>
