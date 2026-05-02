@@ -62,3 +62,18 @@ test('decodes HTML entities in speech text', () => {
     { type: 'speech', text: "Every sprite in Overseer now has a name and the AI knows exactly who it's playing!" }
   ])
 })
+
+test('handles multi-line speech text', () => {
+  const chunk = '<speak>\nLine 1\nLine 2\n</speak>'
+  expect(parseSpriteSpeech(chunk)).toEqual([
+    { type: 'speech', text: 'Line 1\nLine 2' }
+  ])
+})
+
+test('handles multi-line speech text split across chunks', () => {
+  const parser = new SpriteParser()
+  expect(parser.parse('<speak>\nLine 1')).toEqual([])
+  expect(parser.parse('\nLine 2\n</speak>')).toEqual([
+    { type: 'speech', text: 'Line 1\nLine 2' }
+  ])
+})

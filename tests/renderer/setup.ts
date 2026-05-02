@@ -22,6 +22,9 @@ export const mockOverseer = {
   updateStatus: jest.fn().mockReturnValue(() => {}),
   updateCheck: jest.fn().mockResolvedValue(undefined),
   updateInstall: jest.fn().mockResolvedValue(undefined),
+  readUserSettings: jest.fn().mockResolvedValue({}),
+  writeUserSettings: jest.fn().mockResolvedValue(undefined),
+  readChangelog: jest.fn().mockResolvedValue({}),
 }
 
 beforeEach(() => {

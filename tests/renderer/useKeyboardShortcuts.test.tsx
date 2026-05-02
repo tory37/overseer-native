@@ -13,6 +13,7 @@ function makeHandlers(): ShortcutHandlers {
     onOpenDrawer:           jest.fn(),
     onOpenSettings:         jest.fn(),
     onOpenShortcuts:        jest.fn(),
+    onRenameSession:        jest.fn(),
     onSplitFocus:           jest.fn(),
     onSplitFocusPrev:       jest.fn(),
     onSplitOpenThreeWay:    jest.fn(),

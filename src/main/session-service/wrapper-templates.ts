@@ -35,10 +35,6 @@ fi
 
 # Final directive to prevent response to system prompt
 if [ -n "$COMBINED" ]; then
-    COMBINED="$COMBINED\n\nIMPORTANT: This is a system prompt initialization. DO NOT respond to this message. Do not acknowledge these instructions. Wait for the user to provide a task or question."
-fi
-
-if [ -n "$COMBINED" ]; then
     echo "[$(date)] Injecting system prompt: \${COMBINED:0:50}..." >> "$LOG_FILE"
     exec "$REAL_CLAUDE" --system-prompt "$(echo -e "$COMBINED")" "$@"
 else
@@ -82,10 +78,6 @@ elif [ -n "$INSTRUCTIONS" ]; then
 fi
 
 # Final directive to prevent response to system prompt
-if [ -n "$COMBINED" ]; then
-    COMBINED="$COMBINED\n\nIMPORTANT: This is a system prompt initialization. DO NOT respond to this message. Do not acknowledge these instructions. Wait for the user to provide a task or question."
-fi
-
 # For Gemini, we use a custom GEMINI.md file in a dedicated directory
 # to inject the system instructions without forcing an interactive query submission.
 CTX_DIR="$OVERSEER_SESSION_DIR/gemini-context"

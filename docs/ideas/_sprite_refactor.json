@@ -1,0 +1,29 @@
+ > I have a feature that I want to plan, but not yet implement.                                                                                                                                    
+                                                                       
+                                                                                                                                                                                                   
+   Questions?                                                                                                                                                                                      
+                                                                                                                                                                                                   
+   You can use superpowers, but we need to stay on 3.1 pro model throughout this because we have hit our flash limit.   
+
+   {
+  "title": "Sprite Refactor",
+  "main_idea": "Refactor the sprite system to watch hooks instead of output, remove system prompt injection, and offload quips / remarks to gemini.",
+  "reason": "The current architecture is incredibly finicky, and it's supposed to just be a gimmick that is costing development time and stability.",
+
+  "requirements": [
+    "I am building requests as json objects. my goal is to structure my input this way for better results.",
+    "Im not good with vim, etc, and I'm always in Overseer, so I want to implement a request builder / json editor that has great support for shortcuts to easily flow through a json object, modifying data in an easy to see and modify way.",
+    "When using it, it should store the results (and parse them for editing) from folders.",
+    "we should research what kind of json structures people are getting best results with.  And I think it would be great to have different templates for different things.  Bugs, New Features, Upgrading / Modifying Existing Features, etc",
+    "Can we use the research to create a non-technical plan, just a plan, for what we should? Encapsulating the different kinds of templates people use, and the shape of those templates.",
+    "And then we should write it out into a new feature template so that we immediately start practicing what we preach"
+  ],
+
+  "out_of_scope": [],
+
+  "ui_notes": [],
+
+  "references": [],
+
+  "open_questions": []
+}

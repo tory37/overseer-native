@@ -33,6 +33,9 @@ declare global {
       onSpriteSpeech: (callback: (payload: { sessionId: string; text: string }) => void) => () => void
       readSprites: () => Promise<any>
       writeSprites: (settings: any) => Promise<void>
+      readUserSettings: () => Promise<any>
+      writeUserSettings: (settings: any) => Promise<void>
+      readChangelog: () => Promise<any>
       copyToClipboard: (text: string) => Promise<void>
       readFromClipboard: () => Promise<string>
       showContextMenu: (options: { x: number; y: number; hasSelection: boolean }) => void
