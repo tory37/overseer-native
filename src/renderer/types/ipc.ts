@@ -131,6 +131,34 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   openSpriteStudio:     { code: 'KeyP',         ctrl: true,  shift: true,  alt: false },
 }
 
+export const ACTION_LABELS: Record<KeybindingAction, string> = {
+  newSession:           'New Session',
+  killSession:          'Delete Active Session',
+  nextSession:          'Next Session',
+  prevSession:          'Previous Session',
+  sessionByIndex1:      'Switch to Session 1',
+  sessionByIndex2:      'Switch to Session 2',
+  sessionByIndex3:      'Switch to Session 3',
+  sessionByIndex4:      'Switch to Session 4',
+  sessionByIndex5:      'Switch to Session 5',
+  sessionByIndex6:      'Switch to Session 6',
+  sessionByIndex7:      'Switch to Session 7',
+  sessionByIndex8:      'Switch to Session 8',
+  sessionByIndex9:      'Switch to Session 9',
+  openDrawer:           'Open Session List',
+  openSettings:         'Open Settings',
+  openShortcuts:        'Show Keyboard Shortcuts',
+  splitFocus:           'Open / Focus Next Pane',
+  splitFocusPrev:       'Focus Previous Pane',
+  splitOpenThreeWay:    'Open 3-Way Split',
+  splitClose:           'Close Focused Pane',
+  splitSwap:            'Swap Main / Secondary Columns',
+  splitSwapSecondary:   'Swap Companion Panes (3-way)',
+  splitToggleDirection: 'Toggle Split Direction',
+  toggleSpritePanel:    'Toggle Sprite Panel',
+  openSpriteStudio:     'Open Sprite Studio',
+}
+
 const CODE_LABELS: Record<string, string> = {
   KeyA:'A', KeyB:'B', KeyC:'C', KeyD:'D', KeyE:'E', KeyF:'F', KeyG:'G',
   KeyH:'H', KeyI:'I', KeyJ:'J', KeyK:'K', KeyL:'L', KeyM:'M', KeyN:'N',
