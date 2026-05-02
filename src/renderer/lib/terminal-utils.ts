@@ -26,7 +26,7 @@ export function getSmartSelectionText(term: Terminal): string {
     const nextLine = y < buffer.length - 1 ? buffer.getLine(y + 1) : undefined;
     const isWrappedNext = nextLine ? nextLine.isWrapped : false;
 
-    const lineText = line.translateToString(!isWrappedNext && !isLastLine, startX, endX);
+    const lineText = line.translateToString(!isWrappedNext, startX, endX);
     text += lineText;
 
     if (!isLastLine && !isWrappedNext) {

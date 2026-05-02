@@ -56,4 +56,28 @@ describe('getSmartSelectionText', () => {
     const result = getSmartSelectionText(term);
     expect(result).toBe('CDEFG');
   });
+
+  it('should trim trailing whitespace on the last line if not wrapped', () => {
+    // Current implementation might NOT trim the last line.
+    // Let's see if this test fails.
+    const term = mockTerminal([
+      { text: 'Line 1    ', isWrapped: false },
+    ], { start: { x: 0, y: 0 }, end: { x: 10, y: 0 } });
+    
+    const result = getSmartSelectionText(term);
+    expect(result).toBe('Line 1');
+  });
+
+  it('should join multiple consecutive wrapped lines', () => {
+    const term = mockTerminal([
+      { text: 'Part 1          ', isWrapped: false },
+      { text: 'Part 2          ', isWrapped: true },
+      { text: 'Part 3', isWrapped: true }
+    ], { start: { x: 0, y: 0 }, end: { x: 6, y: 2 } });
+    
+    // With cols=80, Part 1 and Part 2 will have trailing spaces preserved because they wrap
+    const result = getSmartSelectionText(term);
+    // Note: in our mock, we don't simulate full 80 cols perfectly, but the logic should hold
+    expect(result).toBe('Part 1          Part 2          Part 3');
+  });
 });

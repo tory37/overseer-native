@@ -81,7 +81,7 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
       window.overseer.showContextMenu({
         x: e.clientX,
         y: e.clientY,
-        hasSelection: !!term.getSelection()
+        hasSelection: term.hasSelection()
       })
     }
     containerRef.current.addEventListener('contextmenu', handleContextMenu)

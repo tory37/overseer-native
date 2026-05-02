@@ -73,7 +73,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
-        const sel = term.getSelection()
+        const sel = getSmartSelectionText(term)
         if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
         return false
       }
@@ -91,7 +91,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
       window.overseer.showContextMenu({
         x: e.clientX,
         y: e.clientY,
-        hasSelection: !!term.getSelection()
+        hasSelection: term.hasSelection()
       })
     }
     containerRef.current.addEventListener('contextmenu', handleContextMenu)
