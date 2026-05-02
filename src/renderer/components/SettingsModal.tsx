@@ -13,6 +13,18 @@ export function SettingsModal({ onClose, keybindings }: Props) {
   const { activeThemeId, customThemes, setActiveTheme } = useThemeStore()
   const allThemes = [...BUILTIN_THEMES, ...customThemes]
 
+  const handlePrevTheme = () => {
+    const currentIndex = allThemes.findIndex(t => t.id === activeThemeId)
+    const prevIndex = (currentIndex - 1 + allThemes.length) % allThemes.length
+    setActiveTheme(allThemes[prevIndex].id)
+  }
+
+  const handleNextTheme = () => {
+    const currentIndex = allThemes.findIndex(t => t.id === activeThemeId)
+    const nextIndex = (currentIndex + 1) % allThemes.length
+    setActiveTheme(allThemes[nextIndex].id)
+  }
+
   const [status,     setStatus]     = useState<DriftStatus | null>(null)
   const [syncing,    setSyncing]    = useState(false)
   const [lastResult, setLastResult] = useState<SyncResult | null>(null)
@@ -27,6 +39,8 @@ export function SettingsModal({ onClose, keybindings }: Props) {
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); onClose(); return }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); handlePrevTheme(); return }
+      if (e.key === 'ArrowRight') { e.preventDefault(); handleNextTheme(); return }
       
       const action = matchKeybinding(keybindings, e)
       if (action === 'openSettings') {
@@ -36,7 +50,7 @@ export function SettingsModal({ onClose, keybindings }: Props) {
     }
     window.addEventListener('keydown', handleGlobalKeyDown)
     return () => window.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [onClose, keybindings])
+  }, [onClose, keybindings, activeThemeId, allThemes])
 
   const handleSync = async () => {
     if (!window.overseer?.syncRun) return
@@ -83,26 +97,65 @@ export function SettingsModal({ onClose, keybindings }: Props) {
           <div style={divider}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{ fontSize: 13, color: 'var(--text-main)' }}>Theme</label>
-              <select
-                value={activeThemeId}
-                onChange={(e) => setActiveTheme(e.target.value)}
-                style={{
-                  background: 'var(--bg-main)',
-                  color: 'var(--text-main)',
-                  border: '1px solid var(--border)',
-                  padding: '6px 8px',
-                  borderRadius: 4,
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-              >
-                {allThemes.map(theme => (
-                  <option key={theme.id} value={theme.id}>
-                    {theme.name}
-                  </option>
-                ))}
-              </select>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <button
+                  onClick={handlePrevTheme}
+                  title="Previous theme (ArrowLeft)"
+                  style={{
+                    background: 'var(--bg-main)',
+                    color: 'var(--text-main)',
+                    border: '1px solid var(--border)',
+                    padding: '6px 10px',
+                    borderRadius: 4,
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  &lt;
+                </button>
+                <select
+                  value={activeThemeId}
+                  onChange={(e) => setActiveTheme(e.target.value)}
+                  style={{
+                    flex: 1,
+                    background: 'var(--bg-main)',
+                    color: 'var(--text-main)',
+                    border: '1px solid var(--border)',
+                    padding: '6px 8px',
+                    borderRadius: 4,
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    outline: 'none',
+                  }}
+                >
+                  {allThemes.map(theme => (
+                    <option key={theme.id} value={theme.id}>
+                      {theme.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleNextTheme}
+                  title="Next theme (ArrowRight)"
+                  style={{
+                    background: 'var(--bg-main)',
+                    color: 'var(--text-main)',
+                    border: '1px solid var(--border)',
+                    padding: '6px 10px',
+                    borderRadius: 4,
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  &gt;
+                </button>
+              </div>
             </div>
           </div>
         </div>
