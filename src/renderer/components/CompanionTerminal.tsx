@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
+import { getSmartSelectionText } from '../lib/terminal-utils'
 import { matchKeybinding } from '../types/ipc'
 import type { Keybindings, Theme } from '../types/ipc'
 
@@ -62,7 +63,7 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
 
     term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
       if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
-        const sel = term.getSelection()
+        const sel = getSmartSelectionText(term)
         if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
         return false
       }
@@ -87,7 +88,7 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
 
     const unsubCopy = window.overseer.onTerminalCopy(() => {
       if (!focusedRef.current) return
-      const sel = term.getSelection()
+      const sel = getSmartSelectionText(term)
       if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
     })
 
