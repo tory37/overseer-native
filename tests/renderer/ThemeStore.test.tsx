@@ -10,6 +10,7 @@ describe('BUILTIN_THEMES', () => {
     expect(ids).toContain('raven')
     expect(ids).toContain('wolf')
     expect(ids).toContain('kraken')
+    expect(ids).toContain('xenomorph')
     
     // Ensure old themes are gone
     expect(ids).not.toContain('monokai')
