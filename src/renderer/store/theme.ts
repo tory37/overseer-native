@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { Theme, IPC } from '../types/ipc'
-import { ANIMAL_THEMES } from '../themes'
+import { ANIMAL_THEMES, RANGER_THEMES } from '../themes'
 
 export const BUILTIN_THEMES: Theme[] = [
   {
@@ -39,7 +39,8 @@ export const BUILTIN_THEMES: Theme[] = [
       'terminal-fg': '#333333'
     }
   },
-  ...ANIMAL_THEMES
+  ...ANIMAL_THEMES,
+  ...RANGER_THEMES
 ]
 
 interface ThemeState {

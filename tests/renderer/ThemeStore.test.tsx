@@ -21,6 +21,18 @@ describe('BUILTIN_THEMES', () => {
     expect(ids).not.toContain('nord')
   })
 
+  test('contains Ranger themes', () => {
+    const ids = BUILTIN_THEMES.map(t => t.id)
+    expect(ids).toContain('red-ranger')
+    expect(ids).toContain('blue-ranger')
+    expect(ids).toContain('green-ranger')
+    expect(ids).toContain('yellow-ranger')
+    expect(ids).toContain('black-ranger')
+    expect(ids).toContain('pink-ranger')
+    expect(ids).toContain('white-ranger')
+    expect(ids).toContain('gold-ranger')
+  })
+
   test('Overseer Dark has correct colors', () => {
     const theme = BUILTIN_THEMES.find(t => t.id === 'overseer-dark')
     expect(theme).toBeDefined()
