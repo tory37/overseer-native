@@ -30,11 +30,21 @@ import { sectoid } from './sectoid'
 import { reaper } from './reaper'
 import { elite } from './elite'
 import { ridley } from './ridley'
+import { tyranid } from './tyranid'
+import { necron } from './necron'
+import { bloodletter } from './bloodletter'
+import { horror } from './horror'
+import { vampire } from './vampire'
+import { werewolf } from './werewolf'
+import { ghost } from './ghost'
+import { frankenstein } from './frankenstein'
 
 export const ANIMAL_THEMES: Theme[] = [
   raven, bat, panther, owl, viper, squid, beetle,
   wolf, scorpion, crow, moth, orca, spider,
   swan, fox, tiger, dolphin, bee, flamingo, rabbit,
   chupacabra, bigfoot, mothman, kraken, wendigo,
-  xenomorph, predator, sectoid, reaper, elite, ridley
+  xenomorph, predator, sectoid, reaper, elite, ridley,
+  tyranid, necron, bloodletter, horror, vampire, werewolf,
+  ghost, frankenstein
 ]
