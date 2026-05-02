@@ -72,7 +72,7 @@
         "preset": "ts-jest",
         "testEnvironment": "jsdom",
         "testMatch": [
-          "<rootDir>/tests/renderer/**/*.test.tsx"
+          "<rootDir>/tests/renderer/**/*.test.{ts,tsx}"
         ],
         "setupFilesAfterEnv": [
           "@testing-library/jest-dom"
