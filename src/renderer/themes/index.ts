@@ -38,6 +38,11 @@ import { vampire } from './vampire'
 import { werewolf } from './werewolf'
 import { ghost } from './ghost'
 import { frankenstein } from './frankenstein'
+import { dragon } from './dragon'
+import { phoenix } from './phoenix'
+import { valkyrie } from './valkyrie'
+import { cerberus } from './cerberus'
+import { pegasus } from './pegasus'
 
 export const ANIMAL_THEMES: Theme[] = [
   raven, bat, panther, owl, viper, squid, beetle,
@@ -46,5 +51,6 @@ export const ANIMAL_THEMES: Theme[] = [
   chupacabra, bigfoot, mothman, kraken, wendigo,
   xenomorph, predator, sectoid, reaper, elite, ridley,
   tyranid, necron, bloodletter, horror, vampire, werewolf,
-  ghost, frankenstein
+  ghost, frankenstein, dragon, phoenix, valkyrie,
+  cerberus, pegasus
 ]
