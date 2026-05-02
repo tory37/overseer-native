@@ -83,6 +83,7 @@ export type KeybindingAction =
   | 'openDrawer'
   | 'openSettings'
   | 'openShortcuts'
+  | 'renameSession'
   | 'splitFocus'
   | 'splitFocusPrev'
   | 'splitOpenThreeWay'
@@ -120,6 +121,7 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   openDrawer:           { code: 'KeyE',        ctrl: true,  shift: true,  alt: false },
   openSettings:         { code: 'Comma',       ctrl: true,  shift: true,  alt: false },
   openShortcuts:        { code: 'Slash',        ctrl: true,  shift: true,  alt: false },
+  renameSession:        { code: 'KeyR',         ctrl: true,  shift: true,  alt: false },
   splitFocus:           { code: 'Backslash',   ctrl: true,  shift: true,  alt: false },
   splitFocusPrev:       { code: 'Backslash',   ctrl: true,  shift: true,  alt: true  },
   splitOpenThreeWay:    { code: 'Equal',        ctrl: true,  shift: true,  alt: false },
@@ -148,6 +150,7 @@ export const ACTION_LABELS: Record<KeybindingAction, string> = {
   openDrawer:           'Open Session List',
   openSettings:         'Open Settings',
   openShortcuts:        'Show Keyboard Shortcuts',
+  renameSession:        'Rename Active Session',
   splitFocus:           'Open / Focus Next Pane',
   splitFocusPrev:       'Focus Previous Pane',
   splitOpenThreeWay:    'Open 3-Way Split',
