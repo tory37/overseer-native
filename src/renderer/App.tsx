@@ -14,6 +14,7 @@ import { useCompanion } from './hooks/useCompanion'
 import { useThemeStore, BUILTIN_THEMES } from './store/theme'
 import { useSpritesStore } from './store/sprites'
 import { RenameSessionDialog } from './components/RenameSessionDialog'
+import { UpdateMessageModal } from './components/UpdateMessageModal'
 import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
@@ -30,8 +31,35 @@ export default function App() {
   const [spriteStudioEditId, setSpriteStudioEditId] = useState<string | null>(null)
   const [spritePanelVisible, setSpritePanelVisible] = useState(true)
   const [renamingSessionId,  setRenamingSessionId]  = useState<string | null>(null)
+  const [updateInfo,         setUpdateInfo]         = useState<{ version: string; features: string[] } | null>(null)
 
-  useEffect(() => { load(); loadThemeSettings(); loadSprites() }, [])
+  useEffect(() => { 
+    load()
+    loadThemeSettings()
+    loadSprites()
+    
+    // Check for version update message
+    const checkVersion = async () => {
+      const currentVersion = window.overseer.appVersion
+      const settings = await window.overseer.readUserSettings()
+      const lastSeen = settings?.lastSeenVersion
+      
+      if (currentVersion !== lastSeen) {
+        const changelog = await window.overseer.readChangelog()
+        const features = changelog[currentVersion]
+        if (features) {
+          setUpdateInfo({ version: currentVersion, features })
+        }
+      }
+    }
+    checkVersion()
+  }, [])
+
+  const handleCloseUpdateModal = async () => {
+    setUpdateInfo(null)
+    const settings = await window.overseer.readUserSettings() || {}
+    await window.overseer.writeUserSettings({ ...settings, lastSeenVersion: window.overseer.appVersion })
+  }
 
   const activeSession = sessions.find(s => s.id === activeSessionId)
 
@@ -216,6 +244,14 @@ export default function App() {
             setRenamingSessionId(null)
           }}
           onCancel={() => setRenamingSessionId(null)}
+        />
+      )}
+
+      {updateInfo && (
+        <UpdateMessageModal
+          version={updateInfo.version}
+          features={updateInfo.features}
+          onClose={handleCloseUpdateModal}
         />
       )}
 
