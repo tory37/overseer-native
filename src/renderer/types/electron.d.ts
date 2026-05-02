@@ -1,4 +1,4 @@
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus } from './ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus, PluginTool } from './ipc'
 
 declare global {
   interface Window {
@@ -45,6 +45,7 @@ declare global {
       appVersion: string
       openDataFolder: () => Promise<void>
       clearAndRestart: () => Promise<void>
+      getPlugins: () => Promise<PluginTool[]>
     }
   }
 }

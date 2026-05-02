@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC } from '../renderer/types/ipc'
-import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus } from '../renderer/types/ipc'
+import type { Session, CreateSessionOptions, GitCommandResult, DriftStatus, SyncResult, Keybindings, ThemeSettings, UpdateStatus, PluginTool } from '../renderer/types/ipc'
 
 contextBridge.exposeInMainWorld('overseer', {
   listSessions: (): Promise<Session[]> =>
@@ -157,4 +157,7 @@ contextBridge.exposeInMainWorld('overseer', {
   appVersion: process.env.OVERSEER_VERSION || '0.5.0',
   openDataFolder: () => ipcRenderer.invoke(IPC.DEV_OPEN_DATA_FOLDER),
   clearAndRestart: () => ipcRenderer.invoke(IPC.DEV_CLEAR_AND_RESTART),
+
+  getPlugins: (): Promise<PluginTool[]> =>
+    ipcRenderer.invoke(IPC.PLUGINS_GET),
 })

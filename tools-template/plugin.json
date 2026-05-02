@@ -1,0 +1,12 @@
+{
+  "name": "Overseer Git Tools",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "id": "git",
+      "name": "Git",
+      "icon": "git-branch",
+      "entry": "git.js"
+    }
+  ]
+}

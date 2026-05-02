@@ -1,7 +1,8 @@
 import React from 'react'
-import { GitPanel } from './GitPanel'
+import { ToolContainer } from './ToolContainer'
 import { SpritePanel } from './SpritePanel'
 import type { Session } from '../types/ipc'
+import type { ToolContext } from '../hooks/usePlugins'
 
 interface Props {
   activeSession: Session | undefined
@@ -12,6 +13,12 @@ interface Props {
 export function RightSidebar({ activeSession, spritePanelVisible, onOpenStudio }: Props) {
   if (!activeSession) return null
 
+  const context: ToolContext = {
+    version: 1,
+    cwd: activeSession.cwd,
+    sessionId: activeSession.id,
+  }
+
   return (
     <div style={{
       width: '260px',
@@ -21,7 +28,7 @@ export function RightSidebar({ activeSession, spritePanelVisible, onOpenStudio }
       flexDirection: 'column',
       overflow: 'hidden',
     }}>
-      <GitPanel cwd={activeSession.cwd} />
+      <ToolContainer context={context} />
       <SpritePanel
         sessionId={activeSession.id}
         spriteId={activeSession.spriteId ?? null}
