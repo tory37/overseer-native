@@ -72,7 +72,7 @@
       "source_file": "tests/renderer/useKeyboardShortcuts.test.tsx",
       "source_location": "L1",
       "id": "tests_renderer_usekeyboardshortcuts_test_tsx",
-      "community": 14,
+      "community": 15,
       "norm_label": "usekeyboardshortcuts.test.tsx"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "tests/renderer/useKeyboardShortcuts.test.tsx",
       "source_location": "L6",
       "id": "renderer_usekeyboardshortcuts_test_makehandlers",
-      "community": 14,
+      "community": 15,
       "norm_label": "makehandlers()"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "tests/renderer/SettingsModal.test.tsx",
       "source_location": "L1",
       "id": "tests_renderer_settingsmodal_test_tsx",
-      "community": 15,
+      "community": 16,
       "norm_label": "settingsmodal.test.tsx"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "tests/renderer/SettingsModal.test.tsx",
       "source_location": "L13",
       "id": "renderer_settingsmodal_test_setupmocks",
-      "community": 15,
+      "community": 16,
       "norm_label": "setupmocks()"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "tests/main/registry.test.ts",
       "source_location": "L1",
       "id": "tests_main_registry_test_ts",
-      "community": 16,
+      "community": 17,
       "norm_label": "registry.test.ts"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "tests/main/registry.test.ts",
       "source_location": "L12",
       "id": "main_registry_test_makesession",
-      "community": 16,
+      "community": 17,
       "norm_label": "makesession()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "tests/main/sync-service.test.ts",
       "source_location": "L1",
       "id": "tests_main_sync_service_test_ts",
-      "community": 17,
+      "community": 18,
       "norm_label": "sync-service.test.ts"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "tests/main/sync-service.test.ts",
       "source_location": "L16",
       "id": "main_sync_service_test_makeservice",
-      "community": 17,
+      "community": 18,
       "norm_label": "makeservice()"
     },
     {
@@ -306,7 +306,7 @@
       "source_file": "tests/main/pty-manager.test.ts",
       "source_location": "L1",
       "id": "tests_main_pty_manager_test_ts",
-      "community": 18,
+      "community": 19,
       "norm_label": "pty-manager.test.ts"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "tests/main/pty-manager.test.ts",
       "source_location": "L12",
       "id": "main_pty_manager_test_makesession",
-      "community": 18,
+      "community": 19,
       "norm_label": "makesession()"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "src/renderer/lib/render-avatar.ts",
       "source_location": "L1",
       "id": "src_renderer_lib_render_avatar_ts",
-      "community": 19,
+      "community": 20,
       "norm_label": "render-avatar.ts"
     },
     {
@@ -423,8 +423,413 @@
       "source_file": "src/renderer/lib/render-avatar.ts",
       "source_location": "L5",
       "id": "lib_render_avatar_renderavatar",
-      "community": 19,
+      "community": 20,
       "norm_label": "renderavatar()"
+    },
+    {
+      "label": "valkyrie.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/valkyrie.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_valkyrie_ts",
+      "community": 60,
+      "norm_label": "valkyrie.ts"
+    },
+    {
+      "label": "phoenix.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/phoenix.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_phoenix_ts",
+      "community": 61,
+      "norm_label": "phoenix.ts"
+    },
+    {
+      "label": "bat.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/bat.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_bat_ts",
+      "community": 62,
+      "norm_label": "bat.ts"
+    },
+    {
+      "label": "xenomorph.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/xenomorph.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_xenomorph_ts",
+      "community": 63,
+      "norm_label": "xenomorph.ts"
+    },
+    {
+      "label": "tiger.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/tiger.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_tiger_ts",
+      "community": 64,
+      "norm_label": "tiger.ts"
+    },
+    {
+      "label": "swan.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/swan.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_swan_ts",
+      "community": 65,
+      "norm_label": "swan.ts"
+    },
+    {
+      "label": "werewolf.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/werewolf.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_werewolf_ts",
+      "community": 66,
+      "norm_label": "werewolf.ts"
+    },
+    {
+      "label": "reaper.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/reaper.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_reaper_ts",
+      "community": 67,
+      "norm_label": "reaper.ts"
+    },
+    {
+      "label": "scorpion.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/scorpion.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_scorpion_ts",
+      "community": 68,
+      "norm_label": "scorpion.ts"
+    },
+    {
+      "label": "horror.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/horror.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_horror_ts",
+      "community": 69,
+      "norm_label": "horror.ts"
+    },
+    {
+      "label": "elite.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/elite.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_elite_ts",
+      "community": 70,
+      "norm_label": "elite.ts"
+    },
+    {
+      "label": "spider.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/spider.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_spider_ts",
+      "community": 71,
+      "norm_label": "spider.ts"
+    },
+    {
+      "label": "ghost.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/ghost.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_ghost_ts",
+      "community": 72,
+      "norm_label": "ghost.ts"
+    },
+    {
+      "label": "chupacabra.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/chupacabra.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_chupacabra_ts",
+      "community": 73,
+      "norm_label": "chupacabra.ts"
+    },
+    {
+      "label": "panther.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/panther.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_panther_ts",
+      "community": 74,
+      "norm_label": "panther.ts"
+    },
+    {
+      "label": "mothman.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/mothman.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_mothman_ts",
+      "community": 75,
+      "norm_label": "mothman.ts"
+    },
+    {
+      "label": "dragon.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/dragon.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_dragon_ts",
+      "community": 76,
+      "norm_label": "dragon.ts"
+    },
+    {
+      "label": "orca.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/orca.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_orca_ts",
+      "community": 77,
+      "norm_label": "orca.ts"
+    },
+    {
+      "label": "frankenstein.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/frankenstein.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_frankenstein_ts",
+      "community": 78,
+      "norm_label": "frankenstein.ts"
+    },
+    {
+      "label": "beetle.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/beetle.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_beetle_ts",
+      "community": 79,
+      "norm_label": "beetle.ts"
+    },
+    {
+      "label": "bee.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/bee.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_bee_ts",
+      "community": 80,
+      "norm_label": "bee.ts"
+    },
+    {
+      "label": "rabbit.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/rabbit.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_rabbit_ts",
+      "community": 81,
+      "norm_label": "rabbit.ts"
+    },
+    {
+      "label": "squid.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/squid.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_squid_ts",
+      "community": 82,
+      "norm_label": "squid.ts"
+    },
+    {
+      "label": "necron.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/necron.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_necron_ts",
+      "community": 83,
+      "norm_label": "necron.ts"
+    },
+    {
+      "label": "owl.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/owl.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_owl_ts",
+      "community": 84,
+      "norm_label": "owl.ts"
+    },
+    {
+      "label": "flamingo.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/flamingo.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_flamingo_ts",
+      "community": 85,
+      "norm_label": "flamingo.ts"
+    },
+    {
+      "label": "cerberus.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/cerberus.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_cerberus_ts",
+      "community": 86,
+      "norm_label": "cerberus.ts"
+    },
+    {
+      "label": "viper.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/viper.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_viper_ts",
+      "community": 87,
+      "norm_label": "viper.ts"
+    },
+    {
+      "label": "bigfoot.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/bigfoot.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_bigfoot_ts",
+      "community": 88,
+      "norm_label": "bigfoot.ts"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/index.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_index_ts",
+      "community": 89,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "ridley.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/ridley.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_ridley_ts",
+      "community": 90,
+      "norm_label": "ridley.ts"
+    },
+    {
+      "label": "predator.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/predator.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_predator_ts",
+      "community": 91,
+      "norm_label": "predator.ts"
+    },
+    {
+      "label": "tyranid.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/tyranid.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_tyranid_ts",
+      "community": 92,
+      "norm_label": "tyranid.ts"
+    },
+    {
+      "label": "crow.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/crow.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_crow_ts",
+      "community": 93,
+      "norm_label": "crow.ts"
+    },
+    {
+      "label": "sectoid.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/sectoid.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_sectoid_ts",
+      "community": 94,
+      "norm_label": "sectoid.ts"
+    },
+    {
+      "label": "kraken.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/kraken.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_kraken_ts",
+      "community": 95,
+      "norm_label": "kraken.ts"
+    },
+    {
+      "label": "moth.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/moth.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_moth_ts",
+      "community": 96,
+      "norm_label": "moth.ts"
+    },
+    {
+      "label": "wolf.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/wolf.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_wolf_ts",
+      "community": 97,
+      "norm_label": "wolf.ts"
+    },
+    {
+      "label": "wendigo.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/wendigo.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_wendigo_ts",
+      "community": 98,
+      "norm_label": "wendigo.ts"
+    },
+    {
+      "label": "bloodletter.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/bloodletter.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_bloodletter_ts",
+      "community": 99,
+      "norm_label": "bloodletter.ts"
+    },
+    {
+      "label": "vampire.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/vampire.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_vampire_ts",
+      "community": 100,
+      "norm_label": "vampire.ts"
+    },
+    {
+      "label": "dolphin.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/dolphin.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_dolphin_ts",
+      "community": 101,
+      "norm_label": "dolphin.ts"
+    },
+    {
+      "label": "raven.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/raven.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_raven_ts",
+      "community": 102,
+      "norm_label": "raven.ts"
+    },
+    {
+      "label": "pegasus.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/pegasus.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_pegasus_ts",
+      "community": 103,
+      "norm_label": "pegasus.ts"
+    },
+    {
+      "label": "fox.ts",
+      "file_type": "code",
+      "source_file": "src/renderer/themes/fox.ts",
+      "source_location": "L1",
+      "id": "src_renderer_themes_fox_ts",
+      "community": 104,
+      "norm_label": "fox.ts"
     },
     {
       "label": "theme.ts",
@@ -432,7 +837,7 @@
       "source_file": "src/renderer/store/theme.ts",
       "source_location": "L1",
       "id": "src_renderer_store_theme_ts",
-      "community": 60,
+      "community": 105,
       "norm_label": "theme.ts"
     },
     {
@@ -441,7 +846,7 @@
       "source_file": "src/renderer/store/sessions.ts",
       "source_location": "L1",
       "id": "src_renderer_store_sessions_ts",
-      "community": 61,
+      "community": 106,
       "norm_label": "sessions.ts"
     },
     {
@@ -450,7 +855,7 @@
       "source_file": "src/renderer/store/sprites.ts",
       "source_location": "L1",
       "id": "src_renderer_store_sprites_ts",
-      "community": 62,
+      "community": 107,
       "norm_label": "sprites.ts"
     },
     {
@@ -466,7 +871,7 @@
       "label": "formatKeybinding()",
       "file_type": "code",
       "source_file": "src/renderer/types/ipc.ts",
-      "source_location": "L148",
+      "source_location": "L176",
       "id": "types_ipc_formatkeybinding",
       "community": 1,
       "norm_label": "formatkeybinding()"
@@ -475,7 +880,7 @@
       "label": "matchKeybinding()",
       "file_type": "code",
       "source_file": "src/renderer/types/ipc.ts",
-      "source_location": "L157",
+      "source_location": "L185",
       "id": "types_ipc_matchkeybinding",
       "community": 1,
       "norm_label": "matchkeybinding()"
@@ -486,7 +891,7 @@
       "source_file": "src/renderer/types/electron.d.ts",
       "source_location": "L1",
       "id": "src_renderer_types_electron_d_ts",
-      "community": 63,
+      "community": 108,
       "norm_label": "electron.d.ts"
     },
     {
@@ -495,7 +900,7 @@
       "source_file": "src/renderer/types/css.d.ts",
       "source_location": "L1",
       "id": "src_renderer_types_css_d_ts",
-      "community": 64,
+      "community": 109,
       "norm_label": "css.d.ts"
     },
     {
@@ -504,7 +909,7 @@
       "source_file": "src/renderer/components/TerminalInstance.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_terminalinstance_tsx",
-      "community": 20,
+      "community": 21,
       "norm_label": "terminalinstance.tsx"
     },
     {
@@ -513,7 +918,7 @@
       "source_file": "src/renderer/components/TerminalInstance.tsx",
       "source_location": "L16",
       "id": "components_terminalinstance_terminalinstance",
-      "community": 20,
+      "community": 21,
       "norm_label": "terminalinstance()"
     },
     {
@@ -522,7 +927,7 @@
       "source_file": "src/renderer/components/NewSessionDialog.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_newsessiondialog_tsx",
-      "community": 12,
+      "community": 13,
       "norm_label": "newsessiondialog.tsx"
     },
     {
@@ -531,7 +936,7 @@
       "source_file": "src/renderer/components/NewSessionDialog.tsx",
       "source_location": "L28",
       "id": "components_newsessiondialog_handlebrowse",
-      "community": 12,
+      "community": 13,
       "norm_label": "handlebrowse()"
     },
     {
@@ -540,7 +945,7 @@
       "source_file": "src/renderer/components/NewSessionDialog.tsx",
       "source_location": "L33",
       "id": "components_newsessiondialog_handlesubmit",
-      "community": 12,
+      "community": 13,
       "norm_label": "handlesubmit()"
     },
     {
@@ -549,7 +954,7 @@
       "source_file": "src/renderer/components/TerminalPane.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_terminalpane_tsx",
-      "community": 21,
+      "community": 22,
       "norm_label": "terminalpane.tsx"
     },
     {
@@ -558,7 +963,7 @@
       "source_file": "src/renderer/components/TerminalPane.tsx",
       "source_location": "L63",
       "id": "components_terminalpane_handlemousedown",
-      "community": 21,
+      "community": 22,
       "norm_label": "handlemousedown()"
     },
     {
@@ -567,7 +972,7 @@
       "source_file": "src/renderer/components/CompanionTerminal.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_companionterminal_tsx",
-      "community": 22,
+      "community": 23,
       "norm_label": "companionterminal.tsx"
     },
     {
@@ -576,7 +981,7 @@
       "source_file": "src/renderer/components/CompanionTerminal.tsx",
       "source_location": "L16",
       "id": "components_companionterminal_companionterminal",
-      "community": 22,
+      "community": 23,
       "norm_label": "companionterminal()"
     },
     {
@@ -585,7 +990,7 @@
       "source_file": "src/renderer/components/RightSidebar.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_rightsidebar_tsx",
-      "community": 65,
+      "community": 110,
       "norm_label": "rightsidebar.tsx"
     },
     {
@@ -693,7 +1098,7 @@
       "source_file": "src/renderer/components/GitPanel.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_gitpanel_tsx",
-      "community": 23,
+      "community": 24,
       "norm_label": "gitpanel.tsx"
     },
     {
@@ -702,7 +1107,7 @@
       "source_file": "src/renderer/components/GitPanel.tsx",
       "source_location": "L14",
       "id": "components_gitpanel_run",
-      "community": 23,
+      "community": 24,
       "norm_label": "run()"
     },
     {
@@ -711,7 +1116,7 @@
       "source_file": "src/renderer/components/SessionDrawer.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_sessiondrawer_tsx",
-      "community": 13,
+      "community": 14,
       "norm_label": "sessiondrawer.tsx"
     },
     {
@@ -720,7 +1125,7 @@
       "source_file": "src/renderer/components/SessionDrawer.tsx",
       "source_location": "L16",
       "id": "components_sessiondrawer_handlekeydown",
-      "community": 13,
+      "community": 14,
       "norm_label": "handlekeydown()"
     },
     {
@@ -729,7 +1134,7 @@
       "source_file": "src/renderer/components/SessionDrawer.tsx",
       "source_location": "L55",
       "id": "components_sessiondrawer_itemstyle",
-      "community": 13,
+      "community": 14,
       "norm_label": "itemstyle()"
     },
     {
@@ -738,17 +1143,35 @@
       "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_keyboardshortcutsmodal_tsx",
-      "community": 24,
+      "community": 12,
       "norm_label": "keyboardshortcutsmodal.tsx"
+    },
+    {
+      "label": "handleCapture()",
+      "file_type": "code",
+      "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
+      "source_location": "L47",
+      "id": "components_keyboardshortcutsmodal_handlecapture",
+      "community": 12,
+      "norm_label": "handlecapture()"
     },
     {
       "label": "handleKeyDown()",
       "file_type": "code",
       "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
-      "source_location": "L67",
+      "source_location": "L63",
       "id": "components_keyboardshortcutsmodal_handlekeydown",
-      "community": 24,
+      "community": 12,
       "norm_label": "handlekeydown()"
+    },
+    {
+      "label": "handleSave()",
+      "file_type": "code",
+      "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
+      "source_location": "L71",
+      "id": "components_keyboardshortcutsmodal_handlesave",
+      "community": 12,
+      "norm_label": "handlesave()"
     },
     {
       "label": "UpdateBanner.tsx",
@@ -756,7 +1179,7 @@
       "source_file": "src/renderer/components/UpdateBanner.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_updatebanner_tsx",
-      "community": 66,
+      "community": 111,
       "norm_label": "updatebanner.tsx"
     },
     {
@@ -783,7 +1206,7 @@
       "source_file": "src/renderer/components/TabBar.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_tabbar_tsx",
-      "community": 67,
+      "community": 112,
       "norm_label": "tabbar.tsx"
     },
     {
@@ -799,43 +1222,25 @@
       "label": "handleGlobalKeyDown()",
       "file_type": "code",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L62",
+      "source_location": "L28",
       "id": "components_settingsmodal_handleglobalkeydown",
       "community": 1,
       "norm_label": "handleglobalkeydown()"
     },
     {
-      "label": "handleCapture()",
-      "file_type": "code",
-      "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L78",
-      "id": "components_settingsmodal_handlecapture",
-      "community": 1,
-      "norm_label": "handlecapture()"
-    },
-    {
       "label": "handleSync()",
       "file_type": "code",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L93",
+      "source_location": "L41",
       "id": "components_settingsmodal_handlesync",
       "community": 1,
       "norm_label": "handlesync()"
     },
     {
-      "label": "handleSaveKb()",
-      "file_type": "code",
-      "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L106",
-      "id": "components_settingsmodal_handlesavekb",
-      "community": 1,
-      "norm_label": "handlesavekb()"
-    },
-    {
       "label": "handleCheckUpdates()",
       "file_type": "code",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L112",
+      "source_location": "L54",
       "id": "components_settingsmodal_handlecheckupdates",
       "community": 1,
       "norm_label": "handlecheckupdates()"
@@ -844,7 +1249,7 @@
       "label": "formatTimestamp()",
       "file_type": "code",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L116",
+      "source_location": "L58",
       "id": "components_settingsmodal_formattimestamp",
       "community": 1,
       "norm_label": "formattimestamp()"
@@ -1350,7 +1755,7 @@
       "source_file": "src/main/session-service/wrapper-templates.ts",
       "source_location": "L1",
       "id": "src_main_session_service_wrapper_templates_ts",
-      "community": 68,
+      "community": 113,
       "norm_label": "wrapper-templates.ts"
     },
     {
@@ -1797,7 +2202,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/types/ipc.ts",
-      "source_location": "L148",
+      "source_location": "L176",
       "weight": 1.0,
       "_src": "src_renderer_types_ipc_ts",
       "_tgt": "types_ipc_formatkeybinding",
@@ -1809,7 +2214,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/types/ipc.ts",
-      "source_location": "L157",
+      "source_location": "L185",
       "weight": 1.0,
       "_src": "src_renderer_types_ipc_ts",
       "_tgt": "types_ipc_matchkeybinding",
@@ -2061,12 +2466,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
-      "source_location": "L67",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_src": "src_renderer_components_keyboardshortcutsmodal_tsx",
+      "_tgt": "components_keyboardshortcutsmodal_handlecapture",
+      "source": "src_renderer_components_keyboardshortcutsmodal_tsx",
+      "target": "components_keyboardshortcutsmodal_handlecapture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
+      "source_location": "L63",
       "weight": 1.0,
       "_src": "src_renderer_components_keyboardshortcutsmodal_tsx",
       "_tgt": "components_keyboardshortcutsmodal_handlekeydown",
       "source": "src_renderer_components_keyboardshortcutsmodal_tsx",
       "target": "components_keyboardshortcutsmodal_handlekeydown",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/renderer/components/KeyboardShortcutsModal.tsx",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_src": "src_renderer_components_keyboardshortcutsmodal_tsx",
+      "_tgt": "components_keyboardshortcutsmodal_handlesave",
+      "source": "src_renderer_components_keyboardshortcutsmodal_tsx",
+      "target": "components_keyboardshortcutsmodal_handlesave",
       "confidence_score": 1.0
     },
     {
@@ -2085,7 +2514,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L62",
+      "source_location": "L28",
       "weight": 1.0,
       "_src": "src_renderer_components_settingsmodal_tsx",
       "_tgt": "components_settingsmodal_handleglobalkeydown",
@@ -2097,19 +2526,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L78",
-      "weight": 1.0,
-      "_src": "src_renderer_components_settingsmodal_tsx",
-      "_tgt": "components_settingsmodal_handlecapture",
-      "source": "src_renderer_components_settingsmodal_tsx",
-      "target": "components_settingsmodal_handlecapture",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L93",
+      "source_location": "L41",
       "weight": 1.0,
       "_src": "src_renderer_components_settingsmodal_tsx",
       "_tgt": "components_settingsmodal_handlesync",
@@ -2121,19 +2538,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L106",
-      "weight": 1.0,
-      "_src": "src_renderer_components_settingsmodal_tsx",
-      "_tgt": "components_settingsmodal_handlesavekb",
-      "source": "src_renderer_components_settingsmodal_tsx",
-      "target": "components_settingsmodal_handlesavekb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L112",
+      "source_location": "L54",
       "weight": 1.0,
       "_src": "src_renderer_components_settingsmodal_tsx",
       "_tgt": "components_settingsmodal_handlecheckupdates",
@@ -2145,7 +2550,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/renderer/components/SettingsModal.tsx",
-      "source_location": "L116",
+      "source_location": "L58",
       "weight": 1.0,
       "_src": "src_renderer_components_settingsmodal_tsx",
       "_tgt": "components_settingsmodal_formattimestamp",

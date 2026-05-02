@@ -1,11 +1,11 @@
 # Graph Report - overseer  (2026-05-01)
 
 ## Corpus Check
-- 73 files · ~40,524 words
+- 118 files · ~47,946 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 184 nodes · 139 edges · 10 communities detected
+- 229 nodes · 139 edges · 10 communities detected
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -46,7 +46,7 @@ Cohesion: 0.16
 Nodes (3): handleSave(), readAgentConfig(), SessionService
 
 ### Community 1 - "Community 1"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (4): handleGlobalKeyDown(), handleSync(), UpdateService, matchKeybinding()
 
 ### Community 3 - "Community 3"
@@ -101,8 +101,8 @@ Nodes (1): ScrollbackManager
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `SessionService` connect `Community 0` to `Community 5`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `handleSave()` connect `Community 0` to `Community 2`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.12 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13 - nodes in this community are weakly interconnected._
