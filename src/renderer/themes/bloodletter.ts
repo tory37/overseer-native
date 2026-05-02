@@ -12,9 +12,9 @@ export const bloodletter: Theme = {
     'bg-terminal': '#2a0000',
     'text-main': '#ffd700',
     'text-muted': '#cc0000',
-    'accent': '#8a0303',
+    'accent': '#ff4d4d',
     'border': '#4a0000',
     'terminal-bg': '#2a0000',
-    'terminal-fg': '#8a0303'
+    'terminal-fg': '#ff4d4d'
   }
 }
