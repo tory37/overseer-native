@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
+import { getSmartSelectionText } from '../lib/terminal-utils'
 import { matchKeybinding } from '../types/ipc'
 import type { Session, Keybindings, Theme } from '../types/ipc'
 
@@ -97,7 +98,7 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
     const unsubCopy = window.overseer.onTerminalCopy(() => {
       if (!focusedRef.current || isDisposed) return
-      const sel = term.getSelection()
+      const sel = getSmartSelectionText(term)
       if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
     })
 
