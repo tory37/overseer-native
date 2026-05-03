@@ -1,3 +1,6 @@
+## Configuration & Workflow
+- **Disabled Skills:** Do NOT use the `using-git-worktrees` skill. It is considered too token-heavy and should be avoided.
+
 # Overseer Architecture Map
 
 ## 1. App Summary
