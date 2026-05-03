@@ -44,3 +44,16 @@ Overseer is an Electron-based terminal manager featuring a native PTY backend, a
 - **Conventions:**
   - Never bypass the typed IPC interface. All new channels must be added to `src/renderer/types/ipc.ts`.
   - Prefer explicit functional composition and Zustand over complex state threading.
+
+## 7. Documentation Maintenance & Auto-Updating
+
+These `AGENTS.md` files serve as critical architectural compasses, not dynamic changelogs. They should **NOT** be automatically updated or maintained during routine bug fixes, feature additions, or minor refactoring.
+
+**When to update:**
+You should only consider updating these files on an **absolutely need-only basis**, specifically when:
+1. **Significant Architectural Shifts:** A core technology, framework, or architectural boundary has been fundamentally changed or introduced.
+2. **New Subsystems:** A large, complex new directory or service has been created that requires its own strategic indexing and rules.
+3. **Obsolete Patterns:** An explicitly documented convention, rule, or boundary is no longer accurate and risks misleading future development.
+
+**How to update:**
+When these criteria are met, use careful consideration to modify the files. Ensure any updates maintain the concise, high-signal nature of the document without cluttering it with implementation details or transient information.
