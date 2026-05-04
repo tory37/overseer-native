@@ -93,6 +93,7 @@ export type KeybindingAction =
   | 'splitToggleDirection'
   | 'toggleSpritePanel'
   | 'openSpriteStudio'
+  | 'randomTheme'
 
 export type UpdateStatus = 
   | { type: 'idle' }
@@ -131,6 +132,7 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   splitToggleDirection: { code: 'Backquote',    ctrl: true,  shift: true,  alt: false },
   toggleSpritePanel:    { code: 'KeyS',         ctrl: true,  shift: true,  alt: false },
   openSpriteStudio:     { code: 'KeyP',         ctrl: true,  shift: true,  alt: false },
+  randomTheme:          { code: 'KeyT',         ctrl: true,  shift: true,  alt: false },
 }
 
 export const ACTION_LABELS: Record<KeybindingAction, string> = {
@@ -160,6 +162,7 @@ export const ACTION_LABELS: Record<KeybindingAction, string> = {
   splitToggleDirection: 'Toggle Split Direction',
   toggleSpritePanel:    'Toggle Sprite Panel',
   openSpriteStudio:     'Open Sprite Studio',
+  randomTheme:          'Apply Random Theme',
 }
 
 const CODE_LABELS: Record<string, string> = {
