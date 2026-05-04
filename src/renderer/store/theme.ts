@@ -47,6 +47,7 @@ interface ThemeState {
   activeThemeId: string
   customThemes: Theme[]
   setActiveTheme: (id: string) => void
+  setRandomTheme: () => void
   loadSettings: () => Promise<void>
 }
 
@@ -57,6 +58,20 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     set({ activeThemeId: id })
     const { activeThemeId, customThemes } = get()
     window.overseer?.writeTheme?.({ activeThemeId, customThemes })
+  },
+  setRandomTheme: () => {
+    const { activeThemeId, customThemes } = get()
+    const allThemes = [...BUILTIN_THEMES, ...customThemes]
+    if (allThemes.length <= 1) return
+
+    let nextThemeId = activeThemeId
+    for (let i = 0; i < 10; i++) {
+      const randomIndex = Math.floor(Math.random() * allThemes.length)
+      nextThemeId = allThemes[randomIndex].id
+      if (nextThemeId !== activeThemeId) break
+    }
+
+    get().setActiveTheme(nextThemeId)
   },
   loadSettings: async () => {
     if (!window.overseer?.readTheme) return
