@@ -1,0 +1,14 @@
+{
+  "title": "Sprite Supression",
+  "main_idea": "Supres the sprite system, and cleanup some needed areas.",
+  "reason": "The current architecture is incredibly finicky, and it's supposed to just be a gimmick that is costing development time and stability.",
+
+  "requirements": [
+    "Remove entire system that interjects Overseer information into the agents, we won't need it.",
+    "Complteley supress the Sprite system.  Remove all references, and comment why it's removed in the sprite source files."
+  ],
+
+  "ui_notes": [
+    "Extend the tools side bar to be full height when removing the sprite section."
+  ]
+}
