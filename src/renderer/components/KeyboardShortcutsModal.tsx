@@ -27,7 +27,7 @@ const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
   },
   {
     title: 'GENERAL',
-    actions: ['openDrawer', 'openSettings', 'openShortcuts']
+    actions: ['openDrawer', 'openSettings', 'openShortcuts', 'randomTheme']
   },
   {
     title: 'SPRITE',

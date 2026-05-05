@@ -19,7 +19,7 @@ import type { CreateSessionOptions } from './types/ipc'
 
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, updateSession, setActive } = useSessionStore()
-  const { activeThemeId, customThemes, loadSettings: loadThemeSettings } = useThemeStore()
+  const { activeThemeId, customThemes, loadSettings: loadThemeSettings, setRandomTheme } = useThemeStore()
   const { loadSprites } = useSpritesStore()
 
   const [showNewDialog,      setShowNewDialog]      = useState(false)
@@ -138,6 +138,7 @@ export default function App() {
       if (!prev) setSpriteStudioEditId(null)
       return !prev
     }),
+    onRandomTheme: setRandomTheme,
   })
 
   const handleCreate = async (options: CreateSessionOptions) => {
