@@ -1,4 +1,5 @@
-import { BUILTIN_THEMES } from '../../src/renderer/store/theme'
+import { renderHook, act } from '@testing-library/react'
+import { BUILTIN_THEMES, useThemeStore } from '../../src/renderer/store/theme'
 
 describe('BUILTIN_THEMES', () => {
   test('contains all expected themes', () => {
@@ -53,5 +54,19 @@ describe('BUILTIN_THEMES', () => {
     expect(raven?.name).toBe('Raven')
     expect(raven?.colors['bg-main']).toBeDefined()
     expect(raven?.colors['accent']).toBeDefined()
+  })
+})
+
+describe('useThemeStore', () => {
+  it('changes theme on setRandomTheme', () => {
+    const { result } = renderHook(() => useThemeStore())
+    const initialThemeId = result.current.activeThemeId
+
+    act(() => {
+      result.current.setRandomTheme()
+    })
+
+    // Since there are many built-in themes, it's highly likely to change
+    expect(result.current.activeThemeId).not.toBe(initialThemeId)
   })
 })

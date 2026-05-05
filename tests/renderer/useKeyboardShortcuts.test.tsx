@@ -23,6 +23,7 @@ function makeHandlers(): ShortcutHandlers {
     onSplitToggleDirection: jest.fn(),
     onToggleSpritePanel:   jest.fn(),
     onOpenSpriteStudio:    jest.fn(),
+    onRandomTheme:         jest.fn(),
   }
 }
 
@@ -207,4 +208,13 @@ test('fires onSplitSwapSecondary for Ctrl+Shift+J', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyJ', ctrlKey: true, shiftKey: true, bubbles: true }))
   })
   expect(handlers.onSplitSwapSecondary).toHaveBeenCalledTimes(1)
+})
+
+test('fires onRandomTheme for Ctrl+Shift+T', () => {
+  const handlers = makeHandlers()
+  renderHook(() => useKeyboardShortcuts(handlers))
+  act(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyT', ctrlKey: true, shiftKey: true, bubbles: true }))
+  })
+  expect(handlers.onRandomTheme).toHaveBeenCalledTimes(1)
 })
