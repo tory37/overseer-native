@@ -17,7 +17,6 @@ function makeSession(overrides: Partial<Session> = {}): Session {
     cwd: '/tmp',
     envVars: {},
     scrollbackPath: '/tmp/test-id.log',
-    spriteId: null,
     ...overrides,
   }
 }

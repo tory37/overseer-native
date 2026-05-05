@@ -6,8 +6,11 @@ export interface AgentConfig {
   instructions?: string
 }
 
-const CORE_SCAFFOLDING = `You are an AI assistant running inside Overseer, a terminal management application. 
-Overseer provides a multi-tab terminal environment with a native PTY shell, an integrated Git tool panel in the sidebar, and a character companion (Sprite) that visually represents your persona.`.trim()
+// SPRITE SYSTEM SUPPRESSED
+// CORE_SCAFFOLDING was removed along with the Overseer context-injection system.
+// Hardcoded Overseer/Sprite persona strings were too fragile and cost more than
+// they provided. User-defined instructions from ~/.overseer are still respected.
+// See feat/sprite-suppression.
 
 export function readAgentConfig(
   agentType: string,
@@ -18,7 +21,7 @@ export function readAgentConfig(
   const mdPath = path.join(baseDir, `${agentType.toUpperCase()}.md`)
 
   let env: Record<string, string> = {}
-  let instructions = CORE_SCAFFOLDING
+  let instructions = ''
 
   // 1. Load from JSON config
   if (fs.existsSync(configPath)) {
@@ -26,7 +29,7 @@ export function readAgentConfig(
       const raw = JSON.parse(fs.readFileSync(configPath, 'utf8'))
       env = (raw.env && typeof raw.env === 'object') ? raw.env : {}
       if (typeof raw.instructions === 'string' && raw.instructions.trim()) {
-        instructions = `${instructions}\n\n${raw.instructions}`
+        instructions = raw.instructions
       }
     } catch {
       // ignore parse errors
@@ -38,7 +41,7 @@ export function readAgentConfig(
     try {
       const mdContent = fs.readFileSync(mdPath, 'utf8')
       if (mdContent.trim()) {
-        instructions = `${instructions}\n\n${mdContent}`
+        instructions = instructions ? `${instructions}\n\n${mdContent}` : mdContent
       }
     } catch {
       // ignore read errors

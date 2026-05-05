@@ -1,15 +1,15 @@
 import React from 'react'
 import { GitPanel } from './GitPanel'
-import { SpritePanel } from './SpritePanel'
 import type { Session } from '../types/ipc'
+
+// SPRITE SYSTEM SUPPRESSED: SpritePanel import and rendering removed.
+// GitPanel now occupies full sidebar height. See feat/sprite-suppression.
 
 interface Props {
   activeSession: Session | undefined
-  spritePanelVisible: boolean
-  onOpenStudio: () => void
 }
 
-export function RightSidebar({ activeSession, spritePanelVisible, onOpenStudio }: Props) {
+export function RightSidebar({ activeSession }: Props) {
   if (!activeSession) return null
 
   return (
@@ -22,13 +22,6 @@ export function RightSidebar({ activeSession, spritePanelVisible, onOpenStudio }
       overflow: 'hidden',
     }}>
       <GitPanel cwd={activeSession.cwd} />
-      <SpritePanel
-        sessionId={activeSession.id}
-        spriteId={activeSession.spriteId ?? null}
-        animationState="idle"
-        visible={spritePanelVisible}
-        onOpenStudio={onOpenStudio}
-      />
     </div>
   )
 }

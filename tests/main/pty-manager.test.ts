@@ -16,8 +16,7 @@ function makeSession(id: string): Session {
     agentType: 'shell',
     cwd: os.tmpdir(),
     envVars: {},
-    scrollbackPath: path.join(tmpDir, `${id}.log`),
-    spriteId: null,
+    scrollbackPath: path.join(tmpDir, `${id}.log`)
   }
 }
 
