@@ -67,12 +67,6 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
         if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
         return false
       }
-      if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyV') {
-        window.overseer.readFromClipboard().then(text => {
-          if (text) window.overseer.sendCompanionInput(companionId, text)
-        }).catch(() => {})
-        return false
-      }
       return !matchKeybinding(keybindingsRef.current, e)
     })
 
@@ -94,9 +88,7 @@ export function CompanionTerminal({ companionId, focused, visible, keybindings, 
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
       if (!focusedRef.current) return
-      window.overseer.readFromClipboard().then(text => {
-        if (text) window.overseer.sendCompanionInput(companionId, text)
-      }).catch(() => {})
+      document.execCommand('paste')
     })
 
     const unsubscribeData = window.overseer.onCompanionData((id, data) => {

@@ -77,12 +77,6 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
         if (sel) window.overseer.copyToClipboard(sel).catch(() => {})
         return false
       }
-      if (e.type === 'keydown' && e.ctrlKey && e.shiftKey && e.code === 'KeyV') {
-        window.overseer.readFromClipboard().then(text => {
-          if (text && !isReplayingRef.current && !isDisposed) window.overseer.sendInput(session.id, text)
-        }).catch(() => {})
-        return false
-      }
       return !matchKeybinding(keybindingsRef.current, e)
     })
 
@@ -104,9 +98,11 @@ export function TerminalInstance({ session, focused, visible, keybindings, activ
 
     const unsubPaste = window.overseer.onTerminalPaste(() => {
       if (!focusedRef.current || isDisposed) return
-      window.overseer.readFromClipboard().then(text => {
-        if (text && !isReplayingRef.current && !isDisposed) window.overseer.sendInput(session.id, text)
-      }).catch(() => {})
+      // We don't manually call term.paste here anymore because xterm.js handles the paste event
+      // when the context menu item is clicked if we let the default behavior through,
+      // or we can rely on the browser's native paste event which xterm listens to.
+      // However, Electron's context menu 'Paste' needs to trigger a real paste event.
+      document.execCommand('paste')
     })
 
     const unsubscribe = window.overseer.onPtyData(session.id, (data) => {
