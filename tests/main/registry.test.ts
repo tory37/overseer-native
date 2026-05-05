@@ -15,7 +15,6 @@ function makeSession(overrides: Partial<Session> = {}): Session {
     name: 'test',
     agentType: 'shell',
     cwd: '/tmp',
-    envVars: {},
     scrollbackPath: '/tmp/test-id.log',
     ...overrides,
   }

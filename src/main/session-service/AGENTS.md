@@ -8,7 +8,6 @@ This directory (`src/main/session-service/`) handles the core terminal PTY manag
 - **`registry.ts` (SessionRegistry):** Persists session metadata to disk in the user's `.overseer` directory.
 - **`pty-manager.ts` (PtyManager):** Manages `node-pty` processes, spawning shells, and mapping PTY instances to session IDs.
 - **`scrollback.ts` (ScrollbackManager):** Buffers shell output to retain history before the UI connects or for state restoration.
-- **`agent-config.ts` & `wrapper-templates.ts`:** Handles configurations for AI agents running within the terminal and injects wrapper scripts (e.g., Claude, Gemini) to intercept specific output.
 
 ## Rules & Conventions
 

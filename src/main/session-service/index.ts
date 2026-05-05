@@ -2,8 +2,6 @@ import { randomUUID } from 'crypto'
 import { SessionRegistry } from './registry'
 import { PtyManager } from './pty-manager'
 import { ScrollbackManager } from './scrollback'
-import { readAgentConfig } from './agent-config'
-import { CLAUDE_WRAPPER, GEMINI_WRAPPER } from './wrapper-templates'
 import type { Session, CreateSessionOptions } from '../../renderer/types/ipc'
 import os from 'os'
 import path from 'path'
@@ -23,7 +21,7 @@ export class SessionService {
     this.baseDir = baseDir || path.join(os.homedir(), '.overseer')
     this.registry = new SessionRegistry(path.join(this.baseDir, 'sessions'))
     this.ptyManager = new PtyManager()
-    
+
     this.purgeTestSessions()
     this.sweepOrphanedDirectories()
   }
@@ -38,10 +36,10 @@ export class SessionService {
   private sweepOrphanedDirectories(): void {
     const sessionsDir = path.join(this.baseDir, 'sessions')
     if (!fs.existsSync(sessionsDir)) return
-    
+
     const registeredIds = new Set(this.registry.list().map(s => s.id))
     const items = fs.readdirSync(sessionsDir)
-    
+
     for (const item of items) {
       const fullPath = path.join(sessionsDir, item)
       if (fs.statSync(fullPath).isDirectory() && !registeredIds.has(item)) {
@@ -67,75 +65,20 @@ export class SessionService {
 
   create(options: CreateSessionOptions): Session {
     const id = randomUUID()
-    const config = readAgentConfig(options.agentType, this.baseDir)
-    
+
     const session: Session = {
       id,
       name: options.name,
       agentType: options.agentType,
       cwd: options.cwd || os.homedir(),
-      envVars: config.env,
-      instructions: config.instructions,
       scrollbackPath: path.join(this.baseDir, 'sessions', id, 'scrollback.log'),
       isTest: options.isTest || false,
     }
 
+    fs.mkdirSync(path.dirname(session.scrollbackPath), { recursive: true })
     this.registry.add(session)
     this.spawnPty(session)
     return session
-  }
-
-  private ensureSessionEnvironment(session: Session): Record<string, string> {
-    const sessionDir = path.join(this.baseDir, 'sessions', session.id)
-    const binDir = path.join(sessionDir, 'bin')
-    
-    if (!fs.existsSync(binDir)) {
-      fs.mkdirSync(binDir, { recursive: true })
-    }
-
-    // Always update context.json with current session state
-    const contextPath = path.join(sessionDir, 'context.json')
-
-    fs.writeFileSync(contextPath, JSON.stringify({
-      instructions: session.instructions || '',
-    }, null, 2))
-
-    // Ensure wrappers exist
-    fs.writeFileSync(path.join(binDir, 'claude'), CLAUDE_WRAPPER, { mode: 0o755 })
-    fs.writeFileSync(path.join(binDir, 'gemini'), GEMINI_WRAPPER, { mode: 0o755 })
-
-    const env = { ...process.env, ...session.envVars }
-    env['OVERSEER_SESSION_DIR'] = sessionDir
-    env['PATH'] = `${binDir}:${env['PATH'] || process.env.PATH}`
-
-    // Special handling for Zsh to prevent ~/.zshrc from overriding our PATH
-    if (process.env.SHELL?.includes('zsh')) {
-      env['ZDOTDIR'] = sessionDir
-      
-      const home = os.homedir()
-      const files = ['.zshenv', '.zprofile', '.zshrc', '.zlogin']
-      
-      for (const file of files) {
-        const dotFile = path.join(sessionDir, file)
-        const originalFile = path.join(home, file)
-        
-        let content = ''
-        if (fs.existsSync(originalFile)) {
-          content += `source "${originalFile}"\n`
-        }
-        
-        if (file === '.zshrc') {
-          // Re-apply our PATH at the very end of zsh initialization
-          content += `export PATH="${binDir}:$PATH"\n`
-        }
-        
-        if (content) {
-          fs.writeFileSync(dotFile, content)
-        }
-      }
-    }
-    
-    return env as Record<string, string>
   }
 
   updateSession(sessionId: string, partial: Partial<Session>): void {
@@ -159,7 +102,7 @@ export class SessionService {
   kill(sessionId: string): void {
     this.ptyManager.kill(sessionId)
     this.registry.remove(sessionId)
-    
+
     const sessionDir = path.join(this.baseDir, 'sessions', sessionId)
     if (fs.existsSync(sessionDir)) {
       fs.rmSync(sessionDir, { recursive: true, force: true })
@@ -168,13 +111,6 @@ export class SessionService {
 
   restoreAll(): void {
     for (const session of this.registry.list()) {
-      // Refresh instructions from config on restore
-      const config = readAgentConfig(session.agentType, this.baseDir)
-      if (config.instructions && !session.instructions) {
-        session.instructions = config.instructions
-        this.registry.update(session.id, { instructions: session.instructions })
-      }
-
       if (!this.ptyManager.has(session.id)) {
         this.spawnPty(session)
       }
@@ -182,13 +118,11 @@ export class SessionService {
   }
 
   private spawnPty(session: Session): void {
-    const env = this.ensureSessionEnvironment(session)
     this.ptyManager.spawn(
       session,
-      env,
+      process.env as Record<string, string>,
       (data) => { this.onDataCallback?.(session.id, data) },
       (err) => { this.onErrorCallback?.(session.id, err) }
     )
   }
 }
-

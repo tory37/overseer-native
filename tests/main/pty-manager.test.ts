@@ -15,7 +15,6 @@ function makeSession(id: string): Session {
     name: 'test',
     agentType: 'shell',
     cwd: os.tmpdir(),
-    envVars: {},
     scrollbackPath: path.join(tmpDir, `${id}.log`)
   }
 }
