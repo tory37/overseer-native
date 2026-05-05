@@ -60,3 +60,11 @@ You should only consider updating these files on an **absolutely need-only basis
 
 **How to update:**
 When these criteria are met, use careful consideration to modify the files. Ensure any updates maintain the concise, high-signal nature of the document without cluttering it with implementation details or transient information.
+
+## Bugfixing
+
+When asked to "work on the next bug":
+1.  **Check Issues:** Immediately access GitHub issues using `gh issue list`.
+2.  **Multiple Issues:** If more than one bug is found, present the list to the user and **ask them to select** which one to prioritize.
+3.  **Single Issue:** If only one bug is found, you may proceed with it immediately, but you **MUST make it VERY obvious** to the user that you have identified exactly one issue and are starting work on it.
+4.  **No Issues:** If no bugs are found, inform the user and ask for further instructions.
