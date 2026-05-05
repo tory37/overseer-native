@@ -13,8 +13,6 @@ export interface Session {
   name: string
   agentType: 'claude' | 'gemini' | 'cursor' | 'shell'
   cwd: string
-  envVars: Record<string, string>
-  instructions?: string
   scrollbackPath: string
   isTest?: boolean
   layout?: SessionLayout

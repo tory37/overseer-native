@@ -7,7 +7,6 @@ const mockSession: Session = {
   name: 'Test Session',
   agentType: 'claude',
   cwd: '/home/test',
-  envVars: {},
   scrollbackPath: '',
 }
 

@@ -59,7 +59,7 @@ test('Slash key closes KeyboardShortcutsModal when open', async () => {
 })
 
 test('Ctrl+Shift+W requires two presses to kill session', async () => {
-  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', envVars: {}, scrollbackPath: '' }
+  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', scrollbackPath: '' }
   ;(window as any).overseer.listSessions.mockResolvedValue([session])
 
   render(<App />)
