@@ -75,6 +75,7 @@ export class SessionService {
       isTest: options.isTest || false,
     }
 
+    fs.mkdirSync(path.dirname(session.scrollbackPath), { recursive: true })
     this.registry.add(session)
     this.spawnPty(session)
     return session
