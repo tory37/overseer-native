@@ -16,7 +16,6 @@ export interface Session {
   envVars: Record<string, string>
   instructions?: string
   scrollbackPath: string
-  spriteId: string | null
   isTest?: boolean
   layout?: SessionLayout
 }
@@ -25,9 +24,6 @@ export interface CreateSessionOptions {
   name: string
   agentType: Session['agentType']
   cwd?: string
-  spriteId?: string | null
-  spriteName?: string
-  persona?: string
   isTest?: boolean
 }
 
@@ -91,8 +87,6 @@ export type KeybindingAction =
   | 'splitSwap'
   | 'splitSwapSecondary'
   | 'splitToggleDirection'
-  | 'toggleSpritePanel'
-  | 'openSpriteStudio'
   | 'randomTheme'
 
 export type UpdateStatus = 
@@ -130,8 +124,6 @@ export const DEFAULT_KEYBINDINGS: Keybindings = {
   splitSwap:            { code: 'KeyM',         ctrl: true,  shift: true,  alt: false },
   splitSwapSecondary:   { code: 'KeyJ',         ctrl: true,  shift: true,  alt: false },
   splitToggleDirection: { code: 'Backquote',    ctrl: true,  shift: true,  alt: false },
-  toggleSpritePanel:    { code: 'KeyS',         ctrl: true,  shift: true,  alt: false },
-  openSpriteStudio:     { code: 'KeyP',         ctrl: true,  shift: true,  alt: false },
   randomTheme:          { code: 'KeyT',         ctrl: true,  shift: true,  alt: false },
 }
 
@@ -160,8 +152,6 @@ export const ACTION_LABELS: Record<KeybindingAction, string> = {
   splitSwap:            'Swap Main / Secondary Columns',
   splitSwapSecondary:   'Swap Companion Panes (3-way)',
   splitToggleDirection: 'Toggle Split Direction',
-  toggleSpritePanel:    'Toggle Sprite Panel',
-  openSpriteStudio:     'Open Sprite Studio',
   randomTheme:          'Apply Random Theme',
 }
 
@@ -226,9 +216,6 @@ export const IPC = {
   COMPANION_KILL:    'companion:kill',
   COMPANION_INPUT:   'companion:input',
   COMPANION_RESIZE:  'companion:resize',
-  SPRITE_SPEECH:     'sprite:speech',
-  SPRITE_READ:       'sprite:read',
-  SPRITE_WRITE:      'sprite:write',
   USER_SETTINGS_READ: 'user-settings:read',
   USER_SETTINGS_WRITE: 'user-settings:write',
   CHANGELOG_READ:    'changelog:read',

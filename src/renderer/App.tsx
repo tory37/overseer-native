@@ -3,7 +3,6 @@ import { useSessionStore } from './store/sessions'
 import { TabBar } from './components/TabBar'
 import { TerminalPane } from './components/TerminalPane'
 import { RightSidebar } from './components/RightSidebar'
-import { SpriteStudio } from './components/SpriteStudio'
 import { NewSessionDialog } from './components/NewSessionDialog'
 import { SessionDrawer } from './components/SessionDrawer'
 import { SettingsModal } from './components/SettingsModal'
@@ -12,38 +11,37 @@ import { UpdateBanner } from './components/UpdateBanner'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { useCompanion } from './hooks/useCompanion'
 import { useThemeStore, BUILTIN_THEMES } from './store/theme'
-import { useSpritesStore } from './store/sprites'
 import { RenameSessionDialog } from './components/RenameSessionDialog'
 import { UpdateMessageModal } from './components/UpdateMessageModal'
 import type { CreateSessionOptions } from './types/ipc'
 
+// SPRITE SYSTEM SUPPRESSED: SpriteStudio import, useSpritesStore import,
+// showSpriteStudio/spriteStudioEditId/spritePanelVisible state, and
+// onToggleSpritePanel/onOpenSpriteStudio shortcut handlers removed.
+// See feat/sprite-suppression.
+
 export default function App() {
   const { sessions, activeSessionId, load, createSession, killSession, updateSession, setActive } = useSessionStore()
   const { activeThemeId, customThemes, loadSettings: loadThemeSettings, setRandomTheme } = useThemeStore()
-  const { loadSprites } = useSpritesStore()
 
   const [showNewDialog,      setShowNewDialog]      = useState(false)
   const [showDrawer,         setShowDrawer]          = useState(false)
   const [showSettings,       setShowSettings]        = useState(false)
   const [showShortcutsModal, setShowShortcutsModal] = useState(false)
   const [confirmKillId,      setConfirmKillId]      = useState<string | null>(null)
-  const [showSpriteStudio,   setShowSpriteStudio]   = useState(false)
-  const [spriteStudioEditId, setSpriteStudioEditId] = useState<string | null>(null)
-  const [spritePanelVisible, setSpritePanelVisible] = useState(true)
   const [renamingSessionId,  setRenamingSessionId]  = useState<string | null>(null)
   const [updateInfo,         setUpdateInfo]         = useState<{ version: string; features: string[] } | null>(null)
 
-  useEffect(() => { 
+  useEffect(() => {
     load()
     loadThemeSettings()
-    loadSprites()
-    
+
     // Check for version update message
     const checkVersion = async () => {
       const currentVersion = window.overseer.appVersion
       const settings = await window.overseer.readUserSettings()
       const lastSeen = settings?.lastSeenVersion
-      
+
       if (currentVersion !== lastSeen) {
         const changelog = await window.overseer.readChangelog()
         const features = changelog[currentVersion]
@@ -133,11 +131,6 @@ export default function App() {
     onSplitSwap,
     onSplitSwapSecondary,
     onSplitToggleDirection,
-    onToggleSpritePanel: () => setSpritePanelVisible(v => !v),
-    onOpenSpriteStudio:  () => setShowSpriteStudio(prev => {
-      if (!prev) setSpriteStudioEditId(null)
-      return !prev
-    }),
     onRandomTheme: setRandomTheme,
   })
 
@@ -164,17 +157,17 @@ export default function App() {
           onSelect={setActive}
           onNew={() => setShowNewDialog(true)}
         />
-        <div style={{ 
-          marginLeft: 'auto', 
-          display: 'flex', 
-          alignItems: 'center', 
+        <div style={{
+          marginLeft: 'auto',
+          display: 'flex',
+          alignItems: 'center',
           gap: '12px',
           marginRight: '10px'
         }}>
-          <span style={{ 
-            fontSize: '11px', 
-            fontWeight: 'bold', 
-            padding: '3px 8px', 
+          <span style={{
+            fontSize: '11px',
+            fontWeight: 'bold',
+            padding: '3px 8px',
             borderRadius: '4px',
             backgroundColor: window.overseer?.isDev ? 'rgba(255, 165, 0, 0.2)' : 'rgba(128, 128, 128, 0.1)',
             color: window.overseer?.isDev ? 'orange' : 'var(--text-muted)',
@@ -212,11 +205,7 @@ export default function App() {
           onInnerRatio={onInnerRatio}
           onFocusPane={onSetSplitFocused}
         />
-        <RightSidebar
-          activeSession={activeSession}
-          spritePanelVisible={spritePanelVisible}
-          onOpenStudio={() => { setSpriteStudioEditId(null); setShowSpriteStudio(true) }}
-        />
+        <RightSidebar activeSession={activeSession} />
       </div>
 
       {showNewDialog && (
@@ -268,13 +257,6 @@ export default function App() {
           keybindings={keybindings}
           onClose={() => setShowShortcutsModal(false)}
           onSaveKeybindings={updateKeybindings}
-        />
-      )}
-
-      {showSpriteStudio && (
-        <SpriteStudio
-          onClose={() => setShowSpriteStudio(false)}
-          editingId={spriteStudioEditId}
         />
       )}
     </div>

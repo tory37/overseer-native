@@ -1,3 +1,9 @@
+// SPRITE SYSTEM SUPPRESSED
+// The sprite store was removed because the Sprite system was too architecturally
+// fragile for the value it provided. The Sprite data model and default personas
+// are preserved here for potential future reimplementation. See feat/sprite-suppression.
+
+/*
 import { create } from 'zustand'
 
 export interface Sprite {
@@ -162,7 +168,7 @@ export const useSpritesStore = create<SpritesState>((set, get) => ({
     if (!window.overseer?.readSprites) return
     const settings = await window.overseer.readSprites()
     const sprites = settings?.sprites || []
-    
+
     // Ensure all default sprites are present
     let changed = false
     for (const def of DEFAULT_SPRITES) {
@@ -175,7 +181,8 @@ export const useSpritesStore = create<SpritesState>((set, get) => ({
     if (changed) {
       window.overseer?.writeSprites?.({ sprites })
     }
-    
+
     set({ sprites })
   }
 }))
+*/

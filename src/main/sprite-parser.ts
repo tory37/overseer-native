@@ -1,3 +1,10 @@
+// SPRITE SYSTEM SUPPRESSED
+// The sprite parser was removed because the Sprite system was too
+// architecturally fragile for the value it provided. The <speak> tag
+// parsing logic is preserved here for potential future reimplementation.
+// See feat/sprite-suppression.
+
+/*
 export interface ParsedSpriteEvent {
   type: 'speech'
   text: string
@@ -16,7 +23,7 @@ function decodeEntities(text: string): string {
 
 function stripAnsi(text: string): string {
   // eslint-disable-next-line no-control-regex
-  return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+  return text.replace(/[][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 }
 
 export class SpriteParser {
@@ -24,7 +31,7 @@ export class SpriteParser {
 
   parse(chunk: string): ParsedSpriteEvent[] {
     this.buffer += chunk
-    
+
     // Safety: if the buffer grows too large, something is wrong.
     if (this.buffer.length > 50000) {
       this.buffer = this.buffer.slice(-1000)
@@ -46,7 +53,7 @@ export class SpriteParser {
     while (true) {
       const endIdx = this.buffer.indexOf('</speak>')
       if (endIdx === -1) {
-        // No end tag yet. 
+        // No end tag yet.
         // We only care about text starting from the LAST <speak>
         const lastStartIdx = this.buffer.lastIndexOf('<speak>')
         if (lastStartIdx !== -1) {
@@ -69,12 +76,12 @@ export class SpriteParser {
       // Found a complete tag pair
       const rawText = this.buffer.slice(startIdx + 7, endIdx).trim()
       if (rawText) {
-        events.push({ 
-          type: 'speech', 
+        events.push({
+          type: 'speech',
           text: decodeEntities(stripAnsi(rawText))
         })
       }
-      
+
       // Remove the processed tag and anything before it, then continue
       this.buffer = this.buffer.slice(endIdx + 8)
     }
@@ -87,3 +94,4 @@ export class SpriteParser {
 export function parseSpriteSpeech(chunk: string): ParsedSpriteEvent[] {
   return new SpriteParser().parse(chunk)
 }
+*/

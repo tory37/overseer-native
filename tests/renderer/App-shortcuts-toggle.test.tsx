@@ -10,9 +10,6 @@ jest.mock('../../src/renderer/components/TerminalPane', () => ({
 jest.mock('../../src/renderer/components/RightSidebar', () => ({
   RightSidebar: () => <div data-testid="right-sidebar" />
 }))
-jest.mock('../../src/renderer/components/SpriteStudio', () => ({
-  SpriteStudio: () => <div data-testid="sprite-studio" />
-}))
 
 import { mockOverseer } from './setup'
 
@@ -62,14 +59,14 @@ test('Slash key closes KeyboardShortcutsModal when open', async () => {
 })
 
 test('Ctrl+Shift+W requires two presses to kill session', async () => {
-  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', envVars: {}, scrollbackPath: '', spriteId: null }
+  const session = { id: 's1', name: 'Session 1', agentType: 'shell', cwd: '/', envVars: {}, scrollbackPath: '' }
   ;(window as any).overseer.listSessions.mockResolvedValue([session])
 
   render(<App />)
 
   // Wait for session to load
   await act(async () => { await Promise.resolve() })
-  
+
   // Initial state: Session 1 is there
   expect(screen.getByText('Session 1')).toBeInTheDocument()
 
@@ -77,7 +74,7 @@ test('Ctrl+Shift+W requires two presses to kill session', async () => {
   await act(async () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyW', ctrlKey: true, shiftKey: true, bubbles: true }))
   })
-  
+
   // Should show confirmation text
   expect(screen.getByText('Session 1 (press again to kill)')).toBeInTheDocument()
   expect((window as any).overseer.killSession).not.toHaveBeenCalled()
@@ -86,26 +83,7 @@ test('Ctrl+Shift+W requires two presses to kill session', async () => {
   await act(async () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyW', ctrlKey: true, shiftKey: true, bubbles: true }))
   })
-  
+
   // Should have called killSession
   expect((window as any).overseer.killSession).toHaveBeenCalledWith('s1')
-})
-
-test('Ctrl+Shift+P toggles SpriteStudio', async () => {
-  render(<App />)
-
-  // Initially not present
-  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
-
-  // Press Ctrl+Shift+P to open
-  await act(async () => {
-    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
-  })
-  expect(screen.getByTestId('sprite-studio')).toBeInTheDocument()
-
-  // Press Ctrl+Shift+P again to close
-  await act(async () => {
-    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyP', ctrlKey: true, shiftKey: true, bubbles: true }))
-  })
-  expect(screen.queryByTestId('sprite-studio')).not.toBeInTheDocument()
 })

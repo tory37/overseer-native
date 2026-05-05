@@ -10,7 +10,6 @@ import { IPC } from '../renderer/types/ipc'
 import type { Session, CreateSessionOptions, Keybindings, ThemeSettings } from '../renderer/types/ipc'
 import { runGitCommand } from './git-service'
 import { CompanionPtyManager } from './companion-pty-manager'
-import { SpriteParser } from './sprite-parser'
 
 export async function isDirectory(p: string): Promise<boolean> {
   try {
@@ -30,23 +29,9 @@ export function registerIpcHandlers(
   isDev: boolean
 ): void {
   const configService = new ConfigService(baseDir)
-  const spriteParsers = new Map<string, SpriteParser>()
-  
+
   service.onData((sessionId, data) => {
     getWindow()?.webContents.send(`pty:data:${sessionId}`, data)
-    try {
-      if (!spriteParsers.has(sessionId)) {
-        spriteParsers.set(sessionId, new SpriteParser())
-      }
-      const events = spriteParsers.get(sessionId)!.parse(data)
-      for (const ev of events) {
-        if (ev.type === 'speech') {
-          getWindow()?.webContents.send(IPC.SPRITE_SPEECH, { sessionId, text: ev.text })
-        }
-      }
-    } catch (err) {
-      console.error('[Sprite] Speech parse error:', err)
-    }
   })
 
   service.onError((sessionId, err) => {
@@ -62,7 +47,6 @@ export function registerIpcHandlers(
   })
 
   ipcMain.handle(IPC.SESSION_KILL, (_event, sessionId: string) => {
-    spriteParsers.delete(sessionId)
     return service.kill(sessionId)
   })
   ipcMain.handle(IPC.SESSION_UPDATE, (_event, sessionId: string, partial: Partial<Session>) => {
@@ -95,21 +79,8 @@ export function registerIpcHandlers(
   ipcMain.handle(IPC.THEME_READ,  () => configService.read<ThemeSettings>('theme-settings.json'))
   ipcMain.handle(IPC.THEME_WRITE, (_event, settings: ThemeSettings) => configService.write('theme-settings.json', settings))
 
-  ipcMain.handle(IPC.SPRITE_READ,  () => configService.read<any>('sprites.json'))
-  ipcMain.handle(IPC.SPRITE_WRITE, (_event, settings: any) => {
-    configService.write('sprites.json', settings)
-    
-    // Propagate updates to active sessions using these sprites
-    const sessions = service.list()
-    for (const session of sessions) {
-      if (session.spriteId) {
-        const sprite = settings.sprites?.find((s: any) => s.id === session.spriteId)
-        if (sprite) {
-          service.updateSprite(session.id, sprite.id, sprite.name, sprite.persona)
-        }
-      }
-    }
-  })
+  // SPRITE SYSTEM SUPPRESSED: SPRITE_READ and SPRITE_WRITE handlers removed.
+  // See feat/sprite-suppression.
 
   ipcMain.handle(IPC.USER_SETTINGS_READ,  () => configService.read<any>('user-settings.json'))
   ipcMain.handle(IPC.USER_SETTINGS_WRITE, (_event, settings: any) => configService.write('user-settings.json', settings))

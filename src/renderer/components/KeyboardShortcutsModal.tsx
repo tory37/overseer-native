@@ -28,11 +28,8 @@ const GROUPS: { title: string, actions: KeybindingAction[] }[] = [
   {
     title: 'GENERAL',
     actions: ['openDrawer', 'openSettings', 'openShortcuts', 'randomTheme']
-  },
-  {
-    title: 'SPRITE',
-    actions: ['toggleSpritePanel', 'openSpriteStudio']
   }
+  // SPRITE SYSTEM SUPPRESSED: SPRITE group removed. See feat/sprite-suppression.
 ]
 
 export function KeyboardShortcutsModal({ keybindings, onClose, onSaveKeybindings }: Props) {

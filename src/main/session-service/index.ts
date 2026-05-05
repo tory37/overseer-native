@@ -77,15 +77,7 @@ export class SessionService {
       envVars: config.env,
       instructions: config.instructions,
       scrollbackPath: path.join(this.baseDir, 'sessions', id, 'scrollback.log'),
-      spriteId: options.spriteId ?? null,
       isTest: options.isTest || false,
-    }
-
-    if (options.persona) {
-      session.envVars['OVERSEER_SPRITE_PERSONA'] = options.persona
-    }
-    if (options.spriteName) {
-      (session as any).spriteName = options.spriteName
     }
 
     this.registry.add(session)
@@ -103,21 +95,9 @@ export class SessionService {
 
     // Always update context.json with current session state
     const contextPath = path.join(sessionDir, 'context.json')
-    
-    // Try to get existing context to preserve spriteName if not in session object
-    let spriteName = (session as any).spriteName || ''
-    if (!spriteName && fs.existsSync(contextPath)) {
-      try {
-        const oldCtx = JSON.parse(fs.readFileSync(contextPath, 'utf8'))
-        spriteName = oldCtx.spriteName || ''
-      } catch (e) {}
-    }
 
-    fs.writeFileSync(contextPath, JSON.stringify({ 
-      persona: session.envVars['OVERSEER_SPRITE_PERSONA'] || '', 
+    fs.writeFileSync(contextPath, JSON.stringify({
       instructions: session.instructions || '',
-      spriteId: session.spriteId,
-      spriteName
     }, null, 2))
 
     // Ensure wrappers exist
@@ -156,24 +136,6 @@ export class SessionService {
     }
     
     return env as Record<string, string>
-  }
-
-  updateSprite(sessionId: string, spriteId: string, name: string, persona: string): void {
-    const sessionDir = path.join(this.baseDir, 'sessions', sessionId)
-    if (!fs.existsSync(sessionDir)) {
-      fs.mkdirSync(sessionDir, { recursive: true })
-    }
-
-    const session = this.registry.list().find(s => s.id === sessionId)
-    const instructions = session?.instructions || ''
-
-    fs.writeFileSync(
-      path.join(sessionDir, 'context.json'),
-      JSON.stringify({ persona, instructions, spriteId, spriteName: name }, null, 2)
-    )
-
-    // Also update the session in registry so it persists
-    this.registry.update(sessionId, { spriteId, envVars: { ...this.registry.list().find(s => s.id === sessionId)?.envVars, OVERSEER_SPRITE_PERSONA: persona } })
   }
 
   updateSession(sessionId: string, partial: Partial<Session>): void {

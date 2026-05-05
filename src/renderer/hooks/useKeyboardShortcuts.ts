@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { DEFAULT_KEYBINDINGS, matchKeybinding } from '../types/ipc'
 import type { Keybindings } from '../types/ipc'
 
+// SPRITE SYSTEM SUPPRESSED: onToggleSpritePanel and onOpenSpriteStudio
+// handlers removed from ShortcutHandlers. See feat/sprite-suppression.
+
 export interface ShortcutHandlers {
   onNewSession:           () => void
   onKillSession:          () => void
@@ -19,9 +22,7 @@ export interface ShortcutHandlers {
   onSplitSwap:            () => void
   onSplitSwapSecondary:   () => void
   onSplitToggleDirection: () => void
-  onToggleSpritePanel:   () => void
-  onOpenSpriteStudio:    () => void
-  onRandomTheme:         () => void
+  onRandomTheme:          () => void
 }
 
 export interface KeyboardShortcutsAPI {
@@ -53,7 +54,7 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (action === 'openDrawer')           { h.onOpenDrawer();           return }
       if (action === 'openSettings')         { h.onOpenSettings();         return }
       if (action === 'openShortcuts')        { h.onOpenShortcuts();        return }
-      if (action === 'renameSession')       { h.onRenameSession();        return }
+      if (action === 'renameSession')        { h.onRenameSession();        return }
       if (action === 'splitFocus')           { h.onSplitFocus();           return }
       if (action === 'splitFocusPrev')       { h.onSplitFocusPrev();       return }
       if (action === 'splitOpenThreeWay')    { h.onSplitOpenThreeWay();    return }
@@ -61,9 +62,7 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers): KeyboardShortc
       if (action === 'splitSwap')            { h.onSplitSwap();            return }
       if (action === 'splitSwapSecondary')   { h.onSplitSwapSecondary();   return }
       if (action === 'splitToggleDirection') { h.onSplitToggleDirection(); return }
-      if (action === 'toggleSpritePanel')   { h.onToggleSpritePanel();   return }
-      if (action === 'openSpriteStudio')    { h.onOpenSpriteStudio();    return }
-      if (action === 'randomTheme')         { h.onRandomTheme();         return }
+      if (action === 'randomTheme')          { h.onRandomTheme();          return }
       const idxMatch = action.match(/^sessionByIndex(\d)$/)
       if (idxMatch) h.onSessionByIndex(parseInt(idxMatch[1], 10))
     }

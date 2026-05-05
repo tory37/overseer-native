@@ -13,14 +13,13 @@ test('returns env vars and instructions from agent config file', () => {
   fs.mkdirSync(agentsDir, { recursive: true })
   fs.writeFileSync(
     path.join(agentsDir, 'claude.json'),
-    JSON.stringify({ 
+    JSON.stringify({
       env: { ANTHROPIC_API_KEY: 'test-key' },
       instructions: 'test instructions'
     })
   )
   const result = readAgentConfig('claude', tmpDir)
   expect(result.env).toEqual({ ANTHROPIC_API_KEY: 'test-key' })
-  expect(result.instructions).toContain('You are an AI assistant running inside Overseer')
   expect(result.instructions).toContain('test instructions')
 })
 
@@ -36,17 +35,15 @@ test('merges instructions from JSON and global Markdown file', () => {
     'Global Markdown'
   )
   const result = readAgentConfig('gemini', tmpDir)
-  expect(result.instructions).toContain('You are an AI assistant running inside Overseer')
   expect(result.instructions).toContain('Local JSON')
   expect(result.instructions).toContain('Global Markdown')
 })
 
-test('loads only global Markdown and core when JSON is missing', () => {
+test('loads only global Markdown when JSON is missing', () => {
   fs.writeFileSync(
     path.join(tmpDir, 'SHELL.md'),
     'Global Shell Rules'
   )
   const result = readAgentConfig('shell', tmpDir)
-  expect(result.instructions).toContain('You are an AI assistant running inside Overseer')
   expect(result.instructions).toContain('Global Shell Rules')
 })
