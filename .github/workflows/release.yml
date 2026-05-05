@@ -34,7 +34,7 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
             npm run dist -- --linux AppImage
           elif [ "$RUNNER_OS" == "macOS" ]; then
-            npm run dist -- --mac dmg
+            npm run dist -- --mac dmg zip
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
