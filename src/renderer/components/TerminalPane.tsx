@@ -177,7 +177,7 @@ export function TerminalPane({
     <div ref={outerRef} style={{ flex: 1, display: 'flex', flexDirection: isRow ? 'row' : 'column', background: 'var(--bg-main)' }}>
       {/* Main panel */}
       <div 
-        onClick={() => onFocusPane('main')} 
+        onMouseDown={() => onFocusPane('main')} 
         style={{ 
           flex: mainFlex, 
           position: 'relative', 
@@ -212,7 +212,7 @@ export function TerminalPane({
       >
         {/* CompanionA pane */}
         <div 
-          onClick={() => onFocusPane('companionA')} 
+          onMouseDown={() => onFocusPane('companionA')} 
           style={{ 
             flex: companionAFlex, 
             position: 'relative', 
@@ -236,7 +236,7 @@ export function TerminalPane({
         )}
 
         {/* CompanionB pane */}
-        <div onClick={() => onFocusPane('companionB')} style={{
+        <div onMouseDown={() => onFocusPane('companionB')} style={{
           flex: companionBFlex,
           position: 'relative',
           overflow: 'hidden',
